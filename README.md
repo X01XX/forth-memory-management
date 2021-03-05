@@ -17,4 +17,4 @@ addresses on the stack, which no one cares about.
 The files can be brought into gforth with the command: include mm_array.fs
 
 No checking is done to avoid an invalid address being deallocated, 
-or a valid address being deallocated twice.
+or a valid address being deallocated more than once.
