@@ -5,11 +5,11 @@ Pair a special-purpose stack with an array of items.
 
 The special-purpose stack is initialized with the address of each array item.
 
+Allocation and deallocation is fairly fast because it involves only popping or pushing the stack.
+
 The number, and size, of the items is configurable at instance creation.
 
 For a different number and/or size of items, create another instance.
-
-Allocation and deallocation is fairly fast because it involves only popping or pushing the stack.
 
 The files can be brought into gforth with the command: include mm_array.fs
 
