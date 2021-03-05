@@ -9,7 +9,7 @@ For a different number and/or size of items, create another instance.
 
 The special-purpose stack is initialized with the address of each array item.
 
-Allocation and deallocation is fairly fast because it involves only pushing or popping the stack.
+Allocation and deallocation is fairly fast because it involves only popping or pushing the stack.
 
 The entropy of various allocations, and deallocations, appears in the increasing disorder of the
 addresses on the stack, which no one cares about.
