@@ -9,7 +9,9 @@ cr
 .( mma-deallocate: Run like: <item-addr> <mma-addr> mma-deallocate )
 : mma-deallocate ( item-addr mma-addr -- )
 	@		\ item-addr stack-addr
-	stack-push	\
+        over swap	\ item-addr item-addr stack-addr
+	stack-push	\ item-addr
+        0 swap !	\ ( zero out first cell of deallocated item )
 ;
 cr
 .( mma-allocate: Run like: <mma-addr> mma-allocate -- array-item-addr )
