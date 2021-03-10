@@ -16,7 +16,7 @@ The files can be brought into gforth with the command: include mm_array.fs
 No checking is done to avoid an invalid address being deallocated, 
 or a valid address being deallocated more than once.
 
-On deallocation, the first cell of an item is zeroed out.  
+On deallocation, the first cell of an item is zeroed out, to make use problems apparent.
 
 The entropy of various allocations, and deallocations, appears in the increasing disorder of the
 addresses on the stack, which no one cares about.
