@@ -33,6 +33,7 @@ cr
         *		\ n-i item-size all-items-size
         1 cells +	\ n-i item-size total-size ( add one word for the stack address )
 
+        align
 	here		\ n-i item-size total-size free-address
 	swap		\ n-i item-size free-addr total-size
 	allot		\ n-i item-size array-addr ( array memory allocated )
@@ -65,3 +66,29 @@ cr
 	2drop		\ array-addr
 ;
 cr
+
+\ .mma-usage. Run like: "<mma-name> .mma-usage"
+: .mma-usage ( mma-addr -- )
+    @			\ stack-addr
+    cr
+    ." Capacity:"
+    space
+    dup			\ stack-addr stack-addr
+    _stack-get-capacity	\ stack-addr capacity
+    dup			\ stack-addr capacity capacity
+    1 .r			\ stack-addr capacity (emit capacity)
+    44 emit		\ stack-addr capacity (emit comma)
+    space
+    ." Free:"
+    space
+    swap		\ capacity stack-addr
+   _stack-get-num-free	\ capacity num-free
+    dup			\ capacity num-free num-free
+    1 .r			\ capacity num-free (emit num-free)
+    44 emit		\ (emit comma)
+    space
+   ." In use:"
+   space
+   - . 
+;
+
