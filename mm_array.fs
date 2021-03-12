@@ -70,7 +70,6 @@ cr
 \ .mma-usage. Run like: "<mma-name> .mma-usage"
 : .mma-usage ( mma-addr -- )
     @			\ stack-addr
-    cr
     ." Capacity:"
     space
     dup			\ stack-addr stack-addr

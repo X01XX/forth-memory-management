@@ -1,0 +1,21 @@
+list1: (1, 3, 5)
+
+list2: (5, 2, 1)
+
+list3: (1, 5)   (intersection)
+
+list4: (3, 1, 2, 5)   (union)
+
+Memory Use:
+  list-header-store Capacity: 15, Free: 11, In use: 4 
+  link-store        Capacity: 25, Free: 13, In use: 12 
+  num-store         Capacity: 25, Free: 13, In use: 12 
+
+Deallocating ...
+
+Memory Use:
+  list-header-store Capacity: 15, Free: 15, In use: 0 
+  link-store        Capacity: 25, Free: 25, In use: 0 
+  num-store         Capacity: 25, Free: 25, In use: 0 
+ ok
+
