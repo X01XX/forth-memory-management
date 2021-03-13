@@ -20,3 +20,9 @@ On deallocation, the first cell of an item is zeroed out, to make use problems a
 
 The entropy of various allocations, and deallocations, appears in the increasing disorder of the
 addresses on the stack, which no one cares about.
+
+The examples use linked lists of numbers, linear algebra would be possible.
+
+Lists could be of other memory chunks, like objects.
+
+Deallocate each list as soon as it is no longer needed.
