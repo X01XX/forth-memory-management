@@ -80,6 +80,28 @@ include mm_array.fs
         1 swap +!	( list-header-cell2-addr -- )
 ;
  
+\ Add a link to the end of a list
+: list-push-link ( link-addr list-header-addr -- )
+
+    \ Check for an empty list
+    dup			\ link-addr list-header list-header
+    list-get-first-link \ link-addr list-header link-next
+    dup if
+	begin
+	    nip			\ link-new link-next
+	    dup			\ link-new link-next link-next
+	    link-get-next	\ link-new link-next link-next-next
+	    dup			\ link-new link-next link-next-next link-next-next
+	while			\ link-new link-next link-next-next
+	repeat
+	drop			\ link-new link-last
+	link-set-next		\
+    else
+	drop			\ link-addr list-header
+	list-set-first-link	\ 
+    then
+;
+
 : .num-list ( list-addr -- )
     ." ("
     @		\ next-link-addr
@@ -153,9 +175,10 @@ include mm_array.fs
 \ ### M A I N ####
 
 2 15 mma-new value list-header-store	\ Initialize linked list header store.		( link addr, num items, both initially zero )
-2 25 mma-new value link-store		\ Initialize store for linked list links.	( next-link-addr, num-addr )
-1 25 mma-new value num-store		\ Initialize store for numbers.			( Just a number )
+2 30 mma-new value link-store		\ Initialize store for linked list links.	( next-link-addr, num-addr )
+1 30 mma-new value num-store		\ Initialize store for numbers.			( Just a number )
 
+\ Add a number to the beginning of a list
 : num-list-add ( n num-list-addr -- )
     swap 			\ num-list-addr n 
     num-store num-new		\ num-list-addr num-item-addr
@@ -164,10 +187,20 @@ include mm_array.fs
     list-add-link		\
 ;
 
+\ Add a number to the end of the list
+: num-list-push ( n num-list-addr -- )
+    swap 			\ num-list-addr n 
+    num-store num-new		\ num-list-addr num-item-addr
+    link-store link-new		\ num-list-addr link-item-addr 
+    swap			\ link-item-addr num-list-addr
+    list-push-link		\
+;
+
+
 \ Return true if a number if in a num-list
 : num-list-num-in ( n num-list -- flag )
 
-    list-get-first-link			\ n list-get-first-link
+    list-get-first-link		\ n list-get-first-link
     false rot rot		\ false n list-get-first-link
     begin
     dup				\ flag n link link
@@ -192,7 +225,7 @@ include mm_array.fs
     list-header-store list-new	\ list1 list2 list-ret
     >r				\ list1 list2 R: list-ret
 
-    list-get-first-link			\ list1 list-get-first-link R: list-ret
+    list-get-first-link		\ list1 list-get-first-link R: list-ret
     begin
     dup				\ list1 next-link next-link R: list-ret
     while			\ list1 next-link R: list-ret
@@ -210,12 +243,120 @@ include mm_array.fs
         if			\ list1 cur-link n R: list-ret
 
 		r@		\ list1 cur-link n list-ret R: list-ret
-		num-list-add	\ list1 cur-link R: list-ret
+
+		\ Check if the number is already in the return list
+		2dup		\ list1 cur-link n list-ret n list-ret R: list-ret
+        	num-list-num-in	\ list1 cur-link n list-ret flag R: list-ret
+
+		if 
+			2drop	\ list1 cur-link R: list-ret
+		else
+			num-list-add	\ list1 cur-link R: list-ret
+		then
 	else
 		drop		\ list1 cur-link R: list-ret
 	then
 
     	link-get-next		\ list1 next-link R: list-ret
+    repeat
+    2drop			\ R: list-ret
+    r>				\ list-ret
+;
+
+\ Return a list multiplied by a number
+: num-list-multiply ( n list1 -- list2 )
+
+    list-header-store list-new	\ n list1 list-ret
+    >r				\ n list1 R: list-ret
+
+    list-get-first-link		\ n list-get-first-link R: list-ret
+    begin
+    dup				\ n next-link next-link R: list-ret
+    while			\ n next-link R: list-ret
+
+	2dup			\ n cur-link n cur-link R: list-ret
+
+        link-get-data		\ n cur-link n data R: list-ret
+        num-get-value		\ n cur-link n m R: list-ret
+
+		*		\ n cur-link y R: list-ret
+		r@		\ n cur-link y list-ret R: list-ret
+
+		num-list-push	\ n cur-link R: list-ret
+
+    	link-get-next		\ n next-link R: list-ret
+    repeat
+    2drop			\ R: list-ret
+    r>				\ list-ret
+;
+
+\ Return a list plus a number
+: num-list-plus ( n list1 -- list2 )
+    list-header-store list-new	\ n list1 list-ret
+    >r				\ n list1 R: list-ret
+
+    list-get-first-link		\ n list-get-first-link R: list-ret
+    begin
+    dup				\ n next-link next-link R: list-ret
+    while			\ n next-link R: list-ret
+
+	2dup			\ n cur-link n cur-link R: list-ret
+
+        link-get-data		\ n cur-link n data R: list-ret
+        num-get-value		\ n cur-link n m R: list-ret
+
+	+			\ n cur-link y R: list-ret
+
+	r@			\ n cur-link y list-ret R: list-ret
+
+	num-list-push		\ n cur-link R: list-ret
+
+    	link-get-next		\ n next-link R: list-ret
+    repeat
+    2drop			\ R: n list-ret
+    r>				\ list-ret
+;
+
+\ Return the difference of two num lists, same order as in subrtracting numbers in forth, list1 - list2
+: num-list-difference ( list1 list2 -- list-difference )
+
+    swap			\ list2 list1
+    list-header-store list-new	\ list2 list1 list-ret
+    >r				\ list2 list1 R: list-ret
+
+    list-get-first-link		\ list2 list-get-first-link R: list-ret
+    begin
+    dup				\ list2 next-link next-link R: list-ret
+    while			\ list2 next-link R: list-ret
+
+        2dup			\ list2 cur-link list2 cur-link R: list-ret
+
+        link-get-data		\ list2 cur-link list2 data R: list-ret
+        num-get-value		\ list2 cur-link list2 n R: list-ret
+
+        dup			\ list2 cur-link list2 n n R: list-ret
+        rot			\ list2 cur-link n n list2 R: list-ret
+      
+        num-list-num-in		\ list2 cur-link n flag R: list-ret
+       
+        if			\ list2 cur-link n R: list-ret
+		drop		\ list2 cur-link R: list-ret
+	else
+
+		r@		\ list2 cur-link n list-ret R: list-ret
+
+		\ Check if the number is already in the return list
+		2dup		\ list2 cur-link n list-ret n list-ret R: list-ret
+        	num-list-num-in	\ list2 cur-link n list-ret flag R: list-ret
+
+		if 
+			2drop	\ list2 cur-link R: list-ret
+		else
+			num-list-add	\ list2 cur-link R: list-ret
+		then
+	then
+
+    	link-get-next		\ list2 next-link R: list-ret
     repeat
     2drop			\ R: list-ret
     r>				\ list-ret
@@ -227,7 +368,7 @@ include mm_array.fs
     list-header-store list-new >r	\ list1 list2 R: list-ret
 
     \ Process list2 (copy may seem like a better option, but this gets rid of duplicates)
-    list-get-first-link			\ list1 list-get-first-link R: list-ret
+    list-get-first-link		\ list1 list-get-first-link R: list-ret
     begin
     dup				\ list1 next-link next-link R: list-ret
     while			\ list1 cur-link R: list-ret
@@ -251,7 +392,7 @@ include mm_array.fs
     drop			\ list1 R: list-ret
 
     \ Process list1
-    list-get-first-link			\ list-get-first-link R: list-ret
+    list-get-first-link		\ list-get-first-link R: list-ret
     begin
     dup				\ next-link next-link R: list-ret
     while			\ cur-link R: list-ret
@@ -281,9 +422,9 @@ include mm_array.fs
     begin
         dup		\ list-addr cur-link-addr cur-link-addr (flag, zero or not)
     while		\ list-addr cur-link-addr 
-        dup link-get-data	 		\ list-addr cur-link-addr num-addr
+        dup link-get-data 		\ list-addr cur-link-addr num-addr
 	num-store mma-deallocate	\ list-addr cur-link-addr
-        dup link-get-next			\ list-addr cur-link-addr next-link-addr
+        dup link-get-next		\ list-addr cur-link-addr next-link-addr
         swap				\ list-addr next-link-addr cur-link-addr
 	link-store mma-deallocate	\ list-addr next-link-addr
     repeat
@@ -291,11 +432,24 @@ include mm_array.fs
     list-header-store mma-deallocate	\
 ;
 
+\ Print memory use for num-lists
+: num-list-memory-use ( -- )
+	cr
+	." Memory Use:" cr
+	2 spaces ." list-header-store" space
+	list-header-store .mma-usage cr
+	2 spaces ." link-store" 8 spaces
+	link-store .mma-usage cr
+	2 spaces ." num-store" 9 spaces
+	num-store .mma-usage cr
+;
+
 list-header-store list-new value list1	\ Get linked list header for a new list, store it in word list1
 cr
 5 list1 num-list-add
 3 list1 num-list-add
 1 list1 num-list-add
+5 list1 num-list-add
 ." list1: "
 list1 .num-list
 cr
@@ -305,6 +459,7 @@ cr
 1 list2 num-list-add
 2 list2 num-list-add
 5 list2 num-list-add
+5 list2 num-list-add
 ." list2: "
 list2 .num-list
 cr
@@ -313,26 +468,45 @@ cr
 ." list3: "
 list1 list2 num-list-intersection value list3
 list3 .num-list
-3 spaces ." (intersection)"
+3 spaces ." (intersection, no duplicates)"
 cr
-
 
 cr
 ." list4: "
 list1 list2 num-list-union value list4
 list4 .num-list
-3 spaces ." (union)"
+3 spaces ." (union, no duplicates)"
 cr
 
+cr
+." list5: "
+list1 list2 num-list-difference value list5
+list5 .num-list
+3 spaces ." (list1 - list2)"
+cr
 
 cr
-." Memory Use:" cr
-2 spaces ." list-header-store" space
-list-header-store .mma-usage cr
-2 spaces ." link-store" 8 spaces
-link-store .mma-usage cr
-2 spaces ." num-store" 9 spaces
-num-store .mma-usage cr
+." list6: "
+list2 list1 num-list-difference value list6
+list6 .num-list
+3 spaces ." (list2 - list1)"
+cr
+
+cr
+." list7: "
+2 list1 num-list-multiply value list7
+list7 .num-list
+3 spaces ." (list1 * 2)"
+cr
+
+cr
+." list8: "
+-1 list1 num-list-plus value list8
+list8 .num-list
+3 spaces ." (list1 + -1)"
+cr
+
+num-list-memory-use
 
 cr
 ." Deallocating ..."
@@ -342,13 +516,10 @@ list1 num-list-deallocate
 list2 num-list-deallocate
 list3 num-list-deallocate
 list4 num-list-deallocate
+list5 num-list-deallocate
+list6 num-list-deallocate
+list7 num-list-deallocate
+list8 num-list-deallocate
 
-cr
-." Memory Use:" cr
-2 spaces ." list-header-store" space
-list-header-store .mma-usage cr
-2 spaces ." link-store" 8 spaces
-link-store .mma-usage cr
-2 spaces ." num-store" 9 spaces
-num-store .mma-usage cr
+num-list-memory-use
 
