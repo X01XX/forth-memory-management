@@ -19,10 +19,10 @@ or a valid address being deallocated more than once.
 On deallocation, the first cell of an item is zeroed out, to make use problems apparent.
 
 The entropy of various allocations, and deallocations, appears in the increasing disorder of the
-addresses on the stack, which no one cares about.
+addresses on the stack, which has no effect on the utility of the stack-array.
 
-The examples use linked lists of numbers, linear algebra would be possible.
+The examples use linked lists of numbers, Linear Algebra would be possible.
 
-Lists could be of other memory chunks, like objects.
+Lists could be of other memory chunks, like objects. They may, or may not, be in a stack-array.
 
 Deallocate each list as soon as it is no longer needed.
