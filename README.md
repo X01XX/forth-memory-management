@@ -9,9 +9,7 @@ Allocation and deallocation is fairly fast because it involves only popping or p
 
 The number, and size, of the items is configurable at instance creation.
 
-For a different number and/or size of items, create another instance.
-
-The files can be brought into gforth with the command: include mm_array.fs
+The files can be brought into gforth with the command: include example.fs
 
 No checking is done to avoid an invalid address being deallocated, 
 or a valid address being deallocated more than once.
