@@ -21,6 +21,8 @@ On deallocation, the first cell of an item is zeroed out, to make use problems a
 The entropy of various allocations, and deallocations, appears in the increasing disorder of the
 addresses on the stack, which has no effect on the utility of the stack-array.
 
+That a stack is used to provide memory management to a stack-based language is sublime.
+
 The examples use linked lists of numbers, Linear Algebra would be possible.
 
 Lists could be of other memory chunks, like objects. They may, or may not, be in a stack-array.
