@@ -24,3 +24,5 @@ The examples use linked lists of numbers, Linear Algebra would be possible.
 Lists could be of other memory chunks, like objects. They may, or may not, be in a stack-array.
 
 Deallocate each list as soon as it is no longer needed.
+
+The stack-array can be used for memory chunks that are not dependent on lists for processing.
