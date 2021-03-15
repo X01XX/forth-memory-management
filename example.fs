@@ -472,14 +472,34 @@ include mm_array.fs
     list-add-link		\
 ;
 
+\ Print a floating point list
 : .fpn-list ( list-addr -- )
     ." ("
-    @		\ next-link-addr
+    list-get-first-link		\ first-link-addr
     begin
     dup
     while
         dup link-get-data
 	fpn-get-value f.
+    	link-get-next	\ next-link-addr
+        dup if
+	    ." ," space
+	then
+    repeat
+    
+    ." )"
+    drop
+;
+
+\ Print a list of floating point lists
+: .list-of-lists-fpn ( list-addr -- )
+    ." ("
+    list-get-first-link		\ first-link-addr
+    begin
+    dup
+    while
+        dup link-get-data
+        .fpn-list
     	link-get-next	\ next-link-addr
         dup if
 	    ." ," space
@@ -554,13 +574,100 @@ include mm_array.fs
     r>				\ list-ret
 ;
 
-: fpn-list-deallocate ( list-addr -- )
-    dup list-get-first-link	\ list-addr cur-link-addr
+\ Return a fpn list plus fpn list
+: fpnl-plus-fpnl ( list1 list2 -- list3)
+
+    \ Check the lengths are the same
+    over list-get-len		\ list1 list2 len1
+    over list-get-len		\ list1 list2 len1 len2
+    <> if 			\ list1 list2 flag
+	cr
+	." fpnl-plus-fpnl list lengths not equal"
+	cr
+	-24 throw
+    then			\ list1 list2
+
+    list-header-store list-new	\ list1 list2 list3
+    >r				\ list1 list2 R: list3
+
+    list-get-first-link		\ list1 link2 R: list3
+    swap			\ link2 list1 R: list3
+    list-get-first-link		\ link2 link1 R: list3
     begin
-        dup		\ list-addr cur-link-addr cur-link-addr (flag, zero or not)
-    while		\ list-addr cur-link-addr 
+    dup				\ link2 link1 link1 R: list3
+    while			\ link2 link1 R: list3
+
+	over			\ link2 link1 link2       R: list3
+        link-get-data		\ link2 link1 data2       R: list3
+	fpn-get-value		\ link2 link1       F: x  R: list3
+
+	dup 			\ link2 link1 link1 F: x  R: list3
+        link-get-data		\ link2 link1 data1       R: list3
+	fpn-get-value		\ link2 link1       F: y x  R: list3
+	
+	f+			\ link1 link2       F: z  R: list3
+
+	r@			\ link2 link1 list3 F: x R: list3
+	fpn-list-push		\ link2 link1            R: list3
+
+    	link-get-next		\ link2 link1+           R: list3
+    	swap link-get-next	\ link1+ link2+          R: list3
+    	swap			\ link2+ link1+          R: list3 (Keep order for consistency)
+    repeat
+    2drop			\ R: list3
+    r>				\ list3
+;
+
+\  Add a fp-list to each fp-list in a list-of-lists
+: fpnlol-plus-fpnl ( fpnl-addr fpnlol-addr -- fpnlol2-addr )
+
+    list-header-store list-new	\ fpnl fpnlol list-ret
+    >r				\ fpnl fpnlol R: fpnlol2
+
+    list-get-first-link		\ fpnl link R: fpnlol2
+    begin
+    dup
+    while
+        swap			\ link fpnl      R: fpnlol2
+        over link-get-data	\ link fpnl data R: fpnlol2
+        over			\ link fpnl data fpnl R: fpnlol2
+	fpnl-plus-fpnl		\ link fpnl fpnl+
+
+	link-store link-new	\ link fpnl link+     R: fpnlol2
+
+	r@			\ link fpnl link+ fpnlol2 R: fpnlol2
+	list-push-link		\ link fpnl
+	swap			\ fpnl link
+	
+    	link-get-next		\ fpnl link-next
+    repeat
+    
+    2drop
+    r>				\ list-ret
+;
+
+: fpn-list-deallocate ( list-addr -- )
+    dup list-get-first-link		\ list-addr cur-link-addr
+    begin
+        dup				\ list-addr cur-link-addr cur-link-addr (flag, zero or not)
+    while				\ list-addr cur-link-addr 
         dup link-get-data 		\ list-addr cur-link-addr num-addr
 	fpn-store mma-deallocate	\ list-addr cur-link-addr
+        dup link-get-next		\ list-addr cur-link-addr next-link-addr
+        swap				\ list-addr next-link-addr cur-link-addr
+	link-store mma-deallocate	\ list-addr next-link-addr
+    repeat
+    drop				\ list-addr
+    list-header-store mma-deallocate	\
+;
+
+: list-of-lists-fpn-deallocate ( list-addr -- )
+    dup list-get-first-link	\ list-addr cur-link-addr
+    begin
+        dup				\ list-addr cur-link-addr cur-link-addr (flag, zero or not)
+    while				\ list-addr cur-link-addr 
+        dup link-get-data 		\ list-addr cur-link-addr num-addr
+	fpn-list-deallocate		\ list-addr cur-link-addr
         dup link-get-next		\ list-addr cur-link-addr next-link-addr
         swap				\ list-addr next-link-addr cur-link-addr
 	link-store mma-deallocate	\ list-addr next-link-addr
@@ -654,7 +761,6 @@ list-fp-3 .fpn-list
 3 spaces ." (list-fp-1 + 1.5)"
 cr
 
-
 memory-use
 
 cr
@@ -673,6 +779,57 @@ list8 num-list-deallocate
 list-fp-1 fpn-list-deallocate
 list-fp-2 fpn-list-deallocate
 list-fp-3 fpn-list-deallocate
+
+memory-use
+
+\  Do list-of-lists things
+list-header-store list-new value list-of-lists-fp-1	\ Get linked list header for a new lists-of-lists
+
+list-header-store list-new				\ fpn-list   Start a fpn list
+dup 5.1e fpn-list-add
+dup 4.1e fpn-list-add					\ fpn-list
+link-store link-new					\ link
+list-of-lists-fp-1 list-add-link			\ 
+
+list-header-store list-new				\ fpn-list   Start a fpn list
+dup 2.1e fpn-list-add
+dup 1.1e fpn-list-add					\ fpn-list
+link-store link-new					\ link
+list-of-lists-fp-1 list-add-link			\ 
+
+cr
+." list-of-lists-fp-1: "
+list-of-lists-fp-1 .list-of-lists-fpn
+3 spaces ." (Lets say these are Cartesian coordinates)"
+cr
+
+
+list-header-store list-new value list-fp-4		\ Get linked list header for a new lists-of-lists
+
+list-fp-4						\ fpn-list   Start a fpn list
+dup 3.1e fpn-list-add
+6.7e fpn-list-add					\ fpn-list
+
+list-fp-4 list-of-lists-fp-1 fpnlol-plus-fpnl value list-of-lists-fp-2
+
+cr
+." list-of-lists-fp-2: "
+list-of-lists-fp-2 .list-of-lists-fpn
+3 spaces ." (Euclidean Translation using "
+list-fp-4 .fpn-list
+." )"
+cr
+
+
+memory-use
+
+cr
+." Deallocating  ..."
+cr
+
+list-of-lists-fp-1 list-of-lists-fpn-deallocate
+list-fp-4 fpn-list-deallocate
+list-of-lists-fp-2 list-of-lists-fpn-deallocate
 
 memory-use
 

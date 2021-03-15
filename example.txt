@@ -33,3 +33,22 @@ Memory Use:
   link-store        Capacity: 60, Free: 60, In use: 0 
   num-store         Capacity: 30, Free: 30, In use: 0 
   fpn-store         Capacity: 30, Free: 30, In use: 0 
+
+list-of-lists-fp-1: ((1.1 , 2.1 ), (4.1 , 5.1 ))   (Lets say these are Cartesian coordinates)
+
+list-of-lists-fp-2: ((7.8 , 5.2 ), (10.8 , 8.2 ))   (Euclidean Translation using (6.7 , 3.1 ))
+
+Memory Use:
+  list-header-store Capacity: 15, Free: 8, In use: 7 
+  link-store        Capacity: 60, Free: 46, In use: 14 
+  num-store         Capacity: 30, Free: 30, In use: 0 
+  fpn-store         Capacity: 30, Free: 20, In use: 10 
+
+Deallocating  ...
+
+Memory Use:
+  list-header-store Capacity: 15, Free: 15, In use: 0 
+  link-store        Capacity: 60, Free: 60, In use: 0 
+  num-store         Capacity: 30, Free: 30, In use: 0 
+  fpn-store         Capacity: 30, Free: 30, In use: 0 
+
