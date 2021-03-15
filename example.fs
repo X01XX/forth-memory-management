@@ -175,8 +175,9 @@ include mm_array.fs
 \ ### M A I N ####
 
 2 15 mma-new value list-header-store	\ Initialize linked list header store.		( link addr, num items, both initially zero )
-2 30 mma-new value link-store		\ Initialize store for linked list links.	( next-link-addr, num-addr )
+2 60 mma-new value link-store		\ Initialize store for linked list links.	( next-link-addr, num-addr )
 1 30 mma-new value num-store		\ Initialize store for numbers.			( Just a number )
+2 30 mma-new value fpn-store		\ Initialize store for floating point numbers.	( A word to elicit number cells for fp would be nice )
 
 \ Add a number to the beginning of a list
 : num-list-add ( n num-list-addr -- )
@@ -269,7 +270,7 @@ include mm_array.fs
     list-header-store list-new	\ n list1 list-ret
     >r				\ n list1 R: list-ret
 
-    list-get-first-link		\ n list-get-first-link R: list-ret
+    list-get-first-link		\ n first-link R: list-ret
     begin
     dup				\ n next-link next-link R: list-ret
     while			\ n next-link R: list-ret
@@ -295,7 +296,7 @@ include mm_array.fs
     list-header-store list-new	\ n list1 list-ret
     >r				\ n list1 R: list-ret
 
-    list-get-first-link		\ n list-get-first-link R: list-ret
+    list-get-first-link		\ n first-link R: list-ret
     begin
     dup				\ n next-link next-link R: list-ret
     while			\ n next-link R: list-ret
@@ -324,7 +325,7 @@ include mm_array.fs
     list-header-store list-new	\ list2 list1 list-ret
     >r				\ list2 list1 R: list-ret
 
-    list-get-first-link		\ list2 list-get-first-link R: list-ret
+    list-get-first-link		\ list2 first-link R: list-ret
     begin
     dup				\ list2 next-link next-link R: list-ret
     while			\ list2 next-link R: list-ret
@@ -433,7 +434,7 @@ include mm_array.fs
 ;
 
 \ Print memory use for num-lists
-: num-list-memory-use ( -- )
+: memory-use ( -- )
 	cr
 	." Memory Use:" cr
 	2 spaces ." list-header-store" space
@@ -442,6 +443,130 @@ include mm_array.fs
 	link-store .mma-usage cr
 	2 spaces ." num-store" 9 spaces
 	num-store .mma-usage cr
+	2 spaces ." fpn-store" 9 spaces
+	fpn-store .mma-usage cr
+;
+
+\ Get fpn value from fpn item
+: fpn-get-value ( fpn-addr -- n )
+    f@
+;
+
+\ Set fpn value in fpn item
+: fpn-set-value ( n num-addr -- )
+    f!
+;
+
+\ Allocate two cells for a fp number, store the number, return the number cell-addr
+: fpn-new ( fpn-store-addr F: n -- fpn-addr )
+	 mma-allocate		( fpn-store-addr F: n -- fpn-addr F: n )
+         dup			( fpn-addr F: n -- fpn-addr fpn-addr F: n )
+         fpn-set-value		( fpn-addr fpn-addr F: n -- fpn-addr )
+;
+
+\ Add a floating point number to the beginning of a list
+: fpn-list-add ( num-list-addr F: n -- )
+    fpn-store fpn-new		\ num-list-addr num-item-addr
+    link-store link-new		\ num-list-addr link-item-addr 
+    swap			\ link-item-addr num-list-addr
+    list-add-link		\
+;
+
+: .fpn-list ( list-addr -- )
+    ." ("
+    @		\ next-link-addr
+    begin
+    dup
+    while
+        dup link-get-data
+	fpn-get-value f.
+    	link-get-next	\ next-link-addr
+        dup if
+	    ." ," space
+	then
+    repeat
+    
+    ." )"
+    drop
+;
+
+\ Add a fpn to the end of the list
+: fpn-list-push ( num-list-addr F: n -- )
+    fpn-store fpn-new		\ fpn-list-addr fpn-item-addr
+    link-store link-new		\ fpn-list-addr link-item-addr 
+    swap			\ link-item-addr fpn-list-addr
+    list-push-link		\
+;
+
+\ Return a fpn list multiplied by a fp number
+: fpn-list-multiply ( list1 F: n -- list2 )
+
+    list-header-store list-new	\ list1 list-ret F: n
+    >r				\ list1 F: n R: list-ret
+
+    list-get-first-link		\ first-link F: n R: list-ret
+    begin
+    dup				\ next-link next-link F: n R: list-ret
+    while			\ next-link F: n R: list-ret
+
+	dup			\ cur-link cur-link F: n R: list-ret
+
+        link-get-data		\ cur-link data F: n R: list-ret
+	fdup			\ cur-link data F: n n R: ret-list
+        fpn-get-value		\ cur-link F: m n n R: list-ret
+
+		f*		\ cur-link F: y n  R: list-ret
+		r@		\ cur-link list-ret F: y n R: list-ret
+
+		fpn-list-push	\ cur-link F: n R: list-ret
+
+    	link-get-next		\ next-link F: n R: list-ret
+    repeat
+    drop fdrop			\ R: list-ret
+    r>				\ list-ret
+;
+
+\ Return a fpn list plus an fp number
+: fpn-list-plus ( list1 F: n -- list2 )
+
+    list-header-store list-new	\ list1 list-ret F: n
+    >r				\ list1 F: n R: list-ret
+
+    list-get-first-link		\ first-link F: n R: list-ret
+    begin
+    dup				\ next-link next-link F: n R: list-ret
+    while			\ next-link F: n R: list-ret
+
+	dup			\ cur-link cur-link F: n R: list-ret
+
+        link-get-data		\ cur-link data F: n R: list-ret
+	fdup			\ cur-link data F: n n R: ret-list
+        fpn-get-value		\ cur-link F: m n n R: list-ret
+
+		f+		\ cur-link F: y n  R: list-ret
+		r@		\ cur-link list-ret F: y n R: list-ret
+
+		fpn-list-push	\ cur-link F: n R: list-ret
+
+    	link-get-next		\ next-link F: n R: list-ret
+    repeat
+    drop fdrop			\ R: list-ret
+    r>				\ list-ret
+;
+
+: fpn-list-deallocate ( list-addr -- )
+    dup list-get-first-link	\ list-addr cur-link-addr
+    begin
+        dup		\ list-addr cur-link-addr cur-link-addr (flag, zero or not)
+    while		\ list-addr cur-link-addr 
+        dup link-get-data 		\ list-addr cur-link-addr num-addr
+	fpn-store mma-deallocate	\ list-addr cur-link-addr
+        dup link-get-next		\ list-addr cur-link-addr next-link-addr
+        swap				\ list-addr next-link-addr cur-link-addr
+	link-store mma-deallocate	\ list-addr next-link-addr
+    repeat
+    drop				\ list-addr
+    list-header-store mma-deallocate	\
 ;
 
 list-header-store list-new value list1	\ Get linked list header for a new list, store it in word list1
@@ -463,7 +588,6 @@ cr
 ." list2: "
 list2 .num-list
 cr
-
 cr
 ." list3: "
 list1 list2 num-list-intersection value list3
@@ -506,7 +630,32 @@ list8 .num-list
 3 spaces ." (list1 + -1)"
 cr
 
-num-list-memory-use
+
+\ Do floating point list things
+cr
+list-header-store list-new value list-fp-1	\ Get linked list header for a new floating point list
+2.1e list-fp-1 fpn-list-add
+3.2e list-fp-1 fpn-list-add
+4.6e list-fp-1 fpn-list-add
+." list-fp-1: "
+list-fp-1 .fpn-list
+cr
+cr
+
+3.5e list-fp-1 fpn-list-multiply value list-fp-2
+." list-fp-2: "
+list-fp-2 .fpn-list
+3 spaces ." (list-fp-1 * 3.5)"
+cr
+cr
+1.5e list-fp-1 fpn-list-plus value list-fp-3
+." list-fp-3: "
+list-fp-3 .fpn-list
+3 spaces ." (list-fp-1 + 1.5)"
+cr
+
+
+memory-use
 
 cr
 ." Deallocating ..."
@@ -521,5 +670,9 @@ list6 num-list-deallocate
 list7 num-list-deallocate
 list8 num-list-deallocate
 
-num-list-memory-use
+list-fp-1 fpn-list-deallocate
+list-fp-2 fpn-list-deallocate
+list-fp-3 fpn-list-deallocate
+
+memory-use
 

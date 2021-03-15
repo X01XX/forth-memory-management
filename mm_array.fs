@@ -33,7 +33,7 @@ cr
         *		\ n-i item-size all-items-size
         1 cells +	\ n-i item-size total-size ( add one word for the stack address )
 
-        align
+        cfalign
 	here		\ n-i item-size total-size free-address
 	swap		\ n-i item-size free-addr total-size
 	allot		\ n-i item-size array-addr ( array memory allocated )
