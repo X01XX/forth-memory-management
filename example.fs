@@ -76,8 +76,7 @@ include mm_array.fs
         list-set-first-link  ( list-header-addr link-addr list-header-addr -- list-header-addr )
 
         \ Update the list count 
-	1 cells +	( list-header-addr -- list-header-cell2-addr )
-        1 swap +!	( list-header-cell2-addr -- )
+        1 swap list-set-len
 ;
  
 \ Add a link to the end of a list
@@ -104,7 +103,8 @@ include mm_array.fs
 
 : .num-list ( list-addr -- )
     ." ("
-    @		\ next-link-addr
+    list-get-first-link		\ first-link-addr
+    
     begin
     dup
     while
