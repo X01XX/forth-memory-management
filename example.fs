@@ -1,90 +1,80 @@
 include mm_array.fs
 
-\ Return the first link addr of a list-header
-: list-get-first-link ( list-header -- link-addr )
-    @
-;
+\ Return the first link addr of a list-header  ( list-header -- link-addr )
 
-\ Set the first link addr of a list-header
-: list-set-first-link ( link-addr list-header -- )
-    !
-;
+' @ alias list-get-first-link
+
+\ Set the first link addr of a list-header ( link-addr list-header -- )
+' ! alias list-set-first-link
 
 \ Get the length of a list
 : list-get-len ( list-addr - n )
-    1 cells + @
+    cell + @
 ;
 
 \ Set the length of a list
 : list-set-len ( n list-addr - )
-    1 cells + !
+    cell + !
 ;
 
-\ Return the next pointer of a link
-: link-get-next ( link-addr -- next-link-addr )
-    @
-;
+\ Return the next pointer of a link ( link-addr -- next-link-addr )
+' @ alias link-get-next
 
-\ Set the next pointer of a link (0 or another link)
-: link-set-next ( addr link -- )
-    !
-;
+\ Set the next pointer of a link ( addr link -- ) addr can be zero
+' ! alias link-set-next
 
 \ Return the data pointer of a list link
 : link-get-data ( link-addr -- data-addr )
-    1 cells + @
+    cell + @
 ;
 
 \ Set link data pointer 
 : link-set-data ( data link -- )
-    1 cells + !
+    cell + !
 ;
 
-\ Get num value from num item
-: num-get-value ( num-addr -- n )
-    @
-;
+\ Get num value from num item ( num-addr -- n )
+' @ alias num-get-value
 
-\ Set num value in num item
-: num-set-value ( n num-addr -- )
-    !
-;
+\ Set num value in num item ( n num-addr -- )
+' ! alias num-set-value
 
 \ Return the address for a list header, link-addr and num-items initialized to zero
-: list-new ( list-header-store -- list-header-addr )
-	mma-allocate		\ ( list-header-store -- list-header-addr )
+: list-new ( list-header-store -- list-addr )
+	mma-allocate		\ list-addr
 
         \ Zero out first link addr
-	0 over	 		\ ( list-header-addr -- list-header-addr 0 list-header-addr )
-        list-set-first-link		\ ( list-header-addr 0 list-header-addr -- list-header-addr )
+	0 over	 		\ list-addr 0 list-addr
+        list-set-first-link	\ list-addr 
 
 	\ Zero out list length
-	0 over			\ ( list-header-addr -- list-header-addr 0 list-header-addr )
-	list-set-len		\ ( list-header-addr 0 list-header-addr -- list-header-addr )
+	0 over			\ list-addr 0 list-addr
+	list-set-len		\ list-addr
 ;
 
 \ Add an address to the beginning of a list
-: list-add-link ( link-addr list-header-addr -- ) 
+: list-add-link ( link-addr list-addr -- ) 
+
 	\ Store list header next pointer to link next pointer
-        2dup		( link-addr list-header-addr -- link-addr list-header-addr any-addr list-header-addr )
-        list-get-first-link	( link-addr list-header-addr link-addr list-header-addr  -- link-addr list-header-addr link-addr header-next-pointer )
-        swap		( link-addr list-header-addr link-addr header-next-pointer -- link-addr list-header-addr list-get-first-link link )
-        link-set-next	( link-addr list-header-addr list-get-first-link link  -- link-addr list-header-addr )
+        2dup			\ link-addr list-addr link-addr list-addr 
+        list-get-first-link	\ link-addr list-addr link-addr first-link
+        swap			\ link-addr list-addr first-link link-addr
+        link-set-next		\ link-addr list-addr
 
         \ Store link pointer to header next pointer
-        swap over	( link-addr list-header-addr  -- list-header-addr link-addr list-header-addr )
-        list-set-first-link  ( list-header-addr link-addr list-header-addr -- list-header-addr )
+        swap over		\ list-addr link-addr list-addr
+        list-set-first-link  	\ list-addr
 
         \ Update the list count 
-        1 swap list-set-len
+        1 swap list-set-len	\ -- )
 ;
  
 \ Add a link to the end of a list
-: list-push-link ( link-addr list-header-addr -- )
+: list-push-link ( link-addr list-addr -- )
 
     \ Check for an empty list
-    dup			\ link-addr list-header list-header
-    list-get-first-link \ link-addr list-header link-next
+    dup				\ link-addr list-addr list-addr
+    list-get-first-link 	\ link-addr list-addr first-link
     dup if
 	begin
 	    nip			\ link-new link-next
@@ -94,33 +84,14 @@ include mm_array.fs
 	while			\ link-new link-next link-next-next
 	repeat
 	drop			\ link-new link-last
-	link-set-next		\
+	link-set-next		\ -- )
     else
 	drop			\ link-addr list-header
-	list-set-first-link	\ 
+	list-set-first-link	\ -- )
     then
 ;
 
-: .num-list ( list-addr -- )
-    ." ("
-    list-get-first-link		\ first-link-addr
-    
-    begin
-    dup
-    while
-        dup link-get-data
-	num-get-value 1 .r
-    	link-get-next	\ next-link-addr
-        dup if
-	    ." ," space
-	then
-    repeat
-    
-    ." )"
-    drop
-;
-
-: .list-header ( list-add -- )
+: .list-header ( list-addr -- )
 	." List addr:"
 	space
 	dup .
@@ -130,22 +101,6 @@ include mm_array.fs
 	." Num items:"
 	space
 	list-get-len .
-;
-
-\ Allocate a cell for a number, store the number, return the number cell-addr
-: num-new ( n num-store-addr -- num-addr )
-	 mma-allocate		( n num-store-addr -- n num-addr )
-         swap over		( n num-addr -- num-addr n num-addr )
-         num-set-value		( num-addr n num-addr -- num-addr )
-;
-
-: .num ( num-addr -- )
-	." Num  addr:"
-	space
-	dup .
-	." Num:"
-	space
-	num-get-value .
 ;
 
 \ Return a new link
@@ -177,7 +132,42 @@ include mm_array.fs
 2 15 mma-new value list-header-store	\ Initialize linked list header store.		( link addr, num items, both initially zero )
 2 60 mma-new value link-store		\ Initialize store for linked list links.	( next-link-addr, num-addr )
 1 30 mma-new value num-store		\ Initialize store for numbers.			( Just a number )
-2 30 mma-new value fpn-store		\ Initialize store for floating point numbers.	( A word to elicit number cells for fp would be nice )
+float cell / 30 mma-new value fpn-store		\ Initialize store for floating point numbers.
+
+\ Allocate a cell for a number, store the number, return the number cell-addr
+: num-new ( n num-store-addr -- num-addr )
+	 mma-allocate		\ n num-addr
+         swap over		\ num-addr n num-addr
+         num-set-value		\ num-addr
+;
+
+: .num ( num-addr -- )
+	." Num  addr:"
+	space
+	dup .
+	." Num:"
+	space
+	num-get-value .
+;
+
+: .num-list ( list-addr -- )
+    ." ("
+    list-get-first-link		\ first-link
+    
+    begin
+    dup
+    while
+        dup link-get-data	\ link data-addr
+	num-get-value 1 .r	\ link
+    	link-get-next		\ next-link
+        dup if
+	    ." ," space
+	then
+    repeat
+    
+    ." )"
+    drop			\ -- )
+;
 
 \ Add a number to the beginning of a list
 : num-list-add ( n num-list-addr -- )
@@ -185,7 +175,7 @@ include mm_array.fs
     num-store num-new		\ num-list-addr num-item-addr
     link-store link-new		\ num-list-addr link-item-addr 
     swap			\ link-item-addr num-list-addr
-    list-add-link		\
+    list-add-link		\ -- )
 ;
 
 \ Add a number to the end of the list
@@ -194,7 +184,7 @@ include mm_array.fs
     num-store num-new		\ num-list-addr num-item-addr
     link-store link-new		\ num-list-addr link-item-addr 
     swap			\ link-item-addr num-list-addr
-    list-push-link		\
+    list-push-link		\ -- )
 ;
 
 
@@ -217,7 +207,7 @@ include mm_array.fs
     	link-get-next		\ flag n next-link
     repeat
     
-    2drop
+    2drop			\ flag
 ;
 
 \ Return the intersection of two num lists
@@ -419,10 +409,10 @@ include mm_array.fs
 ;
 
 : num-list-deallocate ( list-addr -- )
-    dup list-get-first-link	\ list-addr cur-link-addr
+    dup list-get-first-link		\ list-addr cur-link-addr
     begin
-        dup		\ list-addr cur-link-addr cur-link-addr (flag, zero or not)
-    while		\ list-addr cur-link-addr 
+        dup				\ list-addr cur-link-addr cur-link-addr
+    while				\ list-addr cur-link-addr 
         dup link-get-data 		\ list-addr cur-link-addr num-addr
 	num-store mma-deallocate	\ list-addr cur-link-addr
         dup link-get-next		\ list-addr cur-link-addr next-link-addr
@@ -430,7 +420,7 @@ include mm_array.fs
 	link-store mma-deallocate	\ list-addr next-link-addr
     repeat
     drop				\ list-addr
-    list-header-store mma-deallocate	\
+    list-header-store mma-deallocate	\ -- )
 ;
 
 \ Print memory use for num-lists
@@ -447,21 +437,17 @@ include mm_array.fs
 	fpn-store .mma-usage cr
 ;
 
-\ Get fpn value from fpn item
-: fpn-get-value ( fpn-addr -- n )
-    f@
-;
+\ Get fpn value from fpn item ( fpn-addr -- n )
+' f@ alias fpn-get-value
 
-\ Set fpn value in fpn item
-: fpn-set-value ( n num-addr -- )
-    f!
-;
+\ Set fpn value in fpn item ( n num-addr -- )
+' f! alias fpn-set-value
 
 \ Allocate two cells for a fp number, store the number, return the number cell-addr
 : fpn-new ( fpn-store-addr F: n -- fpn-addr )
-	 mma-allocate		( fpn-store-addr F: n -- fpn-addr F: n )
-         dup			( fpn-addr F: n -- fpn-addr fpn-addr F: n )
-         fpn-set-value		( fpn-addr fpn-addr F: n -- fpn-addr )
+	 mma-allocate		\ fpn-addr F: n
+         dup			\ fpn-addr fpn-addr F: n
+         fpn-set-value		\ fpn-addr
 ;
 
 \ Add a floating point number to the beginning of a list
@@ -469,7 +455,7 @@ include mm_array.fs
     fpn-store fpn-new		\ num-list-addr num-item-addr
     link-store link-new		\ num-list-addr link-item-addr 
     swap			\ link-item-addr num-list-addr
-    list-add-link		\
+    list-add-link		\ -- )
 ;
 
 \ Print a floating point list
@@ -477,45 +463,45 @@ include mm_array.fs
     ." ("
     list-get-first-link		\ first-link-addr
     begin
-    dup
+    dup				\ link link
     while
-        dup link-get-data
-	fpn-get-value f.
-    	link-get-next	\ next-link-addr
-        dup if
+        dup link-get-data	\ link data
+	fpn-get-value f.	\ link
+    	link-get-next		\ next-link
+        dup if			\ If not at end, print a comma
 	    ." ," space
 	then
     repeat
     
     ." )"
-    drop
+    drop			\ -- )
 ;
 
 \ Print a list of floating point lists
 : .list-of-lists-fpn ( list-addr -- )
     ." ("
-    list-get-first-link		\ first-link-addr
+    list-get-first-link		\ first-link
     begin
-    dup
+    dup				\ link link
     while
-        dup link-get-data
-        .fpn-list
-    	link-get-next	\ next-link-addr
-        dup if
+        dup link-get-data	\ link data
+        .fpn-list		\ link
+    	link-get-next		\ next-link
+        dup if			\ If not at end, print comma
 	    ." ," space
 	then
     repeat
     
     ." )"
-    drop
+    drop			\ -- )
 ;
 
 \ Add a fpn to the end of the list
-: fpn-list-push ( num-list-addr F: n -- )
-    fpn-store fpn-new		\ fpn-list-addr fpn-item-addr
-    link-store link-new		\ fpn-list-addr link-item-addr 
-    swap			\ link-item-addr fpn-list-addr
-    list-push-link		\
+: fpn-list-push ( num-list F: n -- )
+    fpn-store fpn-new		\ fpn-list fpn-item
+    link-store link-new		\ fpn-list link
+    swap			\ link fpn-list
+    list-push-link		\ -- )
 ;
 
 \ Return a fpn list multiplied by a fp number
@@ -658,7 +644,7 @@ include mm_array.fs
 	link-store mma-deallocate	\ list-addr next-link-addr
     repeat
     drop				\ list-addr
-    list-header-store mma-deallocate	\
+    list-header-store mma-deallocate	\ -- )
 ;
 
 : list-of-lists-fpn-deallocate ( list-addr -- )
@@ -673,7 +659,7 @@ include mm_array.fs
 	link-store mma-deallocate	\ list-addr next-link-addr
     repeat
     drop				\ list-addr
-    list-header-store mma-deallocate	\
+    list-header-store mma-deallocate	\ -- )
 ;
 
 list-header-store list-new value list1	\ Get linked list header for a new list, store it in word list1
@@ -803,7 +789,6 @@ list-of-lists-fp-1 .list-of-lists-fpn
 3 spaces ." (Lets say these are Cartesian coordinates)"
 cr
 
-
 list-header-store list-new value list-fp-4		\ Get linked list header for a new lists-of-lists
 
 list-fp-4						\ fpn-list   Start a fpn list
@@ -820,7 +805,6 @@ list-fp-4 .fpn-list
 ." )"
 cr
 
-
 memory-use
 
 cr
@@ -833,3 +817,6 @@ list-of-lists-fp-2 list-of-lists-fpn-deallocate
 
 memory-use
 
+cr
+." dstack end:" space .s cr
+." fstack end:" space f.s cr

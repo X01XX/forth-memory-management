@@ -43,7 +43,7 @@
 
 \ Get the start of the stack
 : _stack-get-start ( stack-addr -- start-addr )
-    1 cells +	\ start-addr
+    cell +	\ start-addr
 ;
 
 \ stack-new.  Run like: "<number-cells> stack-new value <stack-name>" to allocate cells and save addr in <stack-name>
@@ -90,7 +90,7 @@
     _stack-get-num-free	\ stack-addr n
 
     1+ swap		\ new-num stack-addr
-    _stack-set-num-free	\
+    _stack-set-num-free	\ -- )
 ;
 
 \ Decrement the number of cells in an stack
@@ -99,7 +99,7 @@
     _stack-get-num-free	\ stack-addr n
 
     1- swap		\ new-num stack-addr
-    _stack-set-num-free	\
+    _stack-set-num-free	\ -- )
 ;
 
 \ stack-push. Run like: "<value to add> <stack-name> stack-push" 
@@ -126,7 +126,7 @@
     cells +	 	\ stack-addr n stack-cell[num-free]
     !           	\ stack-addr ( n stored in cell[num-free] )
 
-    _stack-inc-used	\
+    _stack-inc-used	\ -- )
 ;
 
 \ stack-pop.  Run like: "<stack-name> stack-pop"

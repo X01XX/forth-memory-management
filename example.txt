@@ -52,3 +52,7 @@ Memory Use:
   num-store         Capacity: 30, Free: 30, In use: 0 
   fpn-store         Capacity: 30, Free: 30, In use: 0 
 
+dstack end: <0> 
+fstack end: <0> 
+ ok
+
