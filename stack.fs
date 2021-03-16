@@ -24,10 +24,8 @@
     w!		\ Store capacity into the first 16 bits
 ;
 
-\ Get the stack capacity
-: _stack-get-capacity ( stack-addr -- n )
-    uw@		\ Fetch capacity frim the first 16 bits
-;
+\ Get the stack capacity ( stack-addr -- n )
+' uw@ alias _stack-get-capacity ( stack-addr -- n )
 
 \ Get the number used
 : _stack-get-num-free ( stack-addr -- n )
@@ -147,7 +145,7 @@
     dup			\ stack-addr stack-addr
     _stack-get-num-free	\ stack-addr num-free
 
-    1 + cells +		\ stack-cell[last]
+    1+ cells +		\ stack-cell[last]
     @			\ n
 ;
 
@@ -167,7 +165,7 @@
 \ .stack. Run like: "<stack-name> .stack"
 : .stack ( stack-addr -- )
    dup .stack-stats	\ stack-addr
-   dup 1 cells +	\ stack-addr stack-start
+   dup cell +		\ stack-addr stack-start
    swap 		\ stack-start stack-addr
    _stack-get-num-free	\ stack-start num-free
 

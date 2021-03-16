@@ -31,7 +31,7 @@ cr
         swap		\ n-i item-size n-i
         over		\ n-i item-size n-i item-size
         *		\ n-i item-size all-items-size
-        1 cells +	\ n-i item-size total-size ( add one word for the stack address )
+        cell +		\ n-i item-size total-size ( add one word for the stack address )
 
         cfalign
 	here		\ n-i item-size total-size free-address
@@ -48,7 +48,7 @@ cr
 	0		\ array-addr n-i item-size 0
 	2over	drop	\ array-addr n-i item-size 0 array-addr
 	nip		\ array-addr n-i item-size array-addr
-	1 cells +	\ array-addr n-i item-size array-addr+ ( addr after stack pointer )
+	cell +		\ array-addr n-i item-size array-addr+ ( addr after stack pointer )
 
         rot		\ array-addr item-size array-addr+ n-i
 
