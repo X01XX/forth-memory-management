@@ -23,9 +23,11 @@ addresses on the stack, which has no effect on the utility of the stack-array.
 
 That a stack is used to provide memory management to a stack-based language is sublime.
 
-The examples use linked lists of numbers, Linear Algebra would be possible.
+The examples use linked lists of numbers, Linear Algebra (with lots of calculations and intermediate results) would be possible.
 
 Lists could be of other memory chunks, like objects. They may, or may not, be in a stack-array.
+
+The list-link data address is one cell, it could contain one-cell data directly.
 
 Deallocate each list as soon as it is no longer needed.
 
