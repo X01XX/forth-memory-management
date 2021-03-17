@@ -100,7 +100,7 @@ include stack.fs
     dup			\ mma-addr stack-addr stack-addr
     _stack-get-capacity	\ mma-addr stack-addr capacity
     dup			\ mma-addr stack-addr capacity capacity
-    1 .r		\ mma-addr stack-addr capacity (emit capacity)
+    3 .r		\ mma-addr stack-addr capacity (emit capacity)
     44 emit		\ mma-addr stack-addr capacity (emit comma)
     space
     ." Free:"
@@ -108,32 +108,32 @@ include stack.fs
     dup rot		\ mma-addr capacity capacity stack-addr 
    _stack-get-num-free	\ mma-addr capacity capacity num-free
     dup			\ mma-addr capacity capacity num-free num-free
-    1 .r		\ mma-addr capacity capacity num-free
+    3 .r		\ mma-addr capacity capacity num-free
     44 emit		\ mma-addr capacity capacity num-free
     space
    ." In use:"
    space
-   - . 			\ mma-addr capacity
+   - 3 .r		\ mma-addr capacity
    swap			\ capacity mma-addr
    space
    ." Item Size:" space
    _mm-get-item-size	\ capacity item-size
    dup			\ capacity item-size item-size
-   .			\ capacity item-size
+   3 .r space		\ capacity item-size
    over *		\ capacity array-size
    tuck			\ array-size capacity array-size
    ." Array size:" space
-   .			\ array-size capacity
+   3 .r space 		\ array-size capacity
    3 +			\ array-size capacity-cells-in-stack-plust-3-cells-overhead 
    cells		\ array-size overhead-size
    dup			\ array-size overhead-size overhead-size
    ." Overhead:" space
-   .			\ array-size overhead-size
+   3 .r	space		\ array-size overhead-size
    ." Total:" space
    + dup		\ total-size total-size
-   .			\ total-size
+   4 .r	 space		\ total-size
    cell /		\ number cells
    ." Cells:" space
-   .			\ -- )
+   3 .r			\ -- )
 ;
 
