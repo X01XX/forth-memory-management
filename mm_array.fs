@@ -6,14 +6,15 @@
 \
 \   Memory is arranged as:
 \
-\     Stack
-\       one cell for info, capacity and current number free
-\       one cell for each array item
-\
 \     Array
 \       one cell for stack address
 \       one cell for item size in bytes
 \       items
+\
+\     Stack
+\       one cell for info, capacity and current number free
+\       one cell for each array item
+\
 
 include stack.fs 
 
