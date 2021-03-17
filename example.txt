@@ -21,37 +21,38 @@ list-fp-2: (16.1 , 11.2 , 7.35 )   (list-fp-1 * 3.5)
 list-fp-3: (6.1 , 4.7 , 3.6 )   (list-fp-1 + 1.5)
 
 Memory Use:
-  list-header-store Capacity: 15, Free: 4, In use: 11  Item Size: 16 Array size: 240 Overhead: 144 Total: 384 Cells: 48 
-  link-store        Capacity: 60, Free: 27, In use: 33  Item Size: 16 Array size: 960 Overhead: 504 Total: 1464 Cells: 183 
-  num-store         Capacity: 30, Free: 6, In use: 24  Item Size: 8 Array size: 240 Overhead: 264 Total: 504 Cells: 63 
-  fpn-store         Capacity: 30, Free: 21, In use: 9  Item Size: 8 Array size: 240 Overhead: 264 Total: 504 Cells: 63 
+  list-header-store Capacity:  15, Free:   4, In use:  11 Item Size:  16 Array size: 240 Overhead: 144 Total:  384 Cells:  48
+  link-store        Capacity:  60, Free:  27, In use:  33 Item Size:  16 Array size: 960 Overhead: 504 Total: 1464 Cells: 183
+  num-store         Capacity:  30, Free:   6, In use:  24 Item Size:   8 Array size: 240 Overhead: 264 Total:  504 Cells:  63
+  fpn-store         Capacity:  30, Free:  21, In use:   9 Item Size:   8 Array size: 240 Overhead: 264 Total:  504 Cells:  63
 
 Deallocating ...
 
 Memory Use:
-  list-header-store Capacity: 15, Free: 15, In use: 0  Item Size: 16 Array size: 240 Overhead: 144 Total: 384 Cells: 48 
-  link-store        Capacity: 60, Free: 60, In use: 0  Item Size: 16 Array size: 960 Overhead: 504 Total: 1464 Cells: 183 
-  num-store         Capacity: 30, Free: 30, In use: 0  Item Size: 8 Array size: 240 Overhead: 264 Total: 504 Cells: 63 
-  fpn-store         Capacity: 30, Free: 30, In use: 0  Item Size: 8 Array size: 240 Overhead: 264 Total: 504 Cells: 63 
+  list-header-store Capacity:  15, Free:  15, In use:   0 Item Size:  16 Array size: 240 Overhead: 144 Total:  384 Cells:  48
+  link-store        Capacity:  60, Free:  60, In use:   0 Item Size:  16 Array size: 960 Overhead: 504 Total: 1464 Cells: 183
+  num-store         Capacity:  30, Free:  30, In use:   0 Item Size:   8 Array size: 240 Overhead: 264 Total:  504 Cells:  63
+  fpn-store         Capacity:  30, Free:  30, In use:   0 Item Size:   8 Array size: 240 Overhead: 264 Total:  504 Cells:  63
 
 list-of-lists-fp-1: ((1.1 , 2.1 ), (4.1 , 5.1 ))   (Lets say these are Cartesian coordinates)
 
 list-of-lists-fp-2: ((7.8 , 5.2 ), (10.8 , 8.2 ))   (Euclidean Translation using (6.7 , 3.1 ))
 
 Memory Use:
-  list-header-store Capacity: 15, Free: 8, In use: 7  Item Size: 16 Array size: 240 Overhead: 144 Total: 384 Cells: 48 
-  link-store        Capacity: 60, Free: 46, In use: 14  Item Size: 16 Array size: 960 Overhead: 504 Total: 1464 Cells: 183 
-  num-store         Capacity: 30, Free: 30, In use: 0  Item Size: 8 Array size: 240 Overhead: 264 Total: 504 Cells: 63 
-  fpn-store         Capacity: 30, Free: 20, In use: 10  Item Size: 8 Array size: 240 Overhead: 264 Total: 504 Cells: 63 
+  list-header-store Capacity:  15, Free:   8, In use:   7 Item Size:  16 Array size: 240 Overhead: 144 Total:  384 Cells:  48
+  link-store        Capacity:  60, Free:  46, In use:  14 Item Size:  16 Array size: 960 Overhead: 504 Total: 1464 Cells: 183
+  num-store         Capacity:  30, Free:  30, In use:   0 Item Size:   8 Array size: 240 Overhead: 264 Total:  504 Cells:  63
+  fpn-store         Capacity:  30, Free:  20, In use:  10 Item Size:   8 Array size: 240 Overhead: 264 Total:  504 Cells:  63
 
 Deallocating  ...
 
 Memory Use:
-  list-header-store Capacity: 15, Free: 15, In use: 0  Item Size: 16 Array size: 240 Overhead: 144 Total: 384 Cells: 48 
-  link-store        Capacity: 60, Free: 60, In use: 0  Item Size: 16 Array size: 960 Overhead: 504 Total: 1464 Cells: 183 
-  num-store         Capacity: 30, Free: 30, In use: 0  Item Size: 8 Array size: 240 Overhead: 264 Total: 504 Cells: 63 
-  fpn-store         Capacity: 30, Free: 30, In use: 0  Item Size: 8 Array size: 240 Overhead: 264 Total: 504 Cells: 63 
+  list-header-store Capacity:  15, Free:  15, In use:   0 Item Size:  16 Array size: 240 Overhead: 144 Total:  384 Cells:  48
+  link-store        Capacity:  60, Free:  60, In use:   0 Item Size:  16 Array size: 960 Overhead: 504 Total: 1464 Cells: 183
+  num-store         Capacity:  30, Free:  30, In use:   0 Item Size:   8 Array size: 240 Overhead: 264 Total:  504 Cells:  63
+  fpn-store         Capacity:  30, Free:  30, In use:   0 Item Size:   8 Array size: 240 Overhead: 264 Total:  504 Cells:  63
 
 dstack end: <0> 
 fstack end: <0> 
  ok
+
