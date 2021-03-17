@@ -13,7 +13,7 @@ include mm_array.fs
 ;
 
 \ Set the length of a list
-: list-set-len ( n list-addr - )
+: _list-set-len ( n list-addr - )
     cell + !
 ;
 
@@ -49,7 +49,7 @@ include mm_array.fs
 
 	\ Zero out list length
 	0 over			\ list-addr 0 list-addr
-	list-set-len		\ list-addr
+	_list-set-len		\ list-addr
 ;
 
 \ Add an address to the beginning of a list
@@ -66,11 +66,17 @@ include mm_array.fs
         list-set-first-link  	\ list-addr
 
         \ Update the list count 
-        1 swap list-set-len	\ -- )
+        dup list-get-len	\ list-addr len
+        1+ swap			\ len+ list-addr
+        _list-set-len		\ -- )
 ;
  
 \ Add a link to the end of a list
 : list-push-link ( link-addr list-addr -- )
+
+    \ Increment list length
+    dup list-get-len 1+		\ link-addr list-addr len+
+    over _list-set-len		\ link-addr list-addr
 
     \ Check for an empty list
     dup				\ link-addr list-addr list-addr
@@ -820,3 +826,4 @@ memory-use
 cr
 ." dstack end:" space .s cr
 ." fstack end:" space f.s cr
+
