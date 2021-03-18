@@ -39,10 +39,8 @@
     w!		\ (num-free set)
 ;
 
-\ Get the start of the stack
-: _stack-get-start ( stack-addr -- start-addr )
-    cell +	\ start-addr
-;
+\ Get the start of the stack ( stack-addr -- start-addr )
+' cell+ alias _stack-get-start
 
 \ stack-new.  Run like: "<number-cells> stack-new value <stack-name>" to allocate cells and save addr in <stack-name>
 : stack-new ( num-cells -- stack-addr )
@@ -50,7 +48,7 @@
     here	\ num-cells stack-addr
     swap	\ stack-addr num-cells
     dup		\ stack-addr num-cells num-cells
-    1 +		\ stack-addr num-cells num-cells+
+    1+		\ stack-addr num-cells num-cells+
     cells	\ stack-addr num-cells num-bytes
     allot	\ stack-addr num-cells ( memory allocated )
     over	\ stack-addr num-cells stack-addr
@@ -165,7 +163,7 @@
 \ .stack. Run like: "<stack-name> .stack"
 : .stack ( stack-addr -- )
    dup .stack-stats	\ stack-addr
-   dup cell +		\ stack-addr stack-start
+   dup cell+		\ stack-addr stack-start
    swap 		\ stack-start stack-addr
    _stack-get-num-free	\ stack-start num-free
 

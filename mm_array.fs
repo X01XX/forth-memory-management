@@ -22,11 +22,11 @@ include stack.fs
 ' ! alias _mm-set-stack ( stack-addr mma-addr -- )
 
 : _mm-set-item-size ( item-size mma-addr -- )
-    cell + !
+    cell+ !
 ;
 
 : _mm-get-item-size ( mma-addr -- item-size )
-    cell + @
+    cell+ @
 ;
 
 \ ( mma-deallocate: Run like: <item-addr> <mma-addr> mma-deallocate )

@@ -9,12 +9,12 @@ include mm_array.fs
 
 \ Get the length of a list
 : list-get-len ( list-addr - n )
-    cell + @
+    cell+ @
 ;
 
 \ Set the length of a list
 : _list-set-len ( n list-addr - )
-    cell + !
+    cell+ !
 ;
 
 \ Return the next pointer of a link ( link-addr -- next-link-addr )
@@ -25,12 +25,12 @@ include mm_array.fs
 
 \ Return the data pointer of a list link
 : link-get-data ( link-addr -- data-addr )
-    cell + @
+    cell+ @
 ;
 
 \ Set link data pointer 
 : link-set-data ( data link -- )
-    cell + !
+    cell+ !
 ;
 
 \ Get num value from num item ( num-addr -- n )
