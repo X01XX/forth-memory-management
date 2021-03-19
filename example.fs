@@ -136,9 +136,9 @@ include mm_array.fs
 \ ### M A I N ####
 
 2 15 mma-new value list-header-store	\ Initialize linked list header store.		( link addr, num items, both initially zero )
-2 60 mma-new value link-store		\ Initialize store for linked list links.	( next-link-addr, num-addr )
+2 40 mma-new value link-store		\ Initialize store for linked list links.	( next-link-addr, num-addr )
 1 30 mma-new value num-store		\ Initialize store for numbers.			( Just a number )
-float cell / 30 mma-new value fpn-store		\ Initialize store for floating point numbers.
+float cell / 15 mma-new value fpn-store		\ Initialize store for floating point numbers.
 
 \ Allocate a cell for a number, store the number, return the number cell-addr
 : num-new ( n num-store-addr -- num-addr )
