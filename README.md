@@ -9,7 +9,7 @@ Allocation and deallocation is fairly fast because it involves only popping or p
 
 The number (capacity), and size, of the items is configurable at instance creation.
 
-Within the limit of the maximum number (capacity) of items allocated at the same time, an infinite number of allocations and deallocations are possible.
+Within the limit of the maximum number (capacity) of items allocated at the same time (which you set), an infinite number of allocations and deallocations are possible.
 
 The files can be brought into gforth with the command: include example.fs
 
@@ -33,3 +33,7 @@ Deallocate each list as soon as it is no longer needed.
 
 The stack-array can be used for memory chunks that are not dependent on lists for processing,
 that have an allocation/deallocation life cycle.
+
+Diagnosis of a memory leak can begin with the stack that becomes exhausted.
+
+The first word of every stack item can be set to a large prime number, to indicate the type of memory.  The setting of the first word of a deallocated array item to zero would need to be changed to the second word.  The prime number can be added to the stack-array structure, by shifting the beginning of the array, or stack, up by one word.
