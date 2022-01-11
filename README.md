@@ -37,3 +37,5 @@ that have an allocation/deallocation life cycle.
 Diagnosis of a memory leak can begin with the stack that becomes exhausted.
 
 The first word of every stack item can be set to a large prime number, to indicate the type of memory.  The setting of the first word of a deallocated array item to zero would need to be changed to the second word.  The prime number can be added to the stack-array structure, by shifting the beginning of the array, or stack, up by one word.
+
+One more thing!  Forth is a powerful, fast, language.  A symptom of that is the ease at which a program can blow up.  Not many cycles are lost to checking for safety, and you know that when you use the language. Somewhere along the line, someone thought it would be good to place restrictions on recursion.   So one part of the language is a little more safe, and less powerful.  I think it was a terrible idea.  
