@@ -1,5 +1,5 @@
 # forth-memory-management
-Define an array of items, then allocate and deallocate items from the array.
+Define an array of items, then allocate and deallocate items from the array.  (multiple instances, of different item size and number, can be made)
 
 Pair a special-purpose stack with an array of items.
 
