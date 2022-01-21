@@ -19,7 +19,7 @@ or a valid address being deallocated more than once.
 On deallocation, the first cell of an item is zeroed out, to make use problems apparent.
 
 The entropy of various allocations, and deallocations, appears in the increasing disorder of the
-addresses on the stack, which has no effect on the utility, or speed, of the stack-array.
+addresses on the stack, which has no effect on the utility, or speed, of the stack-array.  A win against entropy?
 
 That a stack is used to provide memory management to a stack-based language is sublime.
 
