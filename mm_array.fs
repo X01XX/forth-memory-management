@@ -55,9 +55,13 @@ include stack.fs
         2 cells +	\ n-i item-size total-size ( add two cells for the stack address, item size )
 
         cfalign
-	here		\ n-i item-size total-size free-address
-	swap		\ n-i item-size free-addr total-size
-	allot		\ n-i item-size array-addr ( array memory allocated )
+	\ n-i item-size total-size
+    allocate    \ n-i item-size array-addr flag
+    0<> 
+    if  
+        abort" mma-new: memory allocation error"
+    then
+    \ n-i item-size array-addr
 
 	rot		\ item-size array-addr n-i
 	2dup		\ item-size array-addr n-i array-addr n-i
@@ -89,6 +93,13 @@ include stack.fs
 	cr
 
 	2drop		\ array-addr
+;
+
+\ Free heap memory when done.
+: mma-free ( addr - )
+  dup   _mm-get-stack	\ mma-addr stack-addr
+  free                  \ mma-addr
+  free                  \
 ;
 
 \ .mma-usage. Run like: "<mma-name> .mma-usage"

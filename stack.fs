@@ -44,18 +44,19 @@
 
 \ stack-new.  Run like: "<number-cells> stack-new value <stack-name>" to allocate cells and save addr in <stack-name>
 : stack-new ( num-cells -- stack-addr )
-    align
-    here	\ num-cells stack-addr
-    swap	\ stack-addr num-cells
-    dup		\ stack-addr num-cells num-cells
-    1+		\ stack-addr num-cells num-cells+
-    cells	\ stack-addr num-cells num-bytes
-    allot	\ stack-addr num-cells ( memory allocated )
-    over	\ stack-addr num-cells stack-addr
+    dup		\ num-cells num-cells
+    1+		\ num-cells num-cells+
+    cells	\ num-cells num-bytes
+    allocate	\ num-cells stack-addr flag
+    0<>
+    if
+        abort" stack-new: memory allocation error"
+    then
+    tuck	\ stack-addr num-cells stack-addr
 
     _stack-set-capacity	\ stack-addr
 
-    0           	\ stack-addr 0
+    0          	\ stack-addr 0
     over		\ stack-addr 0 stack-addr
     _stack-set-num-free	\ stack-addr
 ;

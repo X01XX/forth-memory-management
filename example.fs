@@ -827,3 +827,9 @@ cr
 ." dstack end:" space .s cr
 ." fstack end:" space f.s cr
 
+\ Free heap memory.
+list-header-store mma-free
+link-store mma-free
+num-store mma-free
+fpn-store mma-free
+
