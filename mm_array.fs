@@ -59,7 +59,8 @@ include stack.fs
     allocate    \ n-i item-size array-addr flag
     0<> 
     if  
-        abort" mma-new: memory allocation error"
+        ." mma-new: memory allocation error"
+        abort
     then
     \ n-i item-size array-addr
 
@@ -99,7 +100,9 @@ include stack.fs
 : mma-free ( addr - )
   dup   _mm-get-stack	\ mma-addr stack-addr
   free                  \ mma-addr
+  0<> if ." mm-array stack free failed" then
   free                  \
+  0<> if ." mm-array free failed" then
 ;
 
 \ .mma-usage. Run like: "<mma-name> .mma-usage"

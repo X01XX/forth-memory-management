@@ -50,7 +50,8 @@
     allocate	\ num-cells stack-addr flag
     0<>
     if
-        abort" stack-new: memory allocation error"
+        ." stack-new: memory allocation error"
+        abort
     then
     tuck	\ stack-addr num-cells stack-addr
 
