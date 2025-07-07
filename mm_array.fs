@@ -113,57 +113,57 @@ include stack.fs
 ;
 
 \ Free heap memory when done.
-: mma-free ( addr - )
-    dup   _mm-get-stack    \ mma-addr stack-addr
-    free                  \ mma-addr
+: mma-free ( addr -- )
+    dup   _mm-get-stack     \ mma-addr stack-addr
+    free                    \ mma-addr
     0<> if ." mm-array stack free failed" then
-    free                  \   
+    free
     0<> if ." mm-array free failed" then   
 ;
 
 \ .mma-usage. Run like: "<mma-name> .mma-usage"
 : .mma-usage ( mma-addr -- )
-    dup            \ mma-addr mma-addr
-    _mm-get-stack    \ mma-addr stack-addr
+    dup             \ mma-addr mma-addr
+    _mm-get-stack   \ mma-addr stack-addr
     ." Capacity:"
     space
-    dup            \ mma-addr stack-addr stack-addr
-    _stack-get-capacity    \ mma-addr stack-addr capacity
-    dup            \ mma-addr stack-addr capacity capacity
-    3 .r        \ mma-addr stack-addr capacity (emit capacity)
-    44 emit        \ mma-addr stack-addr capacity (emit comma)
+    dup             \ mma-addr stack-addr stack-addr
+    _stack-get-capacity \ mma-addr stack-addr capacity
+    dup             \ mma-addr stack-addr capacity capacity
+    3 .r            \ mma-addr stack-addr capacity (emit capacity)
+    44 emit         \ mma-addr stack-addr capacity (emit comma)
     space
     ." Free:"
     space
-    dup rot        \ mma-addr capacity capacity stack-addr 
-   _stack-get-num-free    \ mma-addr capacity capacity num-free
-    dup            \ mma-addr capacity capacity num-free num-free
-    3 .r        \ mma-addr capacity capacity num-free
-    44 emit        \ mma-addr capacity capacity num-free
+    dup rot         \ mma-addr capacity capacity stack-addr 
+   _stack-get-num-free  \ mma-addr capacity capacity num-free
+    dup             \ mma-addr capacity capacity num-free num-free
+    3 .r            \ mma-addr capacity capacity num-free
+    44 emit         \ mma-addr capacity capacity num-free
     space
    ." In use:"
    space
-   - 3 .r        \ mma-addr capacity
-   swap            \ capacity mma-addr
+   - 3 .r           \ mma-addr capacity
+   swap             \ capacity mma-addr
    space
    ." Item Size:" space
    _mm-get-item-size    \ capacity item-size
-   dup            \ capacity item-size item-size
-   3 .r space        \ capacity item-size
-   over *        \ capacity array-size
-   tuck            \ array-size capacity array-size
+   dup              \ capacity item-size item-size
+   3 .r space       \ capacity item-size
+   over *           \ capacity array-size
+   tuck             \ array-size capacity array-size
    ." Array size:" space
-   3 .r space         \ array-size capacity
-   3 +            \ array-size capacity-cells-in-stack-plust-3-cells-overhead 
-   cells        \ array-size overhead-size
-   dup            \ array-size overhead-size overhead-size
+   3 .r space       \ array-size capacity
+   3 +              \ array-size capacity-cells-in-stack-plust-3-cells-overhead 
+   cells            \ array-size overhead-size
+   dup              \ array-size overhead-size overhead-size
    ." Overhead:" space
-   3 .r    space        \ array-size overhead-size
+   3 .r    space    \ array-size overhead-size
    ." Total:" space
-   + dup        \ total-size total-size
-   4 .r     space        \ total-size
-   cell /        \ number cells
+   + dup            \ total-size total-size
+   4 .r     space   \ total-size
+   cell /           \ number cells
    ." Cells:" space
-   3 .r            \ -- )
+   3 .r
 ;
 
