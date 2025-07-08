@@ -7,21 +7,21 @@
 
 \ Set the stack capacity
 : _stack-set-capacity ( n stack-addr -- )
-    over	\ n stack-addr n
-    1 <		\ n stack-addr flag
+    over    \ n stack-addr n
+    1 <     \ n stack-addr flag
     if
        ." Stack capacity must be GT 0"
        -24 throw
     endif
 
-    over	\ n stack-addr n
-    65535 >	\ n stack-addr flag
+    over    \ n stack-addr n
+    65535 > \ n stack-addr flag
     if
        ." Stack capacity must be LT 65536"
        -24 throw
     endif
 
-    w!		\ Store capacity into the first 16 bits
+    w!      \ Store capacity into the first 16 bits
 ;
 
 \ Get the stack capacity ( stack-addr -- n )
@@ -29,14 +29,14 @@
 
 \ Get the number used
 : _stack-get-num-free ( stack-addr -- n )
-    2 +		\ stack-addr-2nd-16-bits
-    uw@		\ num-free
+    2 +     \ stack-addr-2nd-16-bits
+    uw@     \ num-free
 ;
 
 \ Set the number used
 : _stack-set-num-free ( n stack-addr -- )
-    2 +		\ n stack-addr-2nd-16-bits
-    w!		\ (num-free set)
+    2 +     \ n stack-addr-2nd-16-bits
+    w!      \ (num-free set)
 ;
 
 \ Get the start of the stack ( stack-addr -- start-addr )
@@ -44,34 +44,34 @@
 
 \ stack-new.  Run like: "<number-cells> stack-new value <stack-name>" to allocate cells and save addr in <stack-name>
 : stack-new ( num-cells -- stack-addr )
-    dup		\ num-cells num-cells
-    1+		\ num-cells num-cells+
-    cells	\ num-cells num-bytes
-    allocate	\ num-cells stack-addr flag
+    dup         \ num-cells num-cells
+    1+          \ num-cells num-cells+
+    cells       \ num-cells num-bytes
+    allocate    \ num-cells stack-addr flag
     0<>
     if
         ." stack-new: memory allocation error"
         abort
     then
-    tuck	\ stack-addr num-cells stack-addr
+    tuck    \ stack-addr num-cells stack-addr
 
-    _stack-set-capacity	\ stack-addr
+    _stack-set-capacity \ stack-addr
 
-    0          	\ stack-addr 0
-    over		\ stack-addr 0 stack-addr
-    _stack-set-num-free	\ stack-addr
+    0                   \ stack-addr 0
+    over                \ stack-addr 0 stack-addr
+    _stack-set-num-free \ stack-addr
 ;
 
 \ Return true if the stack is full
 \ Run before adding a value to an stack
 : _stack-full? ( stack-addr -- flag )
-    dup			\ stack-addr stack-addr
-    _stack-get-capacity	\ stack-addr stack-capacity
+    dup                 \ stack-addr stack-addr
+    _stack-get-capacity \ stack-addr stack-capacity
 
-    swap		\ stack-capacity stack-addr
-    _stack-get-num-free	\ stack-capacity stack-len
+    swap                \ stack-capacity stack-addr
+    _stack-get-num-free \ stack-capacity stack-len
 
-    =			\ flag
+    =                   \ flag
 ;
 
 \ Return true if the stack is empty
@@ -84,100 +84,98 @@
 
 \ Increment the number of cells in an stack
 : _stack-inc-used ( stack-addr -- )
-    dup			\ stack-addr stack-addr
-    _stack-get-num-free	\ stack-addr n
+    dup	                \ stack-addr stack-addr
+    _stack-get-num-free \ stack-addr n
 
-    1+ swap		\ new-num stack-addr
-    _stack-set-num-free	\ -- )
+    1+ swap             \ new-num stack-addr
+    _stack-set-num-free \
 ;
 
 \ Decrement the number of cells in an stack
 : _stack-dec-used ( stack-addr -- )
-    dup			\ stack-addr stack-addr
-    _stack-get-num-free	\ stack-addr n
+    dup                 \ stack-addr stack-addr
+    _stack-get-num-free \ stack-addr n
 
-    1- swap		\ new-num stack-addr
-    _stack-set-num-free	\ -- )
+    1- swap             \ new-num stack-addr
+    _stack-set-num-free \ -- )
 ;
 
 \ stack-push. Run like: "<value to add> <stack-name> stack-push" 
 \ Fails is the stack is full.
 : stack-push ( n stack-addr -- )
-    dup			\ n stack-addr stack-addr
-    _stack-full?	\ n stack-addr flag
+    dup             \ n stack-addr stack-addr
+    _stack-full?    \ n stack-addr flag
 
     if
         cr
-	." stack-push stack is full"
+    ." stack-push stack is full"
         -24 throw
-    then		\ n stack-addr
+    then                \ n stack-addr
 
-    swap over		\ stack-addr n stack-addr
-    dup 		\ stack-addr n stack-addr stack-addr
-    _stack-get-start	\ stack-addr n stack-addr stack-start
+    swap over           \ stack-addr n stack-addr
+    dup                 \ stack-addr n stack-addr stack-addr
+    _stack-get-start    \ stack-addr n stack-addr stack-start
 
-    swap		\ stack-addr n stack-start stack-addr
-    _stack-get-num-free	\ stack-addr n stack-start num-free
-  
+    swap                \ stack-addr n stack-start stack-addr
+    _stack-get-num-free \ stack-addr n stack-start num-free
 
-    
-    cells +	 	\ stack-addr n stack-cell[num-free]
-    !           	\ stack-addr ( n stored in cell[num-free] )
+    cells +             \ stack-addr n stack-cell[num-free]
+    !                   \ stack-addr ( n stored in cell[num-free] )
 
-    _stack-inc-used	\ -- )
+    _stack-inc-used     \
 ;
 
 \ stack-pop.  Run like: "<stack-name> stack-pop"
 \ Fails if the stack is empty
 : stack-pop ( stack-addr -- n )
-    dup			\ stack-addr stack-addr
-    _stack-empty?	\ stack-addr flag
+    dup             \ stack-addr stack-addr
+    _stack-empty?   \ stack-addr flag
 
     if
         cr
-	." stack-pop stack is empty"
+        ." stack-pop stack is empty"
         -24 throw
-    then		\ stack-addr
+    then                \ stack-addr
 
-    dup			\ arra-addr stack-addr
-    _stack-dec-used	\ stack-addr
+    dup                 \ array-addr stack-addr
+    _stack-dec-used     \ stack-addr
 
-    dup			\ stack-addr stack-addr
-    _stack-get-num-free	\ stack-addr num-free
+    dup                 \ stack-addr stack-addr
+    _stack-get-num-free \ stack-addr num-free
 
-    1+ cells +		\ stack-cell[last]
-    @			\ n
+    1+ cells +          \ stack-cell[last]
+    @                   \ n
 ;
 
 \ .stack-stats. Run like: "<stack-name> .stack-stats"
 : .stack-stats ( stack-addr -- )
     ." <"
-    dup			\ stack-addr stack-addr
-    _stack-get-capacity	\ stack-addr capacity
-    .			\ stack-addr (emit capacity)
-    44 emit		\ stack-addr (emit comma)
-   _stack-get-num-free	\ num-free
-   .			\ 
-   62 emit		\ (emit >)
-   32 emit		\ (emit space)
+    dup	                \ stack-addr stack-addr
+    _stack-get-capacity \ stack-addr capacity
+    .                   \ stack-addr (emit capacity)
+    44 emit             \ stack-addr (emit comma)
+   _stack-get-num-free  \ num-free
+   .                    \ 
+   62 emit              \ (emit >)
+   32 emit              \ (emit space)
 ;
 
 \ .stack. Run like: "<stack-name> .stack"
 : .stack ( stack-addr -- )
-   dup .stack-stats	\ stack-addr
-   dup cell+		\ stack-addr stack-start
-   swap 		\ stack-start stack-addr
-   _stack-get-num-free	\ stack-start num-free
+   dup .stack-stats     \ stack-addr
+   dup cell+            \ stack-addr stack-start
+   swap                 \ stack-start stack-addr
+   _stack-get-num-free  \ stack-start num-free
 
-   dup 0 > 		\ stack-start num-free flag
+   dup 0 >              \ stack-start num-free flag
    if
-     0 do		\ stack-start
-       dup		\ stack-start stack-start
-       I cells + @ u.	\ stack-start stack-cell[I]
+     0 do               \ stack-start
+       dup              \ stack-start stack-start
+       I cells + @ u.   \ stack-start stack-cell[I]
      loop
    else
-     drop		\ stack-start  
+     drop               \ stack-start  
    endif
-   drop			\
+   drop                 \
 ;
 

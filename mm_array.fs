@@ -18,19 +18,62 @@
 
 include stack.fs 
 
-' @ alias _mm-get-stack ( mma-addr -- stack-addr )
-' ! alias _mm-set-stack ( stack-addr mma-addr -- )
+' @ alias _mma-get-stack ( mma-addr -- stack-addr )
+' ! alias _mma-set-stack ( stack-addr mma-addr -- )
 
-: _mm-set-item-size ( item-size mma-addr -- )
+: _mma-set-item-size ( item-size mma-addr -- )
     cell+ !
 ;
 
-: _mm-get-item-size ( mma-addr -- item-size )
+: _mma-get-item-size ( mma-addr -- item-size )
     cell+ @
 ;
 
-: _mm-get-array ( mma-addr -- array-addr )
-    2 cells +
+: _mma-set-end-addr ( end-addr mma-addr -- )
+    2 cells + !
+;
+
+: _mma-get-end-addr ( mma-addr -- end-addr )
+    2 cells + @
+;
+
+: _mma-get-array ( mma-addr -- array-addr )
+    3 cells +
+;
+
+\ Return the addr of the first array item.
+: mma-array-start-addr ( mma-addr -- start-addr )
+    _mma-get-array
+;
+   
+
+\ Return the addr of the array end.
+: mma-array-end-addr ( mma-addr -- end-addr )
+    dup _mma-get-stack      \ mma-addr stack-addr
+    _stack-get-num-free     \ mma-addr num-items-
+    over _mma-get-item-size \ mma-addr num-items- item-size
+    *                       \ mma-addr item-offset
+    swap _mma-get-array     \ item-offset array-start
+    +
+;
+
+\ Return true if an address is within an array, its a valid address and could be an instance.
+\ So the caller will avoid fetching from a random number, causing an invalid address abort.
+: mma-within-array ( addr mma-addr -- flag )
+    dup mma-array-start-addr    \ addr mma-addr start-addr
+    2 pick                      \ addr mma-addr start-addr addr
+    swap                        \ addr mma-addr addr start-addr
+    <                           \ addr mma-addr 
+    if
+        2drop false exit
+    then
+
+    _mma-get-end-addr            \ addr end-adder 
+    >= if
+        false
+    else
+        true
+    then
 ;
 
 \ ( mma-deallocate: Run like: <item-addr> <mma-addr> mma-deallocate )
@@ -41,7 +84,7 @@ include stack.fs
         abort
     then
 
-    _mm-get-stack   \ item-addr stack-addr
+    _mma-get-stack  \ item-addr stack-addr
     over swap       \ item-addr item-addr stack-addr
     stack-push      \ item-addr
     0 swap !        \ ( zero out first cell of deallocated item )
@@ -49,8 +92,8 @@ include stack.fs
 
 \ ( mma-allocate: Run like: <mma-addr> mma-allocate -- array-item-addr )
 : mma-allocate ( mma-addr -- item-addr )
-    _mm-get-stack    \ stack-addr
-    stack-pop    \ item-addr
+    _mma-get-stack  \ stack-addr
+    stack-pop       \ item-addr
 ;
 
 \ ( mma-new.  Run like: <num-cells-per-item> <num-items> mma-new value <mma-name>.
@@ -64,49 +107,57 @@ include stack.fs
     swap        \ n-i item-size n-i
     over        \ n-i item-size n-i item-size
     *           \ n-i item-size all-items-size
-    2 cells +   \ n-i item-size total-size ( add two cells for the stack address, item size )
+    dup         \ n-i item-size total-size total-size
+    3 cells +   \ n-i item-size total-size ( add three cells for the stack address, item size, end of array )
 
     cfalign
 
-    \ Allocat e memory for mm-array instance.
-    allocate    \ n-i item-size array-addr flag
+    \ Allocat e memory for mma-array instance.
+    allocate    \ n-i item-size total-size array-addr flag
     0<> 
     if  
         ." mma-new: memory allocation error"
         abort
     then
-    \ n-i item-size array-addr
+    \ n-i item-size total-size mma-addr
+
+    \ Store end of array.
+    swap over           \ n-i item-size mma-addr total-size mma-addr
+    _mma-get-array      \ n-i item-size mma-addr total-size array-addr
+    +                   \ n-i item-size mma-addr end-addr
+    over                \ n-i item-size mma-addr end-addr mma-addr
+    _mma-set-end-addr   \ n-i item-size mma-addr
 
     \ Create stack, store address.
-    rot             \ item-size array-addr n-i
-    2dup            \ item-size array-addr n-i array-addr n-i
-    stack-new       \ item-size array-addr n-i array-addr stack-addr ( stack allocated )
-    swap            \ item-size array-addr n-i stack-addr array-addr 
-    _mm-set-stack   \ item-size array-addr n-i ( stack-addr stored in first array cell )
+    rot                 \ item-size mma-addr n-i
+    2dup                \ item-size mma-addr n-i mma-addr n-i
+    stack-new           \ item-size mma-addr n-i mma-addr stack-addr ( stack allocated )
+    swap                \ item-size mma-addr n-i stack-addr mma-addr 
+    _mma-set-stack      \ item-size mma-addr n-i ( stack-addr stored in first array cell )
 
     \ Store item size
-    rot             \ array-addr n-i item-size
-    dup             \ array-addr n-i item-size item-size
-    3 pick          \ array-addr n-i item-size item-size array-addr
-    _mm-set-item-size   \ array-addr n-i item-size
+    rot                 \ mma-addr n-i item-size
+    dup                 \ mma-addr n-i item-size item-size
+    3 pick              \ mma-addr n-i item-size item-size mma-addr
+    _mma-set-item-size   \ mma-addr n-i item-size
 
     \ Get array addr.
-    2 pick          \ array-addr n-i item-size array-addr
-    _mm-get-array   \ array-addr n-i item-size array-addr+
+    2 pick              \ mma-addr n-i item-size mma-addr
+    _mma-get-array      \ mma-addr n-i item-size array-addr
 
     \ Set up end/start do loop parameters
-    rot 0           \ array-addr item-size array-addr+ n-i 0
+    rot 0               \ mma-addr item-size array-addr n-i 0
 
     \ Initialize each item in array, add to item addr to stack.
-    do              \ array-addr item-size array-addr+
+    do                  \ mma-addr item-size item-addr
         \ Init item, add to stack.
-        dup         \ array-addr item-size array-addr+ array-addr+
-        3 pick      \ array-addr item-size array-addr+ array-addr+ array-addr
-        mma-deallocate  \ array-addr item-size array-addr+
+        dup             \ mma-addr item-size item-addr item-addr
+        3 pick          \ mma-addr item-size item-addr item-addr mma-addr
+        mma-deallocate  \ mma-addr item-size item-addr
 
-        \ Point to the next instance.
-        over        \ array-addr item-size array-addr+ item-size
-        +           \ array-addr item-size array-addr+
+        \ Point to the next item in array.
+        over        \ mma-addr item-size item-addr item-size
+        +           \ mma-addr item-size next-item-addr
     loop
     \ Return mm_array instance addr.
     2drop           \ array-addr
@@ -114,17 +165,17 @@ include stack.fs
 
 \ Free heap memory when done.
 : mma-free ( addr -- )
-    dup   _mm-get-stack     \ mma-addr stack-addr
+    dup   _mma-get-stack     \ mma-addr stack-addr
     free                    \ mma-addr
-    0<> if ." mm-array stack free failed" then
+    0<> if ." mma-array stack free failed" then
     free
-    0<> if ." mm-array free failed" then   
+    0<> if ." mma-array free failed" then   
 ;
 
 \ .mma-usage. Run like: "<mma-name> .mma-usage"
 : .mma-usage ( mma-addr -- )
     dup             \ mma-addr mma-addr
-    _mm-get-stack   \ mma-addr stack-addr
+    _mma-get-stack  \ mma-addr stack-addr
     ." Capacity:"
     space
     dup             \ mma-addr stack-addr stack-addr
@@ -147,7 +198,7 @@ include stack.fs
    swap             \ capacity mma-addr
    space
    ." Item Size:" space
-   _mm-get-item-size    \ capacity item-size
+   _mma-get-item-size    \ capacity item-size
    dup              \ capacity item-size item-size
    3 .r space       \ capacity item-size
    over *           \ capacity array-size
