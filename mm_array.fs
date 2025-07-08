@@ -9,6 +9,7 @@
 \     Array
 \       one cell for stack address
 \       one cell for item size in bytes
+\       one cell for end-of-array address.
 \       items
 \
 \     Stack
@@ -112,7 +113,7 @@ include stack.fs
 
     cfalign
 
-    \ Allocat e memory for mma-array instance.
+    \ Allocate memory for mma-array instance.
     allocate    \ n-i item-size total-size array-addr flag
     0<> 
     if  

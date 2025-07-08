@@ -77,9 +77,9 @@
 \ Return true if the stack is empty
 \ Run before removing a value from an stack
 : _stack-empty? ( stack-addr -- flag )
-    _stack-get-num-free	\ n
+    _stack-get-num-free \ n
 
-    0=			\ flag
+    0=                  \ flag
 ;
 
 \ Increment the number of cells in an stack
