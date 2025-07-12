@@ -1,7 +1,8 @@
-17971 constant link-id
+17137 constant link-id
    3 constant link-struct-number-cells
 
-0 constant  link-header
+\ Link struct fields.
+0 constant  link-header         \ 16-bits [0] id [1] use count.
 link-header cell+ constant link-next
 link-next   cell+ constant link-data
 
@@ -20,12 +21,20 @@ link-next   cell+ constant link-data
 ;
 
 \ Start accessors.
-: link-get-id ( link -- header-value )
-    link-header + @
+: link-get-id ( link -- id )
+    0w@
 ;
 
-: link-set-id ( header-value link -- )
-    link-header + !
+: link-set-id ( link -- )
+    link-id swap 0w!
+;
+
+: link-get-use-count ( link -- u-uc )
+    1w@
+;
+
+: link-set-use-count ( u-16 link -- )
+    1w!
 ;
 
 \ Get link data cell.
@@ -65,13 +74,14 @@ link-next   cell+ constant link-data
     is-allocated-link 0=
 ;
 
-\ Return a new link, with given data value, zero next-value.
+\ Return a new link struct instance address, with given data value, zero next-value.
 : link-new ( data-val -- link-addr )
-    link-mma mma-allocate  \ ( data-val link-store -- data-val link-addr )
-    link-id over link-set-id
-    swap over              \ ( data-val link-addr -- link-addr data-val link-addr )
-    link-set-data          \ ( link-addr data-val link-addr -- link-addr ) ( data-val stored in second, data-pointer , cell )
-    0 over link-set-next   \ ( link-addr -- link-addr ) ( 0 stored in first, next-pointer, cell )
+    link-mma mma-allocate       \ data-val link-addr
+    dup link-set-id
+    swap over                   \ link-addr data-val link-addr
+    link-set-data               \ link-addr
+    0 over link-set-next        \ link-addr
+    1 over link-set-use-count   \ link-addr
 ;
 
 \ Print a link in hex.

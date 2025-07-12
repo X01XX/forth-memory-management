@@ -84,7 +84,7 @@
 
 \ Increment the number of cells in an stack
 : _stack-inc-used ( stack-addr -- )
-    dup	                \ stack-addr stack-addr
+    dup                    \ stack-addr stack-addr
     _stack-get-num-free \ stack-addr n
 
     1+ swap             \ new-num stack-addr
@@ -150,7 +150,7 @@
 \ .stack-stats. Run like: "<stack-name> .stack-stats"
 : .stack-stats ( stack-addr -- )
     ." <"
-    dup	                \ stack-addr stack-addr
+    dup                    \ stack-addr stack-addr
     _stack-get-capacity \ stack-addr capacity
     .                   \ stack-addr (emit capacity)
     44 emit             \ stack-addr (emit comma)

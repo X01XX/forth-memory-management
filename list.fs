@@ -2,12 +2,12 @@
 \ A parking spot for the start of a list of lisks, or no links, that is, an empty list.
 \ This struct wholly manages the link struct.
 
-19717 constant list-id
-    3 constant list-struct-number-cells
+19317 constant list-id
+    2 constant list-struct-number-cells
 
-0 constant  list-header
-list-header cell+ constant list-length
-list-length cell+ constant list-links
+\ List struct fields.
+0 constant  list-header             \ 16-bits [0] id [1] use count [2] length.
+list-header cell+ constant list-links
 
 0 value list-mma  \ Storage for list mma struct instance.
 
@@ -24,31 +24,34 @@ list-length cell+ constant list-links
 ;
 
 \ Start accessors.
-: list-get-id ( list -- header-value )
-    list-header + @
+: list-get-id ( list -- id-value )
+    0w@
 ;
 
 : list-set-id ( list -- )
-    list-header +
-    list-id swap !
+    list-id swap 0w!
 ;
 
-\ Get list length cell.
-: list-get-length ( list-addr -- list-length-value )
-    list-length + @
+: list-get-use-count ( list -- uc-value )
+    1w@
 ;
 
-\ Set list length cell.
+: list-set-use-count ( u-16 list -- )
+    1w!
+;
+
+: list-get-length ( list-addr -- u-length )
+    2w@
+;
+
 : list-set-length ( length-value list-addr -- )
-    list-length + !
+    2w!
 ;
 
-\ Get list links cell.
 : list-get-links ( list-addr -- list-links-value )
     list-links + @
 ;
 
-\ Set list links cell.
 : list-set-links ( links-value list-addr -- )
     list-links + !
 ;
@@ -70,15 +73,16 @@ list-length cell+ constant list-links
     is-allocated-list 0=
 ;
 
-\ Return an new list instance.
+\ Return an new list struct instance address.
 : list-new ( -- addr )
     \ Allocate space.
-    list-mma mma-allocate
+    list-mma mma-allocate       \ link-addr
 
     \ Init fields.
-    dup list-set-id
-    0 over list-set-length
-    0 over list-set-links
+    dup list-set-id             \ link-addr
+    0 over list-set-length      \ link-addr
+    0 over list-set-links       \ link-addr
+    1 over list-set-use-count   \ link-addr
 ;
 
 
@@ -142,7 +146,7 @@ list-length cell+ constant list-links
 ;
 
 \ Print a list.
-: .list ( addr -- )
+: .list-raw ( addr -- )
     \ Check argument.
     dup is-not-allocated-list
     if
@@ -155,7 +159,7 @@ list-length cell+ constant list-links
 
     list-get-links              \ first-link
         begin                   \ List is not empty.
-            dup                 \ first-link first-link
+            dup                 \ link link
         while
             dup .link           \ Print link.
             link-get-next       \ link-next
@@ -163,6 +167,43 @@ list-length cell+ constant list-links
         drop
 
     ." )"
+;
+
+\ Print a list, given an xt to print the data.
+: .list ( xt addr -- )
+    \ Check argument.
+    dup is-not-allocated-list
+    if
+        ." list-push: Argument is not an allocated list"
+        abort
+    then
+
+    ." ("
+
+    list-get-links          \ xt first-link
+    \ Print first item, if any, without leading space.
+    dup
+    if
+        dup                 \ xt link link
+        link-get-data       \ xt link data
+        2 pick              \ xt link data xt
+        execute             \ xt link
+        link-get-next       \ xt link-next
+    then
+
+    \ Print subsequent items, if any.
+    begin                   \ List is not empty.
+        dup                 \ xt link link
+    while
+        space
+        dup                 \ xt link link
+        link-get-data       \ xt link data
+        2 pick              \ xt link data xt
+        execute             \ xt link
+        link-get-next       \ xt link-next
+    repeat
+    ." )"
+    2drop
 ;
 
 \ Return true if a list contains an item, based on a given test execution token.
@@ -174,17 +215,7 @@ list-length cell+ constant list-links
         abort
     then
 
-    \ Check for an empty list.
-    dup list-get-length
-    0=
-    if
-        \ Return false.
-        2drop drop
-        false
-        exit
-    then
-
-    list-get-links              \ xt item first-link
+    list-get-links          \ xt item first-link
     begin                   \ List is not empty.
         dup                 \ xt item link link
     while                   \ xt item link
@@ -202,9 +233,11 @@ list-length cell+ constant list-links
         then
     repeat
 
-    \ Cleanup, return TOS, that is false.
-    nip nip
+    \ Cleanup, return false.
+    2drop drop
+    false
 ;
+
 
 \ Return an data cell if a list contains an item, based on a given test execution token.
 : list-find ( xt item list -- cell true | false )
@@ -250,7 +283,6 @@ list-length cell+ constant list-links
 \ Scan a list for the first item that returns true for the given xt, 
 \ remove that link, returning the link-data contents.
 : list-remove ( xt item list -- data true | false )
-    cr .s cr
     \ Check argument.
     dup is-not-allocated-list
     if
@@ -268,9 +300,7 @@ list-length cell+ constant list-links
         exit
     then
 
-    cr .s cr
     -rot 2 pick             \ list xt item list
-    cr .s cr
     list-get-links          \ list xt item first-link
     0 swap                  \ list xt item last-linx link, add cycle at-start flag
     begin
@@ -316,6 +346,7 @@ list-length cell+ constant list-links
 ;
 
 \ Deallocate a list.
+\ If the link data is struct instance addresses, the caller may need to deallocated them first.
 : list-deallocate ( list-addr -- )
     \ Check argument.
     dup is-not-allocated-list
@@ -325,7 +356,6 @@ list-length cell+ constant list-links
     then
 
     \ Deallocate links.
-    \ If the link data is struct instance addresses, the caller should have deallocated them.
     dup list-get-links      \ list links
     begin
         dup                 \ list link link
@@ -341,4 +371,178 @@ list-length cell+ constant list-links
     0 over list-set-links
 
     list-mma mma-deallocate \ Deallocate list.
+;
+
+\ Return the difference of two lists, same order as in subrtracting numbers in forth, list1 - list0
+\ Provide an xt for determining data equality.
+\ If list data are struct instances, the caller should inc the instance use count,
+\ using xt list-ret list-apply.
+: list-difference ( xt list1 list0 -- list )
+    dup is-not-allocated-list
+    if  
+        ." list-difference: arg0 is not an allocated list"
+        abort
+    then
+    over is-not-allocated-list
+    if  
+        ." list-difference: arg1 is not an allocated list"
+        abort
+    then
+
+    \ Allocate list to return.
+    list-new                   \ xt list1 list0 list-ret
+
+    \ Get first link of list1, if any.
+    rot list-get-links          \ xt list0 list-ret link1
+    begin
+        dup                     \ xt list0 list-ret link1 link1
+    while                       \ Check for link1 addr == zero.
+                                \ xt list0 list-ret link1
+        3 pick                  \ xt list0 list-ret link1 xt
+        over link-get-data      \ xt list0 list-ret link1 xt data1
+        4 pick                  \ xt list0 list-ret link1 xt data1 list0
+        list-member 0=          \ xt list0 list-ret link1 flag
+        if
+                                \ xt list0 list-ret link1
+            dup link-get-data   \ xt list0 list-ret link1 data1
+            2 pick              \ xt list0 list-ret link1 data1 list-ret
+            list-push           \ xt list0 list-ret link1
+        then
+                                \ xt list0 list-ret link1
+        link-get-next           \ xt list0 list-ret link1-next
+    repeat
+    \ xt list0 list-ret 0
+    drop nip nip                \ list-ret
+;
+
+\ Return the union of two lists.
+\ Provide an xt for determining data equality.
+\ If list data are struct instances, the caller should inc the instance use count,
+\ using xt list-ret list-apply.
+: list-union ( xt list1 list0 -- list )
+    dup is-not-allocated-list
+    if  
+        ." list-union: arg0 is not an allocated list"
+        abort
+    then
+    over is-not-allocated-list
+    if  
+        ." list-union: arg1 is not an allocated list"
+        abort
+    then
+
+    \ Allocate list to return.
+    list-new                    \ xt list1 list0 list-ret
+
+    \ Get list0 items 
+    swap list-get-links         \ xt list1 list-ret links0
+    begin
+        dup                     \ xt list1 list-ret link0 link0
+    while                       \ Check for link1 addr == zero.
+                                \ xt list1 list-ret link0
+        3 pick                  \ xt list1 list-ret link0 xt
+        over link-get-data      \ xt list1 list-ret link0 xt data0
+        3 pick                  \ xt list1 list-ret link0 xt data0 list-ret
+        list-member 0=          \ xt list1 list-ret link0 flag
+        if
+                                \ xt list1 list-ret link0
+            dup link-get-data   \ xt list1 list-ret link0 data0 list-ret
+            2 pick              \ xt list1 list-ret link0 data0 list-ret
+            list-push           \ xt list1 list-ret link0
+        then
+        link-get-next           \ xt list1 list-ret link0-next
+    repeat
+                                \ xt list1 list-ret 0
+    drop                        \ xt list1 list-ret
+
+    \ Get list1 items 
+    swap list-get-links         \ xt list-ret links1
+    begin
+        dup                     \ xt list-ret link1 link1
+    while                       \ Check for link1 addr == zero.
+                                \ xt list-ret link1
+        2 pick                  \ xt list-ret link1 xt
+        over link-get-data      \ xt list-ret link0 xt data1
+        3 pick                  \ xt list-ret link0 xt data1 list-ret
+        list-member 0=          \ xt list-ret link1 flag
+        if
+                                \ xt list-ret link1
+            dup link-get-data   \ xt list-ret link1 data1 list-ret
+            2 pick              \ xt list-ret link1 data1 list-ret
+            list-push           \ xt list-ret link1
+        then
+        link-get-next           \ xt list-ret link1-next
+    repeat
+                                \ xt list-ret 0
+    drop nip                    \ list-ret
+;
+
+\ Apply a function to each item in a list.
+: list-apply ( xt list0 -- )
+    dup is-not-allocated-list
+    if  
+        ." list-apply: list0 is not an allocated list"
+        abort
+    then
+
+    list-get-links      \ xt links0
+    begin
+        dup
+    while
+        dup link-get-data       \ xt link0 data0
+        2 pick                  \ xt link0 data0 xt
+        execute                 \ xt link0
+        link-get-next           \ xt link-next
+    repeat
+    \ xt 0
+    2drop
+;
+
+\ Return the intersection of two lists.
+: list-intersection ( xt list1 list0 -- list2 )
+    dup is-not-allocated-list
+    if  
+        ." list-intersection: list0 is not an allocated list"
+        abort
+    then
+    over is-not-allocated-list
+    if  
+        ." list-intersection: list1 is not an allocated list"
+        abort
+    then
+
+    \ Allocate list to return.
+    list-new                   \ xt list1 list0 list-ret
+
+    \ Get first link of list1, if any.
+    rot list-get-links          \ xt list0 list-ret link1
+    begin
+        dup                     \ xt list0 list-ret link1 link1
+    while                       \ Check for link1 addr == zero.
+                                \ xt list0 list-ret link1
+        3 pick                  \ xt list0 list-ret link1 xt
+        over link-get-data      \ xt list0 list-ret link1 xt data1
+        4 pick                  \ xt list0 list-ret link1 xt data1 list0
+        list-member             \ xt list0 list-ret link1 flag
+        if
+                                \ xt list0 list-ret link1
+            dup link-get-data   \ xt list0 list-ret link1 data1
+            2 pick              \ xt list0 list-ret link1 data1 list-ret
+
+            \ Avoid dups in list-ret
+            5 pick              \ xt list0 list-ret link1 data1 list-ret xt
+            2 pick              \ xt list0 list-ret link1 data1 list-ret xt data1
+            2 pick              \ xt list0 list-ret link1 data1 list-ret xt data1 list-ret
+            list-member         \ xt list0 list-ret link1 data1 list-ret flag
+            if
+                2drop           \ xt list0 list-ret link1
+            else
+              list-push         \ xt list0 list-ret link1
+            then
+        then
+                                \ xt list0 list-ret link1
+        link-get-next           \ xt list0 list-ret link1-next
+    repeat
+    \ xt list0 list-ret 0
+    drop nip nip                \ list-ret
 ;
