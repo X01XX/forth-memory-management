@@ -37,3 +37,6 @@ that have an allocation/deallocation life cycle.
 Diagnosis of a memory leak can begin with the stack that becomes exhausted.
 
 The first word of every stack item can be set to a large prime number, to indicate the type of memory.  The setting of the first word of a deallocated array item to zero would need to be changed to the second word.  The prime number can be added to the stack-array structure, by shifting the beginning of the array, or stack, up by one word.
+
+These ideas should work in Assembler Language and C.
+
