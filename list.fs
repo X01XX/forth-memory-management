@@ -73,6 +73,33 @@ list-header cell+ constant list-links
     is-allocated-list 0=
 ;
 
+: list-dec-use-count ( list-addr -- )
+    dup list-get-use-count      \ list-addr use-count
+    1-
+    swap list-set-use-count
+;
+
+: list-inc-use-count ( list-addr -- )
+    dup list-get-use-count      \ list-addr use-count
+    1+
+    swap list-set-use-count
+;
+
+: list-inc-length ( list-addr -- )
+    dup list-get-length     \ list-addr count
+    1+
+    swap                    \ count list-addr
+    list-set-length
+;
+
+: list-dec-length ( list-addr -- )
+    dup list-get-length     \ list-addr count
+    1-
+    swap                    \ count list-addr
+    list-set-length
+;
+
+
 \ Return an new list struct instance address.
 : list-new ( -- addr )
     \ Allocate space.
@@ -99,8 +126,7 @@ list-header cell+ constant list-links
     swap link-new swap          \ link-new list
 
     \ Increment list length
-    dup list-get-length 1+      \ link-new list len+
-    over list-set-length        \ link-new list
+    dup list-inc-length         \ link-new
 
     \ Check for an empty list
     dup list-get-links          \ link-new list first-link
@@ -132,8 +158,7 @@ list-header cell+ constant list-links
     swap link-new swap          \ link-new list
 
     \ Increment list length
-    dup list-get-length 1+      \ link-new list len+
-    over list-set-length        \ link-new list
+    dup list-inc-length         \ link-new list
 
     \ Store list header next pointer to link next pointer
     2dup                \ link-new list link-new list
@@ -327,8 +352,7 @@ list-header cell+ constant list-links
 
                 \ Adjust list length.
                 swap dup                \ data list list
-                list-get-length 1-      \ data list new-len
-                swap list-set-length    \ data
+                list-dec-length         \ data list
                 true                    \ data flag
             else
                 \ Handle subsequent link.
@@ -345,16 +369,8 @@ list-header cell+ constant list-links
     false
 ;
 
-\ Deallocate a list.
-\ If the link data is struct instance addresses, the caller may need to deallocated them first.
-: list-deallocate ( list-addr -- )
-    \ Check argument.
-    dup is-not-allocated-list
-    if
-        ." list-deallocate: Arg is not an allocated list"
-        abort
-    then
-
+\ Deallocate a list that has a use count of 1.
+: list-deallocate-uc-1 ( list-addr -- )
     \ Deallocate links.
     dup list-get-links      \ list links
     begin
@@ -371,6 +387,31 @@ list-header cell+ constant list-links
     0 over list-set-links
 
     list-mma mma-deallocate \ Deallocate list.
+;
+
+\ Deallocate a list.
+\ If the link data is struct instance addresses, the caller may need to deallocated them first.
+: list-deallocate ( list-addr -- )
+    \ Check argument.
+    dup is-not-allocated-list
+    if
+        ." list-deallocate: Arg is not an allocated list"
+        abort
+    then
+
+    dup list-get-use-count      \ list-addr count
+
+    dup 1 < 
+    if  
+        ." invalid use count" abort
+    else
+        1 = 
+        if  
+            list-deallocate-uc-1
+        else
+            list-dec-use-count
+        then
+    then
 ;
 
 \ Return the difference of two lists, same order as in subrtracting numbers in forth, list1 - list0

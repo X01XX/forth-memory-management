@@ -74,6 +74,18 @@ link-next   cell+ constant link-data
     is-allocated-link 0=
 ;
 
+: link-dec-use-count ( link-addr -- )
+    dup link-get-use-count      \ link-addr use-count
+    1-
+    swap link-set-use-count
+;
+
+: link-inc-use-count ( link-addr -- )
+    dup link-get-use-count      \ link-addr use-count
+    1+
+    swap link-set-use-count
+;
+
 \ Return a new link struct instance address, with given data value, zero next-value.
 : link-new ( data-val -- link-addr )
     link-mma mma-allocate       \ data-val link-addr
@@ -106,9 +118,20 @@ link-next   cell+ constant link-data
         abort
     then
 
-    \ Clear fields.
-    0 over link-set-next
-    0 over link-set-data
+    dup link-get-use-count      \ link-addr count
 
-    link-mma mma-deallocate \ Deallocate link.
+    dup 1 < 
+    if  
+        ." invalid use count" abort
+    else
+        1 = 
+        if  
+            \ Clear fields.
+            0 over link-set-next
+            0 over link-set-data
+            link-mma mma-deallocate \ Deallocate link.
+        else
+            link-dec-use-count
+        then
+    then
 ;

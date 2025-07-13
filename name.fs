@@ -120,13 +120,17 @@ name-header cell+ constant name-string
     then
 
     dup name-get-use-count      \ name-addr count
-    2 <
-    if
-        \ Clear fields.
-        0 over name-string + !
 
-        name-mma mma-deallocate \ Deallocate name.
+    dup 1 <
+    if 
+        ." invalid use count" abort
     else
-        name-dec-use-count
+        1 =
+        if
+            0 over name-string + !  \ Clear string field first cell.
+            name-mma mma-deallocate \ Deallocate instance.
+        else
+            name-dec-use-count
+        then
     then
 ;
