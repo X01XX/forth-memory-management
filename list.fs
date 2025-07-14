@@ -305,8 +305,10 @@ list-header cell+ constant list-links
     nip nip
 ;
 
+
 \ Scan a list for the first item that returns true for the given xt, 
 \ remove that link, returning the link-data contents.
+\ If the data is a struct instance with a use count, that should be adjusted by the caller.
 : list-remove ( xt item list -- data true | false )
     \ Check argument.
     dup is-not-allocated-list
@@ -325,47 +327,80 @@ list-header cell+ constant list-links
         exit
     then
 
-    -rot 2 pick             \ list xt item list
-    list-get-links          \ list xt item first-link
-    0 swap                  \ list xt item last-linx link, add cycle at-start flag
+    \ Check first link.     \ xt item list
+    dup list-get-links      \ xt item list | link 
+    dup link-get-data       \ xt item list | link data
+
+    3 pick                  \ xt item list | link data | item
+    over                    \ xt item list | link data | item data
+    6 pick                  \ xt item list | link data | item data xt
+
+    execute                 \ xt item list | link data | flag
+
+    if                      \ xt item list | link data
+        \ Adjust first list pointer.
+        swap                \ xt item list | data link
+        dup link-get-next   \ xt item list | data link link-next
+        3 pick              \ xt item list | data link link-next list
+        list-set-links      \ xt item list | data link
+        
+        \ Deallocate link.
+        link-deallocate     \ xt item list | data
+
+        \ Adjust list length.
+        swap                \ xt item data list
+        list-dec-length     \ xt item data
+
+        \ Clean up stack.
+        nip nip             \ data
+
+        \ Add flag.
+        true                \ data true
+        exit
+    else                    \ xt item list | link data
+        2drop               \ xt item list
+    then
+
+    \ Check subsequent links.
+    dup list-get-links      \ xt item list | last-link
+
     begin
-        dup                 \ list xt item last-link link link
-    while                   \ list xt item last-link link
-        2 pick over         \ list xt item last-link link item link
-        link-get-data       \ list xt item last-link link item link-data
-        5 pick              \ list xt item last-link link item link-data xt
-        execute             \ list xt item last-link link last-link
-        if                  \ list xt item last-link link
-            \ Check last link
-            over 0=                     \ list xt item last-link link flag
-            if                          \ list xt item last-link link
-                \ Handle first link.  Set list-links to link after (if any) the first link.
-                dup                     \ list xt item last-link link link
-                link-get-next           \ list xt item last-link link next-link
-                5 pick                  \ list xt item last-link link next-link list
-                list-set-links          \ list xt item last-link link
-                dup link-get-data swap  \ list xt item last-link data link
+        dup link-get-next   \ xt item list | last-link cur-link
+        dup
+    while                   \ xt item list | last-link cur-link
+        dup link-get-data   \ xt item list | last-link cur-link | data
+        4 pick              \ xt item list | last-link cur-link | data item
+        6 pick              \ xt item list | last-link cur-link | data item xt
+        execute             \ xt item list | last-link cur-link | flag
 
-                \ Deallocate link.
-                link-deallocate     \ list xt item last-link data
-                nip nip nip         \ list data
+        if                      \ xt item list | last-link cur-link
 
-                \ Adjust list length.
-                swap dup                \ data list list
-                list-dec-length         \ data list
-                true                    \ data flag
-            else
-                \ Handle subsequent link.
-            then
+            \ Set last-link link-next field.
+            swap                \ xt item list | cur-link last-link
+            over link-get-next  \ xt item list | cur-link last-link link-next
+            swap link-set-next  \ xt item list | cur-link
+
+            \ Get data to return.
+            dup link-get-data       \ xt item list | cur-link data
+
+            \ Deallocate link.
+            swap link-deallocate    \ xt item list | data
+
+            \ Adjust list length.
+            swap                \ xt item data list
+            list-dec-length     \ xt item data
+
+            \ Cleanup stack.
+            nip nip                 \ data
+
+            true                    \ data true
             exit
-        else                    \ list xt item last-link link
-            nip dup             \ list xt item link link
-            link-get-next       \ list xt item last-link next-link
-        then
+        then                \ xt item list | last-link cur-link
+
+        nip                 \ xt item list | cur-link
     repeat
-    \ Cleanup stack.
+    \ xt item list | last-link 0 ( last link-next field value )
     2drop 2drop drop
-    \ Return negative result.
     false
 ;
 
