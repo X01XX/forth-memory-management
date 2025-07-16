@@ -10,7 +10,7 @@
 : name-list-intersection ( name-list-addr1 name-list-addr0 -- name-list-result-addr )
     [ ' name-eq ] literal -rot          \ xt name-list-addr1 name-list-addr0
     list-intersection                   \ name-list-result-addr
-    [ ' name-inc-use-count ] literal    \ name-list-result-addr xt
+    [ ' struct-inc-use-count ] literal  \ name-list-result-addr xt
     over list-apply                     \ name-list-result-addr
 ;
 
@@ -18,7 +18,7 @@
 : name-list-union ( name-list-addr1 name-list-addr0 -- name-list-result-addr )
     [ ' name-eq ] literal -rot          \ xt name-list-addr1 name-list-addr0
     list-union                          \ name-list-result-addr
-    [ ' name-inc-use-count ] literal    \ name-list-result-addr xt
+    [ ' struct-inc-use-count ] literal  \ name-list-result-addr xt
     over list-apply                     \ name-list-result-addr
 ;
 
@@ -26,7 +26,7 @@
 : name-list-difference ( name-list-addr1 name-list-addr0 -- name-list-result-addr )
     [ ' name-eq ] literal -rot          \ xt name-list-addr1 name-list-addr0
     list-difference                     \ name-list-result-addr
-    [ ' name-inc-use-count ] literal    \ name-list-result-addr xt
+    [ ' struct-inc-use-count ] literal  \ name-list-result-addr xt
     over list-apply                     \ name-list-result-addr
 ;
 

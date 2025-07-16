@@ -21,21 +21,6 @@ link-next   cell+ constant link-data
 ;
 
 \ Start accessors.
-: link-get-id ( link -- id )
-    0w@
-;
-
-: link-set-id ( link -- )
-    link-id swap 0w!
-;
-
-: link-get-use-count ( link -- u-uc )
-    1w@
-;
-
-: link-set-use-count ( u-16 link -- )
-    1w!
-;
 
 \ Get link data cell.
 : link-get-data ( link-addr -- link-data-value )
@@ -66,7 +51,7 @@ link-next   cell+ constant link-data
         drop false exit
     then
     
-    link-get-id \ Here the fetch could abort on an invalid address, like a random number.
+    struct-get-id   \ Here the fetch could abort on an invalid address, like a random number.
     link-id =
 ;
 
@@ -74,26 +59,15 @@ link-next   cell+ constant link-data
     is-allocated-link 0=
 ;
 
-: link-dec-use-count ( link-addr -- )
-    dup link-get-use-count      \ link-addr use-count
-    1-
-    swap link-set-use-count
-;
-
-: link-inc-use-count ( link-addr -- )
-    dup link-get-use-count      \ link-addr use-count
-    1+
-    swap link-set-use-count
-;
-
 \ Return a new link struct instance address, with given data value, zero next-value.
 : link-new ( data-val -- link-addr )
     link-mma mma-allocate       \ data-val link-addr
-    dup link-set-id
+    link-id over                \ data-val link-addr id addr
+    struct-set-id               \ data-val link-addr
     swap over                   \ link-addr data-val link-addr
     link-set-data               \ link-addr
     0 over link-set-next        \ link-addr
-    1 over link-set-use-count   \ link-addr
+    1 over struct-set-use-count \ link-addr
 ;
 
 \ Print a link in hex.
@@ -118,7 +92,7 @@ link-next   cell+ constant link-data
         abort
     then
 
-    dup link-get-use-count      \ link-addr count
+    dup struct-get-use-count    \ link-addr count
 
     dup 1 < 
     if  
@@ -131,7 +105,7 @@ link-next   cell+ constant link-data
             0 over link-set-data
             link-mma mma-deallocate \ Deallocate link.
         else
-            link-dec-use-count
+            struct-dec-use-count
         then
     then
 ;

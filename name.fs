@@ -21,33 +21,6 @@ name-header cell+ constant name-string
 ;
 
 \ Start accessors.
-: name-get-id ( name-addr -- id )
-    0w@
-;
-
-: name-set-id ( name-addr -- )
-    name-id swap 0w!
-;
-
-: name-get-use-count ( name-addr -- u-uc )
-    1w@
-;
-
-: name-set-use-count ( u-16 name-addr -- )
-    1w!
-;
-
-: name-dec-use-count ( name-addr -- )
-    dup name-get-use-count      \ name-addr use-count
-    1-
-    swap name-set-use-count
-;
-
-: name-inc-use-count ( name-addr -- )
-    dup name-get-use-count      \ name-addr use-count
-    1+
-    swap name-set-use-count
-;
 
 \ Get name data cell.
 : name-get-string ( name-addr -- string-addr length )
@@ -77,7 +50,7 @@ name-header cell+ constant name-string
         drop false exit
     then
     
-    name-get-id \ Here the fetch could abort on an invalid address, like a random number.
+    struct-get-id   \ Here the fetch could abort on an invalid address, like a random number.
     name-id =
 ;
 
@@ -88,8 +61,10 @@ name-header cell+ constant name-string
 \ Return a new name struct instance address, with given data value.
 : name-new ( string-addr length -- name-addr )
     name-mma mma-allocate       \ str-addr len name-addr
-    dup name-set-id             \ str-addr len name-addr
-    1 over name-set-use-count   \ str-addr len name-addr
+    name-id over                \ str-addr len name-addr id name-addr
+    struct-set-id               \ str-addr len name-addr
+    1 over                      \ str-addr len name-addr 1 addr
+    struct-set-use-count        \ str-addr len name-addr
 
     -rot                        \ name-addr str-addr len
     2 pick                      \ name-addr str-addr len name-addr
@@ -119,7 +94,7 @@ name-header cell+ constant name-string
         abort
     then
 
-    dup name-get-use-count      \ name-addr count
+    dup struct-get-use-count    \ name-addr count
 
     dup 1 <
     if 
@@ -130,7 +105,7 @@ name-header cell+ constant name-string
             0 over name-string + !  \ Clear string field first cell.
             name-mma mma-deallocate \ Deallocate instance.
         else
-            name-dec-use-count
+            struct-dec-use-count
         then
     then
 ;

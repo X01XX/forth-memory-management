@@ -24,21 +24,6 @@ list-header cell+ constant list-links
 ;
 
 \ Start accessors.
-: list-get-id ( list -- id-value )
-    0w@
-;
-
-: list-set-id ( list -- )
-    list-id swap 0w!
-;
-
-: list-get-use-count ( list -- uc-value )
-    1w@
-;
-
-: list-set-use-count ( u-16 list -- )
-    1w!
-;
 
 : list-get-length ( list-addr -- u-length )
     2w@
@@ -65,24 +50,12 @@ list-header cell+ constant list-links
         drop false exit
     then
 
-    list-get-id     \ Here the fetch could abort on an invalid address, like a random number.
+    struct-get-id   \ Here the fetch could abort on an invalid address, like a random number.
     list-id =       \ An unallocated instance should have an ID of zero.
 ;
 
 : is-not-allocated-list ( list -- flag )
     is-allocated-list 0=
-;
-
-: list-dec-use-count ( list-addr -- )
-    dup list-get-use-count      \ list-addr use-count
-    1-
-    swap list-set-use-count
-;
-
-: list-inc-use-count ( list-addr -- )
-    dup list-get-use-count      \ list-addr use-count
-    1+
-    swap list-set-use-count
 ;
 
 : list-inc-length ( list-addr -- )
@@ -106,10 +79,11 @@ list-header cell+ constant list-links
     list-mma mma-allocate       \ link-addr
 
     \ Init fields.
-    dup list-set-id             \ link-addr
+    list-id over                \ link-addr id link-addr
+    struct-set-id               \ link-addr
     0 over list-set-length      \ link-addr
     0 over list-set-links       \ link-addr
-    1 over list-set-use-count   \ link-addr
+    1 over struct-set-use-count \ link-addr
 ;
 
 
@@ -434,7 +408,7 @@ list-header cell+ constant list-links
         abort
     then
 
-    dup list-get-use-count      \ list-addr count
+    dup struct-get-use-count    \ list-addr count
 
     dup 1 < 
     if  
@@ -444,7 +418,7 @@ list-header cell+ constant list-links
         if  
             list-deallocate-uc-1
         else
-            list-dec-use-count
+            struct-dec-use-count
         then
     then
 ;
