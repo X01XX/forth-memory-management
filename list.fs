@@ -149,7 +149,7 @@ list-header cell+ constant list-links
     \ Check argument.
     dup is-not-allocated-list
     if
-        ." list-push: Argument is not an allocated list"
+        ." list-raw: Argument is not an allocated list"
         abort
     then
 
@@ -173,7 +173,7 @@ list-header cell+ constant list-links
     \ Check argument.
     dup is-not-allocated-list
     if
-        ." list-push: Argument is not an allocated list"
+        ." .list: Argument is not an allocated list"
         abort
     then
 
@@ -278,7 +278,6 @@ list-header cell+ constant list-links
     \ Cleanup, return TOS, that is false.
     nip nip
 ;
-
 
 \ Scan a list for the first item that returns true for the given xt, 
 \ remove that link, returning the link-data contents.

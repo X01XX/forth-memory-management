@@ -72,6 +72,13 @@ link-next   cell+ constant link-data
 
 \ Print a link in hex.
 : .link ( link-addr -- )
+    \ Check argument.
+    dup is-not-allocated-link
+    if
+        ." .link: Arg is not an allocated link"
+        abort
+    then
+
     base @ swap         \ Save the current base.
     hex
     ." Link: "
