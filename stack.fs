@@ -5,7 +5,7 @@
 \
 \ The max size is 2^16 cells. 
 
-\ Set the stack capacity
+\ Set the stack capacity, use only in this file.
 : _stack-set-capacity ( n stack-addr -- )
     over    \ n stack-addr n
     1 <     \ n stack-addr flag
@@ -25,15 +25,15 @@
 ;
 
 \ Get the stack capacity ( stack-addr -- n )
-' uw@ alias _stack-get-capacity ( stack-addr -- n )
+' uw@ alias stack-get-capacity ( stack-addr -- n )
 
 \ Get the number used
-: _stack-get-num-free ( stack-addr -- n )
+: stack-get-num-free ( stack-addr -- n )
     2 +     \ stack-addr-2nd-16-bits
     uw@     \ num-free
 ;
 
-\ Set the number used
+\ Set the number used, use only in this file.
 : _stack-set-num-free ( n stack-addr -- )
     2 +     \ n stack-addr-2nd-16-bits
     w!      \ (num-free set)
@@ -64,37 +64,37 @@
 
 \ Return true if the stack is full
 \ Run before adding a value to an stack
-: _stack-full? ( stack-addr -- flag )
+: stack-full? ( stack-addr -- flag )
     dup                 \ stack-addr stack-addr
-    _stack-get-capacity \ stack-addr stack-capacity
+    stack-get-capacity  \ stack-addr stack-capacity
 
     swap                \ stack-capacity stack-addr
-    _stack-get-num-free \ stack-capacity stack-len
+    stack-get-num-free  \ stack-capacity stack-len
 
     =                   \ flag
 ;
 
 \ Return true if the stack is empty
 \ Run before removing a value from an stack
-: _stack-empty? ( stack-addr -- flag )
-    _stack-get-num-free \ n
+: stack-empty? ( stack-addr -- flag )
+    stack-get-num-free  \ n
 
     0=                  \ flag
 ;
 
-\ Increment the number of cells in an stack
+\ Increment the number of cells in an stack, use only in this file.
 : _stack-inc-used ( stack-addr -- )
     dup                    \ stack-addr stack-addr
-    _stack-get-num-free \ stack-addr n
+    stack-get-num-free     \ stack-addr n
 
     1+ swap             \ new-num stack-addr
     _stack-set-num-free \
 ;
 
-\ Decrement the number of cells in an stack
+\ Decrement the number of cells in an stack, use only in this file.
 : _stack-dec-used ( stack-addr -- )
     dup                 \ stack-addr stack-addr
-    _stack-get-num-free \ stack-addr n
+    stack-get-num-free  \ stack-addr n
 
     1- swap             \ new-num stack-addr
     _stack-set-num-free \ -- )
@@ -104,7 +104,7 @@
 \ Fails is the stack is full.
 : stack-push ( n stack-addr -- )
     dup             \ n stack-addr stack-addr
-    _stack-full?    \ n stack-addr flag
+    stack-full?     \ n stack-addr flag
 
     if
         cr
@@ -117,7 +117,7 @@
     _stack-get-start    \ stack-addr n stack-addr stack-start
 
     swap                \ stack-addr n stack-start stack-addr
-    _stack-get-num-free \ stack-addr n stack-start num-free
+    stack-get-num-free  \ stack-addr n stack-start num-free
 
     cells +             \ stack-addr n stack-cell[num-free]
     !                   \ stack-addr ( n stored in cell[num-free] )
@@ -129,7 +129,7 @@
 \ Fails if the stack is empty
 : stack-pop ( stack-addr -- n )
     dup             \ stack-addr stack-addr
-    _stack-empty?   \ stack-addr flag
+    stack-empty?    \ stack-addr flag
 
     if
         cr
@@ -141,7 +141,7 @@
     _stack-dec-used     \ stack-addr
 
     dup                 \ stack-addr stack-addr
-    _stack-get-num-free \ stack-addr num-free
+    stack-get-num-free  \ stack-addr num-free
 
     1+ cells +          \ stack-cell[last]
     @                   \ n
@@ -151,10 +151,10 @@
 : .stack-stats ( stack-addr -- )
     ." <"
     dup                    \ stack-addr stack-addr
-    _stack-get-capacity \ stack-addr capacity
+    stack-get-capacity  \ stack-addr capacity
     .                   \ stack-addr (emit capacity)
     44 emit             \ stack-addr (emit comma)
-   _stack-get-num-free  \ num-free
+   stack-get-num-free   \ num-free
    .                    \ 
    62 emit              \ (emit >)
    32 emit              \ (emit space)
@@ -165,7 +165,7 @@
    dup .stack-stats     \ stack-addr
    dup cell+            \ stack-addr stack-start
    swap                 \ stack-start stack-addr
-   _stack-get-num-free  \ stack-start num-free
+   stack-get-num-free   \ stack-start num-free
 
    dup 0 >              \ stack-start num-free flag
    if

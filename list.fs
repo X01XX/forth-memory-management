@@ -2,7 +2,7 @@
 \ A parking spot for the start of a list of lisks, or no links, that is, an empty list.
 \ This struct wholly manages the link struct.
 
-19317 constant list-id
+17971 constant list-id
     2 constant list-struct-number-cells
 
 \ List struct fields.
@@ -25,21 +25,26 @@ list-header cell+ constant list-links
 
 \ Start accessors.
 
+\ Get lint length.
 : list-get-length ( list-addr -- u-length )
     2w@
 ;
 
-: list-set-length ( length-value list-addr -- )
+\ Set list length, use only in this file.
+: _list-set-length ( length-value list-addr -- )
     2w!
 ;
 
+\ Get list first link.
 : list-get-links ( list-addr -- list-links-value )
     list-links + @
 ;
 
-: list-set-links ( links-value list-addr -- )
+\ Set list links, use only in this file.
+: _list-set-links ( links-value list-addr -- )
     list-links + !
 ;
+
 \ End accessors.
 
 \ Check instance type.
@@ -62,14 +67,14 @@ list-header cell+ constant list-links
     dup list-get-length     \ list-addr count
     1+
     swap                    \ count list-addr
-    list-set-length
+    _list-set-length
 ;
 
 : list-dec-length ( list-addr -- )
     dup list-get-length     \ list-addr count
     1-
     swap                    \ count list-addr
-    list-set-length
+    _list-set-length
 ;
 
 
@@ -79,10 +84,9 @@ list-header cell+ constant list-links
     list-mma mma-allocate       \ link-addr
 
     \ Init fields.
-    list-id over                \ link-addr id link-addr
-    struct-set-id               \ link-addr
-    0 over list-set-length      \ link-addr
-    0 over list-set-links       \ link-addr
+    list-id over struct-set-id  \ link-addr
+    0 over _list-set-length     \ link-addr
+    0 over _list-set-links      \ link-addr
     1 over struct-set-use-count \ link-addr
 ;
 
@@ -112,10 +116,10 @@ list-header cell+ constant list-links
             dup link-get-next   \ link-new cur-link link-next
         repeat
         drop                    \ link-new link-last
-        link-set-next
+        _link-set-next
     else                        \ List is empty
         drop                    \ link-new list
-        list-set-links
+        _list-set-links
     then
 ;
 
@@ -138,10 +142,10 @@ list-header cell+ constant list-links
     2dup                \ link-new list link-new list
     list-get-links      \ link-new list link-new first-link (first-link may be 0)
     swap                \ link-new list first-link link-new
-    link-set-next       \ link-new list
+    _link-set-next      \ link-new list
 
     \ Store link-new as first link.
-    list-set-links
+    _list-set-links
 ;
 
 \ Print a list.
@@ -173,7 +177,7 @@ list-header cell+ constant list-links
     \ Check argument.
     dup is-not-allocated-list
     if
-        ." .list: Argument is not an allocated list"
+        ." list: Argument is not an allocated list"
         abort
     then
 
@@ -315,7 +319,7 @@ list-header cell+ constant list-links
         swap                \ xt item list | data link
         dup link-get-next   \ xt item list | data link link-next
         3 pick              \ xt item list | data link link-next list
-        list-set-links      \ xt item list | data link
+        _list-set-links     \ xt item list | data link
         
         \ Deallocate link.
         link-deallocate     \ xt item list | data
@@ -349,9 +353,9 @@ list-header cell+ constant list-links
         if                      \ xt item list | last-link cur-link
 
             \ Set last-link link-next field.
-            swap                \ xt item list | cur-link last-link
-            over link-get-next  \ xt item list | cur-link last-link link-next
-            swap link-set-next  \ xt item list | cur-link
+            swap                    \ xt item list | cur-link last-link
+            over link-get-next      \ xt item list | cur-link last-link link-next
+            swap _link-set-next     \ xt item list | cur-link
 
             \ Get data to return.
             dup link-get-data       \ xt item list | cur-link data
@@ -391,8 +395,8 @@ list-header cell+ constant list-links
     drop                    \ list
 
     \ Clear fields.
-    0 over list-set-length
-    0 over list-set-links
+    0 over _list-set-length
+    0 over _list-set-links
 
     list-mma mma-deallocate \ Deallocate list.
 ;
@@ -407,7 +411,7 @@ list-header cell+ constant list-links
         abort
     then
 
-    dup struct-get-use-count    \ list-addr count
+    dup struct-get-use-count        \ list-addr count
 
     dup 1 < 
     if  

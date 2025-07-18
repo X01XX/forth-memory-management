@@ -51,7 +51,7 @@ include stack.fs
 \ Return the addr of the array end.
 : mma-array-end-addr ( mma-addr -- end-addr )
     dup _mma-get-stack      \ mma-addr stack-addr
-    _stack-get-num-free     \ mma-addr num-items-
+    stack-get-num-free      \ mma-addr num-items-
     over _mma-get-item-size \ mma-addr num-items- item-size
     *                       \ mma-addr item-offset
     swap _mma-get-array     \ item-offset array-start
@@ -180,7 +180,7 @@ include stack.fs
     ." Capacity:"
     space
     dup             \ mma-addr stack-addr stack-addr
-    _stack-get-capacity \ mma-addr stack-addr capacity
+    stack-get-capacity  \ mma-addr stack-addr capacity
     dup             \ mma-addr stack-addr capacity capacity
     3 .r            \ mma-addr stack-addr capacity (emit capacity)
     44 emit         \ mma-addr stack-addr capacity (emit comma)
@@ -188,7 +188,7 @@ include stack.fs
     ." Free:"
     space
     dup rot         \ mma-addr capacity capacity stack-addr 
-   _stack-get-num-free  \ mma-addr capacity capacity num-free
+    stack-get-num-free  \ mma-addr capacity capacity num-free
     dup             \ mma-addr capacity capacity num-free num-free
     3 .r            \ mma-addr capacity capacity num-free
     44 emit         \ mma-addr capacity capacity num-free

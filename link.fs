@@ -27,8 +27,8 @@ link-next   cell+ constant link-data
     link-data + @
 ;
 
-\ Set link data cell.
-: link-set-data ( data-value link-addr -- )
+\ Set link data cell, use only in this file.
+: _link-set-data ( data-value link-addr -- )
     link-data + !
 ;
 
@@ -37,8 +37,8 @@ link-next   cell+ constant link-data
     link-next + @
 ;
 
-\ Set link next cell.
-: link-set-next ( next-value link-addr -- )
+\ Set link next cell, use only in this file, and list.fs.
+: _link-set-next ( next-value link-addr -- )
     link-next + !
 ;
 \ End accessors.
@@ -51,7 +51,7 @@ link-next   cell+ constant link-data
         drop false exit
     then
     
-    struct-get-id   \ Here the fetch could abort on an invalid address, like a random number.
+    struct-get-id \ Here the fetch could abort on an invalid address, like a random number.
     link-id =
 ;
 
@@ -62,11 +62,10 @@ link-next   cell+ constant link-data
 \ Return a new link struct instance address, with given data value, zero next-value.
 : link-new ( data-val -- link-addr )
     link-mma mma-allocate       \ data-val link-addr
-    link-id over                \ data-val link-addr id addr
-    struct-set-id               \ data-val link-addr
+    link-id over struct-set-id  \ data-val link-addr
     swap over                   \ link-addr data-val link-addr
-    link-set-data               \ link-addr
-    0 over link-set-next        \ link-addr
+    _link-set-data              \ link-addr
+    0 over _link-set-next       \ link-addr
     1 over struct-set-use-count \ link-addr
 ;
 
@@ -108,8 +107,8 @@ link-next   cell+ constant link-data
         1 = 
         if  
             \ Clear fields.
-            0 over link-set-next
-            0 over link-set-data
+            0 over _link-set-next
+            0 over _link-set-data
             link-mma mma-deallocate \ Deallocate link.
         else
             struct-dec-use-count
