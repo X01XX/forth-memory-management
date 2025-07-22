@@ -1,10 +1,10 @@
 One of my favorite calculations, the possible Karnaugh Map regions implied by a few arbitrarily chosen dissimilar pairs of squares.
 
-I am using 4 bits, but given Forth words, up to 63 or 64 bits is possible for the computer, but not drawable on a piece of paper.
+I am using 4 bits, but given Forth words, up to 63 or 64 bits is easily possible for the computer, but not drawable on a piece of paper.
 
 Possible dissimilarity between elements of the two pairs is not addressed.
 
-The code for region.fs and regionlist.fs is not supplied at this time.
+The code for main.fs, region.fs, and regionlist.fs is not supplied at this time.
 
 include main.fs
 
