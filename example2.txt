@@ -18,6 +18,8 @@ Initializing Region store.
 
 Possible regions = (~4 + ~5) & (~3 + ~6) = (1xxx x11x xxx0 xxx1 x0xx)
 
+(You may think this just predicts the regions 4, 5, 3 and 6 will be in. But 1xxx contains none of them, so there is some additional predictive power. )
+
 Memory use:
     Region mma:       Capacity: 103, Free:  87, In use:  16 Item Size:  24 Array size: 2472 Overhead: 848 Total: 3320 Cells: 415
     List mma:         Capacity: 102, Free:  99, In use:   3 Item Size:  16 Array size: 1632 Overhead: 840 Total: 2472 Cells: 309
