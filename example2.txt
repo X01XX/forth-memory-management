@@ -12,9 +12,9 @@ Initializing Link store.
 Initializing List store.
 Initializing Region store.
 
-~4 + ~5: (xxx0 x0xx xxx1 xx1x 1xxx)
+~4 + ~5: (xxx0 x0xx xxx1 xx1x 1xxx)        (no region can contain both)
 
-~3 + ~6: (x0xx xxx1 xxx0 xx0x x1xx 1xxx)
+~3 + ~6: (x0xx xxx1 xxx0 xx0x x1xx 1xxx)   (no region can contain both)
 
 Possible regions = (~4 + ~5) & (~3 + ~6) = (1xxx x11x xxx0 xxx1 x0xx)
 
