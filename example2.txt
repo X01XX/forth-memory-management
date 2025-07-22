@@ -1,0 +1,34 @@
+One of my favorite calculations, the possible Karnaugh Map regions implied by a few arbitrarily chosen dissimilar pairs of squares.
+
+I am using 4 bits, but given Forth words, up to 63 or 64 bits is possible for the computer, but not drawable on a piece of paper.
+
+Possible dissimilarity between elements of the two pairs is not addressed.
+
+The code for region.fs and regionlist.fs is not supplied at this time.
+
+include main.fs
+
+Initializing Link store.
+Initializing List store.
+Initializing Region store.
+
+~4 + ~5: (xxx0 x0xx xxx1 xx1x 1xxx)
+
+~3 + ~6: (x0xx xxx1 xxx0 xx0x x1xx 1xxx)
+
+Possible regions = (~4 + ~5) & (~3 + ~6) = (1xxx x11x xxx0 xxx1 x0xx)
+
+Memory use:
+    Region mma:       Capacity: 103, Free:  87, In use:  16 Item Size:  24 Array size: 2472 Overhead: 848 Total: 3320 Cells: 415
+    List mma:         Capacity: 102, Free:  99, In use:   3 Item Size:  16 Array size: 1632 Overhead: 840 Total: 2472 Cells: 309
+    Link mma:         Capacity: 101, Free:  85, In use:  16 Item Size:  24 Array size: 2424 Overhead: 832 Total: 3256 Cells: 407
+    dstack: <3> 101922403784760 101922403784744 101922403784792 
+
+Deallocating ...
+
+Memory use:
+    Region mma:       Capacity: 103, Free: 103, In use:   0 Item Size:  24 Array size: 2472 Overhead: 848 Total: 3320 Cells: 415
+    List mma:         Capacity: 102, Free: 102, In use:   0 Item Size:  16 Array size: 1632 Overhead: 840 Total: 2472 Cells: 309
+    Link mma:         Capacity: 101, Free: 101, In use:   0 Item Size:  24 Array size: 2424 Overhead: 832 Total: 3256 Cells: 407
+    dstack: <0> 
+ ok

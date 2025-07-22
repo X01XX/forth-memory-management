@@ -81,13 +81,13 @@ list-header cell+ constant list-links
 \ Return an new list struct instance address.
 : list-new ( -- addr )
     \ Allocate space.
-    list-mma mma-allocate       \ link-addr
+    list-mma mma-allocate       \ list-addr
 
     \ Init fields.
-    list-id over struct-set-id  \ link-addr
-    0 over _list-set-length     \ link-addr
-    0 over _list-set-links      \ link-addr
-    1 over struct-set-use-count \ link-addr
+    list-id over struct-set-id  \ list-addr
+    0 over _list-set-length     \ list-addr
+    0 over _list-set-links      \ list-addr
+    1 over struct-set-use-count \ list-addr
 ;
 
 
@@ -305,13 +305,12 @@ list-header cell+ constant list-links
     then
 
     \ Check first link.     \ xt item list
-    dup list-get-links      \ xt item list | link 
+    dup list-get-links      \ xt item list | link
     dup link-get-data       \ xt item list | link data
 
-    3 pick                  \ xt item list | link data | item
-    over                    \ xt item list | link data | item data
-    6 pick                  \ xt item list | link data | item data xt
-
+    dup                     \ xt item list | link data | data
+    4 pick                  \ xt item list | link data | data item
+    6 pick                  \ xt item list | link data | data item  xt
     execute                 \ xt item list | link data | flag
 
     if                      \ xt item list | link data
@@ -337,6 +336,7 @@ list-header cell+ constant list-links
     else                    \ xt item list | link data
         2drop               \ xt item list
     then
+    \ cr ." list-remove: At 0.1 " .s
 
     \ Check subsequent links.
     dup list-get-links      \ xt item list | last-link
@@ -348,9 +348,11 @@ list-header cell+ constant list-links
         dup link-get-data   \ xt item list | last-link cur-link | data
         4 pick              \ xt item list | last-link cur-link | data item
         6 pick              \ xt item list | last-link cur-link | data item xt
+        \ cr ." at 2 " .s
         execute             \ xt item list | last-link cur-link | flag
+        \ cr ." at 3 " .s
 
-        if                      \ xt item list | last-link cur-link
+        if                  \ xt item list | last-link cur-link
 
             \ Set last-link link-next field.
             swap                    \ xt item list | cur-link last-link
