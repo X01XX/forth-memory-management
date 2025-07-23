@@ -16,16 +16,17 @@ clearstack
 \ Print memory use for mm-arays.
 : memory-use ( -- )
     cr
-    ." Memory Use:" cr
-    2 spaces ." list" space
-    list-mma .mma-usage cr
-    2 spaces ." link" space
-    link-mma .mma-usage cr
-    2 spaces ." name" space
-    name-mma .mma-usage cr
+    ." Memory Use:"
+    cr 4 spaces ." list" space
+    list-mma .mma-usage
+    cr 4 spaces ." link" space
+    link-mma .mma-usage
+    cr 4 spaces ." name" space
+    name-mma .mma-usage
+    cr 4 spaces ." dstack: " .s
 ;
 
-cr memory-use
+cr memory-use cr
 
 list-new value list1   \ Get linked list header for a new list, store it in word list1
 
@@ -78,16 +79,14 @@ cr
 ' * 2 list1 num-list-apply value list7
 list7 .num-list
 3 spaces ." (list1 * 2)"
-cr
 
 cr
 ." list8: "
 ' + -1 list1 num-list-apply value list8
 list8 .num-list
 3 spaces ." (list1 + -1)"
-cr
 
-memory-use
+cr memory-use cr
 
 cr
 ." Deallocating num-lists ..."
@@ -102,11 +101,12 @@ list6 num-list-deallocate
 list7 num-list-deallocate
 list8 num-list-deallocate
 
-memory-use
+cr memory-use
 
 \ Here, a struct instance address will be stored in the data field in a link.
 \
 \ ***************************************************************************
+cr
 cr ." *** Working with lists of Name struct instances, list link data field is an instance address."
 cr ." *** Name struct instances keep track of use count, see namelist.fs, name-deallocate in name.fs."
 cr
@@ -139,7 +139,7 @@ cr ." list10 - list9: " ' .name list14 .list
 
 cr memory-use
 
-cr ." Deallocating name lists ..."
+cr cr ." Deallocating name lists ..."
 
 list9  name-list-deallocate
 list10 name-list-deallocate
@@ -149,10 +149,8 @@ list13 name-list-deallocate
 list14 name-list-deallocate
 cr memory-use
 
-cr
-." dstack end:" space .s
-
 \ Free heap memory.
+cr
 cr ." Freeing heap memory"
 list-mma mma-free
 link-mma mma-free

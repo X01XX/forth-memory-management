@@ -1,12 +1,10 @@
-One of my favorite calculations, the possible Karnaugh Map regions implied by a few arbitrarily chosen dissimilar pairs of squares.
+One of my favorite calculations, the possible Karnaugh Map regions implied by dissimilar pairs of squares.
 
 I am using 4 bits, but given Forth words, up to 63 or 64 bits is easily possible for the computer, but not drawable on a piece of paper.
 
 Possible dissimilarity between elements of the two pairs is not addressed.
 
-The code for main.fs, region.fs, and regionlist.fs is not supplied at this time.
-
-include main.fs
+include example2.fs
 
 Initializing Link store.
 Initializing List store.
@@ -33,4 +31,6 @@ Memory use:
     List mma:         Capacity: 102, Free: 102, In use:   0 Item Size:  16 Array size: 1632 Overhead: 840 Total: 2472 Cells: 309
     Link mma:         Capacity: 101, Free: 101, In use:   0 Item Size:  24 Array size: 2424 Overhead: 832 Total: 3256 Cells: 407
     dstack: <0> 
+
+Freeing heap memory
  ok

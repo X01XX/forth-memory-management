@@ -4,6 +4,8 @@ Run > gforth
 
 then: include example.fs
 
+or:   include example2.fs
+
 Strategy: Build one thing upon another.
 
 1) A stand-alone stack (SAS), with an array of cells for stack items,

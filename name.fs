@@ -1,5 +1,5 @@
 \ The name struct, storing a name of up to 15 characters.
-17971 constant name-id
+19317 constant name-id
    3 constant name-struct-number-cells
 
 \ Name struct fields.
@@ -72,7 +72,7 @@ name-header cell+ constant name-string
 ;
 
 \ Print a name struct instance.
-: .name ( name-addr -- )
+: .name ( name-addr -- )        \ redefines an obsolete function, so a warning displays.
     name-get-string type
 ;
 
