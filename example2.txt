@@ -16,6 +16,8 @@ Initializing Region store.
 
 Possible regions = (~4 + ~5) & (~3 + ~6) = (1xxx x11x xxx0 xxx1 x0xx)
 
+( 4 only in xxx0, 5 only in xxx1, this is significant)
+
 (You may think this just predicts the regions 4, 5, 3 and 6 will be in. But 1xxx contains none of them, so there is some additional predictive power. )
 
 Memory use:
