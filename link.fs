@@ -59,6 +59,15 @@ link-next   cell+ constant link-data
     is-allocated-link 0=
 ;
 
+\ Check arg0 for link, unconventional, leaves stack unchanged. 
+: assert-arg0-is-link ( arg0 -- arg0 )
+    dup is-allocated-link 0=
+    if
+        cr ." argo is not an allocated link."
+        abort
+    then
+;
+
 \ Return a new link struct instance address, with given data value, zero next-value.
 : link-new ( data-val -- link-addr )
     link-mma mma-allocate       \ data-val link-addr
@@ -66,17 +75,13 @@ link-next   cell+ constant link-data
     swap over                   \ link-addr data-val link-addr
     _link-set-data              \ link-addr
     0 over _link-set-next       \ link-addr
-    1 over struct-set-use-count \ link-addr
+    0 over struct-set-use-count \ link-addr
 ;
 
 \ Print a link in hex.
 : .link ( link-addr -- )
-    \ Check argument.
-    dup is-not-allocated-link
-    if
-        ." .link: Arg is not an allocated link"
-        abort
-    then
+    \ Check arg.
+    assert-arg0-is-link
 
     base @ swap         \ Save the current base.
     hex
@@ -91,16 +96,12 @@ link-next   cell+ constant link-data
 
 \ Deallocate a link.
 : link-deallocate ( link-addr -- )
-    \ Check argument.
-    dup is-not-allocated-link
-    if
-        ." link-deallocate: Arg is not an allocated link"
-        abort
-    then
+    \ Check arg.
+    assert-arg0-is-link
 
     dup struct-get-use-count    \ link-addr count
 
-    dup 1 < 
+    dup 0 < 
     if  
         ." invalid use count" abort
     else

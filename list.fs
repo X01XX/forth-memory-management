@@ -25,7 +25,7 @@ list-header cell+ constant list-links
 
 \ Start accessors.
 
-\ Get lint length.
+\ Get list length.
 : list-get-length ( list-addr -- u-length )
     2w@
 ;
@@ -63,7 +63,28 @@ list-header cell+ constant list-links
     is-allocated-list 0=
 ;
 
+\ Check arg0 for list, unconventional, leaves stack unchanged. 
+: assert-arg0-is-list ( lst -- lst )
+    dup is-not-allocated-list
+    if
+        cr ." arg0 is not an allocated list."
+        abort
+    then
+;
+
+\ Check arg1 for list, unconventional, leaves stack unchanged. 
+: assert-arg1-is-list ( arg1 arg0 -- arg1 arg0 )
+    over is-not-allocated-list
+    if
+        cr ." arg1 is not an allocated list."
+        abort
+    then
+;
+
 : list-inc-length ( list-addr -- )
+    \ Check arg.
+    assert-arg0-is-list
+
     dup list-get-length     \ list-addr count
     1+
     swap                    \ count list-addr
@@ -71,6 +92,9 @@ list-header cell+ constant list-links
 ;
 
 : list-dec-length ( list-addr -- )
+    \ Check arg.
+    assert-arg0-is-list
+
     dup list-get-length     \ list-addr count
     1-
     swap                    \ count list-addr
@@ -87,21 +111,20 @@ list-header cell+ constant list-links
     list-id over struct-set-id  \ list-addr
     0 over _list-set-length     \ list-addr
     0 over _list-set-links      \ list-addr
-    1 over struct-set-use-count \ list-addr
+    0 over struct-set-use-count \ list-addr
 ;
 
 
 \ Add data to the end of a list.
+\ If data is a struct, having a use count, caller to inc use count.
 : list-push-end ( data list-addr -- )
-    \ Check argument.
-    dup is-not-allocated-list
-    if
-        ." list-push-end: Argument is not an allocated list"
-        abort
-    then
+    \ Check arg.
+    assert-arg0-is-list
 
     \ Create new link.
-    swap link-new swap          \ link-new list
+    swap link-new               \ list link
+    dup struct-inc-use-count    \ list link
+    swap                        \ link-new list
 
     \ Increment list length
     dup list-inc-length         \ link-new
@@ -124,16 +147,15 @@ list-header cell+ constant list-links
 ;
 
 \ Add an address to the beginning of a list
-: list-push ( data list-addr -- ) 
-    \ Check argument.
-    dup is-not-allocated-list
-    if
-        ." list-push: Argument is not an allocated list"
-        abort
-    then
+\ If data is a struct, having a use count, caller to inc use count.
+: list-push ( data list-addr -- )
+    \ Check arg.
+    assert-arg0-is-list
 
     \ Create new link.
-    swap link-new swap          \ link-new list
+    swap link-new               \ list link-new
+    dup struct-inc-use-count    \ list link-new
+    swap                        \ link-new list
 
     \ Increment list length
     dup list-inc-length         \ link-new list
@@ -150,12 +172,8 @@ list-header cell+ constant list-links
 
 \ Print a list.
 : .list-raw ( addr -- )
-    \ Check argument.
-    dup is-not-allocated-list
-    if
-        ." list-raw: Argument is not an allocated list"
-        abort
-    then
+    \ Check arg.
+    assert-arg0-is-list
 
     dup list-get-length
     ." length " . ."  ("
@@ -174,12 +192,8 @@ list-header cell+ constant list-links
 
 \ Print a list, given an xt to print the data.
 : .list ( xt addr -- )
-    \ Check argument.
-    dup is-not-allocated-list
-    if
-        ." list: Argument is not an allocated list"
-        abort
-    then
+    \ Check arg.
+    assert-arg0-is-list
 
     ." ("
 
@@ -211,12 +225,8 @@ list-header cell+ constant list-links
 
 \ Return true if a list contains an item, based on a given test execution token.
 : list-member ( xt item list -- flag )
-    \ Check argument.
-    dup is-not-allocated-list
-    if
-        ." list-member: Argument is not an allocated list"
-        abort
-    then
+    \ Check arg.
+    assert-arg0-is-list
 
     list-get-links          \ xt item first-link
     begin                   \ List is not empty.
@@ -244,12 +254,8 @@ list-header cell+ constant list-links
 
 \ Return an data cell if a list contains an item, based on a given test execution token.
 : list-find ( xt item list -- cell true | false )
-    \ Check argument.
-    dup is-not-allocated-list
-    if
-        ." list-find: Argument is not an allocated list"
-        abort
-    then
+    \ Check arg.
+    assert-arg0-is-list
 
     \ Check for an empty list.
     dup list-get-length
@@ -287,12 +293,8 @@ list-header cell+ constant list-links
 \ remove that link, returning the link-data contents.
 \ If the data is a struct instance with a use count, that should be adjusted by the caller.
 : list-remove ( xt item list -- data true | false )
-    \ Check argument.
-    dup is-not-allocated-list
-    if
-        ." list-remove: Argument is not an allocated list"
-        abort
-    then
+    \ Check arg.
+    assert-arg0-is-list
 
     \ Check for an empty list.
     dup list-get-length
@@ -385,6 +387,9 @@ list-header cell+ constant list-links
 
 \ Deallocate a list that has a use count of 1.
 : list-deallocate-uc-1 ( list-addr -- )
+    \ Check arg.
+    assert-arg0-is-list
+
     \ Deallocate links.
     dup list-get-links      \ list links
     begin
@@ -406,16 +411,12 @@ list-header cell+ constant list-links
 \ Deallocate a list.
 \ If the link data is struct instance addresses, the caller may need to deallocated them first.
 : list-deallocate ( list-addr -- )
-    \ Check argument.
-    dup is-not-allocated-list
-    if
-        ." list-deallocate: Arg is not an allocated list"
-        abort
-    then
+    \ Check arg.
+    assert-arg0-is-list
 
     dup struct-get-use-count        \ list-addr count
 
-    dup 1 < 
+    dup 0 < 
     if  
         ." invalid use count" abort
     else
@@ -433,16 +434,9 @@ list-header cell+ constant list-links
 \ If list data are struct instances, the caller should inc the instance use count,
 \ using xt list-ret list-apply.
 : list-difference ( xt list1 list0 -- list )
-    dup is-not-allocated-list
-    if  
-        ." list-difference: arg0 is not an allocated list"
-        abort
-    then
-    over is-not-allocated-list
-    if  
-        ." list-difference: arg1 is not an allocated list"
-        abort
-    then
+    \ Check arg.
+    assert-arg0-is-list
+    assert-arg1-is-list
 
     \ Allocate list to return.
     list-new                   \ xt list1 list0 list-ret
@@ -475,16 +469,9 @@ list-header cell+ constant list-links
 \ If list data are struct instances, the caller should inc the instance use count,
 \ using xt list-ret list-apply.
 : list-union ( xt list1 list0 -- list )
-    dup is-not-allocated-list
-    if  
-        ." list-union: arg0 is not an allocated list"
-        abort
-    then
-    over is-not-allocated-list
-    if  
-        ." list-union: arg1 is not an allocated list"
-        abort
-    then
+    \ Check args.
+    assert-arg0-is-list
+    assert-arg1-is-list
 
     \ Allocate list to return.
     list-new                    \ xt list1 list0 list-ret
@@ -534,11 +521,8 @@ list-header cell+ constant list-links
 
 \ Apply a function to each item in a list.
 : list-apply ( xt list0 -- )
-    dup is-not-allocated-list
-    if  
-        ." list-apply: list0 is not an allocated list"
-        abort
-    then
+    \ Check arg.
+    assert-arg0-is-list
 
     list-get-links      \ xt links0
     begin
@@ -555,16 +539,9 @@ list-header cell+ constant list-links
 
 \ Return the intersection of two lists.
 : list-intersection ( xt list1 list0 -- list2 )
-    dup is-not-allocated-list
-    if  
-        ." list-intersection: list0 is not an allocated list"
-        abort
-    then
-    over is-not-allocated-list
-    if  
-        ." list-intersection: list1 is not an allocated list"
-        abort
-    then
+    \ Check arg.
+    assert-arg0-is-list
+    assert-arg1-is-list
 
     \ Allocate list to return.
     list-new                   \ xt list1 list0 list-ret
