@@ -100,7 +100,7 @@ name-header cell+ constant name-string
     if 
         ." invalid use count" abort
     else
-        1 =
+        2 <
         if
             0 over name-string + !  \ Clear string field first cell.
             name-mma mma-deallocate \ Deallocate instance.

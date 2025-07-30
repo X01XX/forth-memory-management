@@ -338,7 +338,6 @@ list-header cell+ constant list-links
     else                    \ xt item list | link data
         2drop               \ xt item list
     then
-    \ cr ." list-remove: At 0.1 " .s
 
     \ Check subsequent links.
     dup list-get-links      \ xt item list | last-link
@@ -350,9 +349,7 @@ list-header cell+ constant list-links
         dup link-get-data   \ xt item list | last-link cur-link | data
         4 pick              \ xt item list | last-link cur-link | data item
         6 pick              \ xt item list | last-link cur-link | data item xt
-        \ cr ." at 2 " .s
         execute             \ xt item list | last-link cur-link | flag
-        \ cr ." at 3 " .s
 
         if                  \ xt item list | last-link cur-link
 
@@ -420,7 +417,7 @@ list-header cell+ constant list-links
     if  
         ." invalid use count" abort
     else
-        1 = 
+        2 < 
         if  
             list-deallocate-uc-1
         else
