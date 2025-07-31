@@ -173,6 +173,14 @@ include stack.fs
     0<> if ." mma-array free failed" then   
 ;
 
+\ Return the number af array items in use.
+: mma-in-use ( mma-addr -- u )
+    _mma-get-stack           \ stack-addr
+    dup stack-get-capacity   \ stack-addr capacity
+    swap stack-get-num-free  \ capacity free
+    -
+;
+
 \ .mma-usage. Run like: "<mma-name> .mma-usage"
 : .mma-usage ( mma-addr -- )
     dup             \ mma-addr mma-addr
