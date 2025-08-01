@@ -48,7 +48,7 @@
 ;
 
 \ Remove a region from a region-list, and deallocate.
-: region-list-remove ( xt reg list | item true | false )
+: region-list-remove ( xt reg list -- bool )
     \ Check args.
     assert-arg0-is-list
     assert-arg1-is-region
