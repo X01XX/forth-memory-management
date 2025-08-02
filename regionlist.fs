@@ -48,6 +48,8 @@
 ;
 
 \ Remove a region from a region-list, and deallocate.
+\ xt signature is ( item list-data -- flag )
+\ Return true if a region was removed.
 : region-list-remove ( xt reg list -- bool )
     \ Check args.
     assert-arg0-is-list

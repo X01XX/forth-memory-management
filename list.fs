@@ -200,6 +200,7 @@ list-header cell+ constant list-links
 ;
 
 \ Print a list, given an xt to print the data.
+\ xt signature is ( link-data -- )
 : .list ( xt addr -- )
     \ Check arg.
     assert-arg0-is-list
@@ -233,6 +234,7 @@ list-header cell+ constant list-links
 ;
 
 \ Return true if a list contains an item, based on a given test execution token.
+\ xt signature is ( item link-data -- flag )
 : list-member ( xt item list -- flag )
     \ Check arg.
     assert-arg0-is-list
@@ -261,7 +263,8 @@ list-header cell+ constant list-links
 ;
 
 
-\ Return an data cell if a list contains an item, based on a given test execution token.
+\ Return the first data cell of a link, based on a given test execution token and test item.
+\ xt signature is ( item link-data -- flag )
 : list-find ( xt item list -- cell true | false )
     \ Check arg.
     assert-arg0-is-list
@@ -276,8 +279,8 @@ list-header cell+ constant list-links
         exit
     then
 
-    list-get-links              \ xt item first-link
-    begin                   \ List is not empty.
+    list-get-links          \ xt item first-link
+    begin
         dup                 \ xt item link link
     while                   \ xt item link
         2dup                \ xt item link item link
@@ -298,8 +301,53 @@ list-header cell+ constant list-links
     nip nip
 ;
 
+\ Return a list containing items that match a given test execution token and test item.
+\ xt signature is ( item link-data -- flag )
+\
+\ If the data is a struct that implements a use count, follow this with
+\ [ ' struct-inc-use-count ] literal over list-apply
+: list-find-all ( xt item list -- list )
+    \ Check arg.
+    assert-arg0-is-list
+    >R                  \ xt item
+    list-new            \ xt item ret-list
+    -rot                \ ret xt item
+    R>                  \ ret xt item list 
+
+    \ Check for an empty list.
+    dup list-get-length
+    0=
+    if
+        \ Return false.
+        2drop drop
+        exit
+    then
+
+    list-get-links          \ ret xt item first-link
+    begin
+        dup                 \ ret xt item link link
+    while                   \ ret xt item link
+        2dup                \ ret xt item link item link
+        link-get-data       \ ret xt item link item link-data
+        4 pick              \ ret xt item link item link-data xt
+        execute             \ ret xt item link flag
+        if
+            \ Get data.
+            dup link-get-data   \ ret xt item link data
+            4 pick              \ ret xt item link data ret
+            list-push           \ ret xt item link
+        then
+        link-get-next       \ ret xt item link-next
+    repeat
+
+    \ Cleanup.
+    drop 2drop              \ ret-list
+;
+
 \ Scan a list for the first item that returns true for the given xt, 
 \ remove that link, returning the link-data contents.
+\ xt signature is ( item link-data -- flag )
+\
 \ If the data is a struct instance with a use count, that should be adjusted by the caller.
 : list-remove ( xt item list -- data true | false )
     \ Check arg.
@@ -319,9 +367,9 @@ list-header cell+ constant list-links
     dup list-get-links      \ xt item list | link
     dup link-get-data       \ xt item list | link data
 
-    dup                     \ xt item list | link data | data
-    4 pick                  \ xt item list | link data | data item
-    6 pick                  \ xt item list | link data | data item  xt
+    3 pick                  \ xt item list | link data | item
+    over                    \ xt item list | link data | item data
+    6 pick                  \ xt item list | link data | item data xt
     execute                 \ xt item list | link data | flag
 
     if                      \ xt item list | link data
@@ -437,6 +485,8 @@ list-header cell+ constant list-links
 
 \ Return the difference of two lists, same order as in subrtracting numbers in forth, list1 - list0
 \ Provide an xt for determining data equality.
+\ xt signature is ( item link-data -- flag )
+\
 \ If list data are struct instances, the caller should inc the instance use count,
 \ using xt list-ret list-apply.
 : list-difference ( xt list1 list0 -- list )
@@ -472,6 +522,8 @@ list-header cell+ constant list-links
 
 \ Return the union of two lists.
 \ Provide an xt for determining data equality.
+\ xt signature is ( list-data list-data -- flag )
+\
 \ If list data are struct instances, the caller should inc the instance use count,
 \ using xt list-ret list-apply.
 : list-union ( xt list1 list0 -- list )
@@ -526,6 +578,7 @@ list-header cell+ constant list-links
 ;
 
 \ Apply a function to each item in a list.
+\ xt signature is ( data -- )
 : list-apply ( xt list0 -- )
     \ Check arg.
     assert-arg0-is-list
