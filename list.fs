@@ -23,6 +23,15 @@ list-header cell+ constant list-links
     list-struct-number-cells swap mma-new  to list-mma
 ;
 
+\ Check list mma usage.
+: assert-list-mma-none-in-use ( -- )
+    list-mma mma-in-use 0<>
+    if
+        ." list-mma use GT 0"
+        abort
+    then
+;
+
 \ Start accessors.
 
 \ Get list length.

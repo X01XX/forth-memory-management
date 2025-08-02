@@ -20,6 +20,15 @@ link-next   cell+ constant link-data
     link-struct-number-cells swap mma-new to link-mma
 ;
 
+\ Check link mma usage.
+: assert-link-mma-none-in-use ( -- )
+    link-mma mma-in-use 0<>
+    if
+        ." link-mma use GT 0"
+        abort
+    then
+;
+
 \ Start accessors.
 
 \ Get link data cell.
