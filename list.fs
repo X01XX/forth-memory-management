@@ -349,6 +349,8 @@ list-header cell+ constant list-links
 \ xt signature is ( item link-data -- flag )
 \
 \ If the data is a struct instance with a use count, that should be adjusted by the caller.
+\
+\ I like this one. Standard tradecraft, as L. Ron Hubbard once wrote.
 : list-remove ( xt item list -- data true | false )
     \ Check arg.
     assert-arg0-is-list
