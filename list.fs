@@ -393,19 +393,17 @@ list-header cell+ constant list-links
         true                \ data true
         exit
     else                    \ xt item list | link data
-        2drop               \ xt item list
+        drop                \ xt item list | link
     then
 
     \ Check subsequent links.
-    dup list-get-links      \ xt item list | last-link
-
     begin
         dup link-get-next   \ xt item list | last-link cur-link
         dup
     while                   \ xt item list | last-link cur-link
-        dup link-get-data   \ xt item list | last-link cur-link | data
-        4 pick              \ xt item list | last-link cur-link | data item
-        6 pick              \ xt item list | last-link cur-link | data item xt
+        3 pick              \ xt item list | last-link cur-link | item
+        over link-get-data  \ xt item list | last-link cur-link | item data
+        6 pick              \ xt item list | last-link cur-link | item data xt
         execute             \ xt item list | last-link cur-link | flag
 
         if                  \ xt item list | last-link cur-link
@@ -435,6 +433,7 @@ list-header cell+ constant list-links
         nip                 \ xt item list | cur-link
     repeat
     \ xt item list | last-link 0 ( last link-next field value )
+    
     2drop 2drop drop
     false
 ;

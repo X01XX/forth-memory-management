@@ -431,12 +431,9 @@ region-state-0 cell+ constant region-state-1
         \ Regions intersect.
         over region-intersection    \ reg1 reg-int flag
         if
-            dup struct-inc-use-count
                                     \ reg1 reg-int
             swap over region-eq     \ reg-int flag
             swap region-deallocate  \ flag
-            \ dup ."  = " .
-            \ exit
         else
             ." region-superset-of: reg0 and reg1 should intersect"
             abort
@@ -460,12 +457,9 @@ region-state-0 cell+ constant region-state-1
         swap                        \ reg0 reg1
         over region-intersection    \ reg0 reg-int flag
         if
-            dup struct-inc-use-count
                                     \ reg0 reg-int
             swap over region-eq     \ reg-int flag
             swap region-deallocate  \ flag
-            \ dup ."  = " .
-            \ exit
         else
             ." region-subset-of: reg0 and reg1 should intersect"
             abort

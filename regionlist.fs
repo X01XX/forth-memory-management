@@ -85,7 +85,7 @@
 
     begin
         2dup
-        [ ' region-superset-of ] literal -rot \ reg1 list0 xt reg1 list0
+        [ ' region-subset-of ] literal -rot \ reg1 list0 xt reg1 list0
         region-list-remove                  \ reg1 list0 | flag
     while
     repeat
