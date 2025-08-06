@@ -2,7 +2,7 @@
     3 constant link-struct-number-cells
 
 \ Link struct fields.
-0 constant  link-header         \ 16-bits [0] id [1] use count.
+0 constant  link-header         \ 16-bits [0] struct id [1] use count.
 link-header cell+ constant link-next
 link-next   cell+ constant link-data
 
@@ -52,7 +52,7 @@ link-next   cell+ constant link-data
 ;
 \ End accessors.
 
-\ Check instance type.
+\ Return true if TOS is an allocated link.
 : is-allocated-link ( link -- flag )
     \ Insure the given addr cannot be an invalid addr.
     dup link-mma mma-within-array 0=
@@ -64,6 +64,7 @@ link-next   cell+ constant link-data
     link-id =
 ;
 
+\ Return true if TOS is not an allocated link.
 : is-not-allocated-link ( link -- flag )
     is-allocated-link 0=
 ;
@@ -72,7 +73,7 @@ link-next   cell+ constant link-data
 : assert-arg0-is-link ( arg0 -- arg0 )
     dup is-allocated-link 0=
     if
-        cr ." argo is not an allocated link."
+        cr ." arg0 is not an allocated link."
         abort
     then
 ;

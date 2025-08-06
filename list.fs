@@ -1,12 +1,12 @@
 \ The List struct.
-\ A parking spot for the start of a list of lisks, or no links, that is, an empty list.
+\ A parking spot for the start of a list of links, or no links, that is, an empty list.
 \ This struct wholly manages the link struct.
 
 17971 constant list-id
     2 constant list-struct-number-cells
 
 \ List struct fields.
-0 constant  list-header             \ 16-bits [0] id [1] use count [2] length.
+0 constant  list-header             \ 16-bits [0] struct id [1] use count [2] length.
 list-header cell+ constant list-links
 
 0 value list-mma  \ Storage for list mma struct instance.
@@ -54,9 +54,25 @@ list-header cell+ constant list-links
     list-links + !
 ;
 
+\ Increment the list length.
+: _list-inc-length ( list-addr -- )
+    dup list-get-length     \ list-addr count
+    1+
+    swap                    \ count list-addr
+    _list-set-length
+;
+
+\ Decrement the list length.
+: _list-dec-length ( list-addr -- )
+    dup list-get-length     \ list-addr count
+    1-
+    swap                    \ count list-addr
+    _list-set-length
+;
+
 \ End accessors.
 
-\ Check instance type.
+\  Return true if TOS is an allocated list.
 : is-allocated-list ( list -- flag )
     \ Insure the given addr cannot be an invalid addr.
     dup list-mma mma-within-array 0=
@@ -68,6 +84,7 @@ list-header cell+ constant list-links
     list-id =       \ An unallocated instance should have an ID of zero.
 ;
 
+\ Return true if TOS is not an allocated list.
 : is-not-allocated-list ( list -- flag )
     is-allocated-list 0=
 ;
@@ -89,27 +106,6 @@ list-header cell+ constant list-links
         abort
     then
 ;
-
-: list-inc-length ( list-addr -- )
-    \ Check arg.
-    assert-arg0-is-list
-
-    dup list-get-length     \ list-addr count
-    1+
-    swap                    \ count list-addr
-    _list-set-length
-;
-
-: list-dec-length ( list-addr -- )
-    \ Check arg.
-    assert-arg0-is-list
-
-    dup list-get-length     \ list-addr count
-    1-
-    swap                    \ count list-addr
-    _list-set-length
-;
-
 
 \ Return an new list struct instance address.
 : list-new ( -- addr )
@@ -136,7 +132,7 @@ list-header cell+ constant list-links
     swap                        \ link-new list
 
     \ Increment list length
-    dup list-inc-length         \ link-new
+    dup _list-inc-length        \ link-new
 
     \ Check for an empty list
     dup list-get-links          \ link-new list first-link
@@ -167,7 +163,7 @@ list-header cell+ constant list-links
     swap                        \ link-new list
 
     \ Increment list length
-    dup list-inc-length         \ link-new list
+    dup _list-inc-length        \ link-new list
 
     \ Store list header next pointer to link next pointer
     2dup                \ link-new list link-new list
@@ -234,7 +230,7 @@ list-header cell+ constant list-links
 ;
 
 \ Return true if a list contains an item, based on a given test execution token.
-\ xt signature is ( item link-data -- flag )
+\ xt signature is ( item link-data -- flag ) or ( filler link-data -- flag )
 : list-member ( xt item list -- flag )
     \ Check arg.
     assert-arg0-is-list
@@ -264,7 +260,7 @@ list-header cell+ constant list-links
 
 
 \ Return the first data cell of a link, based on a given test execution token and test item.
-\ xt signature is ( item link-data -- flag )
+\ xt signature is ( item link-data -- flag ) or ( filler link-data -- flag )
 : list-find ( xt item list -- cell true | false )
     \ Check arg.
     assert-arg0-is-list
@@ -302,7 +298,7 @@ list-header cell+ constant list-links
 ;
 
 \ Return a list containing items that match a given test execution token and test item.
-\ xt signature is ( item link-data -- flag )
+\ xt signature is ( item link-data -- flag ) or ( filler link-data -- flag )
 \
 \ If the data is a struct that implements a use count, follow this with
 \ [ ' struct-inc-use-count ] literal over list-apply
@@ -346,7 +342,7 @@ list-header cell+ constant list-links
 
 \ Scan a list for the first item that returns true for the given xt, 
 \ remove that link, returning the link-data contents.
-\ xt signature is ( item link-data -- flag )
+\ xt signature is ( item link-data -- flag ) or ( filler link-data -- flag )
 \
 \ If the data is a struct instance with a use count, that should be adjusted by the caller.
 \
@@ -386,7 +382,7 @@ list-header cell+ constant list-links
 
         \ Adjust list length.
         swap                \ xt item data list
-        list-dec-length     \ xt item data
+        _list-dec-length    \ xt item data
 
         \ Clean up stack.
         nip nip             \ data
@@ -423,7 +419,7 @@ list-header cell+ constant list-links
 
             \ Adjust list length.
             swap                \ xt item data list
-            list-dec-length     \ xt item data
+            _list-dec-length    \ xt item data
 
             \ Cleanup stack.
             nip nip                 \ data
@@ -486,7 +482,7 @@ list-header cell+ constant list-links
 
 \ Return the difference of two lists, same order as in subrtracting numbers in forth, list1 - list0
 \ Provide an xt for determining data equality.
-\ xt signature is ( item link-data -- flag )
+\ xt signature is ( link-data link-data -- flag )
 \
 \ If list data are struct instances, the caller should inc the instance use count,
 \ using xt list-ret list-apply.
@@ -523,7 +519,7 @@ list-header cell+ constant list-links
 
 \ Return the union of two lists.
 \ Provide an xt for determining data equality.
-\ xt signature is ( list-data list-data -- flag )
+\ xt signature is ( link-data link-data -- flag )
 \
 \ If list data are struct instances, the caller should inc the instance use count,
 \ using xt list-ret list-apply.
@@ -579,7 +575,7 @@ list-header cell+ constant list-links
 ;
 
 \ Apply a function to each item in a list.
-\ xt signature is ( data -- )
+\ xt signature is ( link-data -- )
 : list-apply ( xt list0 -- )
     \ Check arg.
     assert-arg0-is-list
@@ -598,6 +594,7 @@ list-header cell+ constant list-links
 ;
 
 \ Return the intersection of two lists.
+\ xt signature is ( link-data link-data -- flag )
 : list-intersection ( xt list1 list0 -- list2 )
     \ Check arg.
     assert-arg0-is-list
