@@ -596,7 +596,7 @@ list-header cell+ constant list-links
 \ Return the intersection of two lists.
 \ xt signature is ( link-data link-data -- flag )
 : list-intersection ( xt list1 list0 -- list2 )
-    \ Check arg.
+    \ Check args.
     assert-arg0-is-list
     assert-arg1-is-list
 
@@ -634,4 +634,13 @@ list-header cell+ constant list-links
     repeat
     \ xt list0 list-ret 0
     drop nip nip                \ list-ret
+;
+
+\ Return true if a list is empty.
+: list-is-empty ( list0 -- flag )
+    \ Check arg.
+    assert-arg0-is-list
+
+    list-get-length
+    0=
 ;
