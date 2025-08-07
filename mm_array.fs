@@ -1,4 +1,4 @@
-\ Memmory Management array
+\ Memory Management array
 \
 \ Create and manage an array, where:
 \   Allocation involves popping an array element address from a stack,
@@ -16,7 +16,23 @@
 \       one cell for info, capacity and current number free
 \       one cell for each array item
 \
-
+\
+\ Trouble-shooting leftover struct instances.
+\
+\ After running a program, display the usage of all mm-arrays, noticing some instances are still in use.
+\
+\ Comment out the freeing heap memory, if needed.
+\
+\ Create a print of each address from <struct name>-new, and <struct name>-deallocate (where use-count is LT 2).
+\
+\ For those instances not accounted for with paired new/deallocate prints,
+\ Check dangling addresses with is-allocated-<struct name>
+\ If that returns true, try .<struct name>
+\ and struct-get-use-count
+\
+\ If still mistified, statements like: cr ." at ...." cr
+\ in the code, paired with the new address prints, can narrow down where
+\ the dangling instance is created.
 include stack.fs 
 
 ' @ alias _mma-get-stack ( mma-addr -- stack-addr )
