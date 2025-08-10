@@ -171,11 +171,37 @@
    if
      0 do               \ stack-start
        dup              \ stack-start stack-start
-       I cells + @ u.   \ stack-start stack-cell[I]
+       I cells + @ u.   \ stack-start
      loop
    else
      drop               \ stack-start  
    endif
    drop                 \
+;
+
+\ Return true if an address is in the stack.
+: stack-in ( addr stack-addr -- flag )
+   dup cell+            \ addr stack stack-start
+   swap                 \ addr stack-start stack
+   stack-get-num-free   \ addr stack-start num-free
+
+   dup 0 >              \ addr stack-start num-free flag
+   if
+     0 do               \ addr stack-start
+       dup              \ addr stack-start stack-start
+       I cells + @      \ addr stack-start stack-cell[I]
+       2 pick           \ addr stack-start stack-cell[I] addr
+       =                \ addr stack-start
+       if
+            2drop true
+            unloop
+            exit
+       then
+     loop
+   else
+     drop               \ addr stack-start  
+   endif
+   2drop                \
+   false
 ;
 

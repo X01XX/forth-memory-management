@@ -23,12 +23,11 @@
 \
 \ Comment out the freeing heap memory, if needed.
 \
-\ Create a print of each address from <struct name>-new, and <struct name>-deallocate (where use-count is LT 2).
+\ Run <mma addr> .mma-in-use
 \
-\ For those instances not accounted for with paired new/deallocate prints,
-\ Check dangling addresses with is-allocated-<struct name>
-\ If that returns true, try .<struct name>
-\ and struct-get-use-count
+\ Check in-use addresses with:  addr  is-allocated-<struct name>
+\ If that returns true, try:    addr  .<struct name>
+\ and                           addr  struct-get-use-count
 \
 \ If still mistified, statements like: cr ." at ...." cr
 \ in the code, paired with the new address prints, can narrow down where
@@ -241,3 +240,27 @@ include stack.fs
    5 .r
 ;
 
+\ Print out addresses that are still in use.
+: .mma-in-use ( mma-addr -- )
+    dup _mma-get-item-size swap     \ size mma
+    dup _mma-get-stack swap         \ size stack mma
+    dup mma-array-end-addr swap     \ size stack end mma
+    mma-array-start-addr            \ size stack end next-item
+
+    begin
+        2dup <>
+    while
+        dup                         \ size stack end item item
+        3 pick                      \ size stack end item item stack
+        stack-in                    \ size stack end item flag
+        if
+        else
+            cr dup ." In use: " .
+        then
+
+        3 pick                      \ size stack end item size
+        +                           \ size stack end next-item
+    repeat
+    cr
+    2drop 2drop
+;
