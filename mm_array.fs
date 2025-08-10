@@ -30,7 +30,7 @@
 \ and                           addr  struct-get-use-count
 \
 \ If still mistified, statements like: cr ." at ...." cr
-\ in the code, paired with the new address prints, can narrow down where
+\ in the code, paired with the <struct name>-new address prints, can narrow down where
 \ the dangling instance is created.
 include stack.fs 
 
