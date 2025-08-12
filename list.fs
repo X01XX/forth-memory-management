@@ -117,8 +117,8 @@ list-header cell+ constant list-links
     0 over _list-set-length     \ list-addr
     0 over _list-set-links      \ list-addr
     0 over struct-set-use-count \ list-addr
+    \ cr ." list-new: " dup . cr
 ;
-
 
 \ Add data to the end of a list.
 \ If data is a struct, having a use count, caller to inc use count.
@@ -440,6 +440,7 @@ list-header cell+ constant list-links
 : list-deallocate-uc-1 ( list-addr -- )
     \ Check arg.
     assert-arg0-is-list
+    \ cr ." list-deallocate-uc-1: " dup . cr
 
     \ Deallocate links.
     dup list-get-links      \ list links
@@ -644,3 +645,39 @@ list-header cell+ constant list-links
     list-get-length
     0=
 ;
+
+\ Return a data item, based on an index into a list.
+: list-get-item ( u list -- data )
+    \ Check args.
+    assert-arg0-is-list
+
+    over                        \ u list u
+    over list-get-length        \ u list u len
+    over                        \ u list u len u
+    0 <
+    if
+        ." index LT 0"
+        abort
+    then                        \ u list u len
+    >=
+    if
+        ." index too large"
+        abort
+    then                        \ u list
+
+    \ Step through links the given number of times.
+    0 swap                      \ u count list
+    list-get-links              \ u count link
+
+    begin
+        -rot 2dup <>            \ link u count
+    while
+        1+
+        rot                     \ u count+ link
+        link-get-next
+    repeat
+
+    \ Get data to return.
+    2drop link-get-data
+;
+
