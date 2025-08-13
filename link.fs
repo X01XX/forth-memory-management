@@ -11,10 +11,7 @@ link-next   cell+ constant link-data
 \ Init link mma.
 : link-mma-init ( num-items -- ) \ sets link-mma.
     dup 1 <
-    if
-        ." link-mma-init: Invalid number items."
-        abort
-    then
+    abort" link-mma-init: Invalid number items."
 
     cr ." Initializing Link store."  
     link-struct-number-cells swap mma-new to link-mma
@@ -23,10 +20,7 @@ link-next   cell+ constant link-data
 \ Check link mma usage.
 : assert-link-mma-none-in-use ( -- )
     link-mma mma-in-use 0<>
-    if
-        ." link-mma use GT 0"
-        abort
-    then
+    abort" link-mma use GT 0"
 ;
 
 \ Start accessors.
@@ -69,20 +63,17 @@ link-next   cell+ constant link-data
     is-allocated-link 0=
 ;
 
-\ Check arg0 for link, unconventional, leaves stack unchanged. 
-: assert-arg0-is-link ( arg0 -- arg0 )
+\ Check TOS for link, unconventional, leaves stack unchanged. 
+: assert-tos-is-link ( arg0 -- arg0 )
     dup is-allocated-link 0=
-    if
-        cr ." arg0 is not an allocated link."
-        abort
-    then
+    abort" TOS is not an allocated link."
 ;
 
 \ Return a new link struct instance address, with given data value, zero next-value.
 : link-new ( data-val -- link-addr )
     link-mma mma-allocate       \ data-val link-addr
     link-id over struct-set-id  \ data-val link-addr
-    swap over                   \ link-addr data-val link-addr
+    tuck                        \ link-addr data-val link-addr
     _link-set-data              \ link-addr
     0 over _link-set-next       \ link-addr
     0 over struct-set-use-count \ link-addr
@@ -91,7 +82,7 @@ link-next   cell+ constant link-data
 \ Print a link in hex.
 : .link ( link-addr -- )
     \ Check arg.
-    assert-arg0-is-link
+    assert-tos-is-link
 
     base @ swap         \ Save the current base.
     hex
@@ -107,22 +98,19 @@ link-next   cell+ constant link-data
 \ Deallocate a link.
 : link-deallocate ( link-addr -- )
     \ Check arg.
-    assert-arg0-is-link
+    assert-tos-is-link
 
     dup struct-get-use-count    \ link-addr count
 
     dup 0 < 
+    abort" invalid use count"
+    1 = 
     if  
-        ." invalid use count" abort
+        \ Clear fields.
+        0 over _link-set-next
+        0 over _link-set-data
+        link-mma mma-deallocate \ Deallocate link.
     else
-        1 = 
-        if  
-            \ Clear fields.
-            0 over _link-set-next
-            0 over _link-set-data
-            link-mma mma-deallocate \ Deallocate link.
-        else
-            struct-dec-use-count
-        then
+        struct-dec-use-count
     then
 ;

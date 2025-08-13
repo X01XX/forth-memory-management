@@ -33,15 +33,15 @@
 \ Print a region-list
 : .region-list ( list0 -- )
     \ Check args.
-    assert-arg0-is-list
+    assert-tos-is-list
     [ ' .region ] literal swap .list
 ;
 
 \ Push a region to a region-list.
 : _region-list-push ( reg1 list0 -- )
     \ Check args.
-    assert-arg0-is-list
-    assert-arg1-is-region
+    assert-tos-is-list
+    assert-nos-is-region
 
     over struct-inc-use-count
     list-push
@@ -52,8 +52,8 @@
 \ Return true if a region was removed.
 : region-list-remove ( xt reg list -- bool )
     \ Check args.
-    assert-arg0-is-list
-    assert-arg1-is-region
+    assert-tos-is-list
+    assert-nos-is-region
 
     list-remove
     if
@@ -68,8 +68,8 @@
 \ If there are no supersets in the list, delete any subsets.
 : region-list-push-nosubs ( reg1 list0 -- )
     \ Check args.
-    assert-arg0-is-list
-    assert-arg1-is-region
+    assert-tos-is-list
+    assert-nos-is-region
 
     \ Return if any region in the list is a superset of reg1.
     2dup                                    \ reg1 list0 reg1 list0
@@ -98,8 +98,8 @@
 \ Return a list of region intersections with a region-list, no subsets.
 : region-list-region-intersections ( list1 list0 -- list-result )
     \ Check args.
-    assert-arg0-is-list
-    assert-arg1-is-list
+    assert-tos-is-list
+    assert-nos-is-list
 
     \ list1 list0
     list-get-links                  \ list1 link0

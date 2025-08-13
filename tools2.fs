@@ -85,7 +85,7 @@
 \ Increment struct use count.
 : struct-inc-use-count ( struct-addr -- )
     dup struct-get-use-count      \ struct-addr use-count
-    1+                                                                                                                                               
+    1+
     swap struct-set-use-count
 ;
 
@@ -140,12 +140,6 @@
     =   
 ;
  
-\ Return true if a number is an invalid value.
-: is-not-value ( u -- flag )
-    dup all-bits and 
-    <>  
-;
-
 \ Check arg0 for value, unconventional, leaves stack unchanged. 
 : assert-arg0-is-value ( u -- u )
     dup is-not-value

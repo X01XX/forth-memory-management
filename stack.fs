@@ -49,10 +49,8 @@
     cells       \ num-cells num-bytes
     allocate    \ num-cells stack-addr flag
     0<>
-    if
-        ." stack-new: memory allocation error"
-        abort
-    then
+    abort" stack-new: memory allocation error"
+
     tuck    \ stack-addr num-cells stack-addr
 
     _stack-set-capacity \ stack-addr
@@ -112,7 +110,7 @@
         -24 throw
     then                \ n stack-addr
 
-    swap over           \ stack-addr n stack-addr
+    tuck                \ stack-addr n stack-addr
     dup                 \ stack-addr n stack-addr stack-addr
     _stack-get-start    \ stack-addr n stack-addr stack-start
 

@@ -14,10 +14,7 @@ list-header cell+ constant list-links
 \ Init lisp, and lisk, mma.
 : list-mma-init ( num-items -- ) \ Sets list-mma
     dup 1 <
-    if
-        ." list-mma-init: Invalid number items."
-        abort
-    then
+    abort" list-mma-init: Invalid number items."
 
     cr ." Initializing List store."
     list-struct-number-cells swap mma-new  to list-mma
@@ -26,10 +23,7 @@ list-header cell+ constant list-links
 \ Check list mma usage.
 : assert-list-mma-none-in-use ( -- )
     list-mma mma-in-use 0<>
-    if
-        ." list-mma use GT 0"
-        abort
-    then
+    abort" list-mma use GT 0"
 ;
 
 \ Start accessors.
@@ -89,22 +83,16 @@ list-header cell+ constant list-links
     is-allocated-list 0=
 ;
 
-\ Check arg0 for list, unconventional, leaves stack unchanged. 
-: assert-arg0-is-list ( lst -- lst )
+\ Check TOS for list, unconventional, leaves stack unchanged. 
+: assert-tos-is-list ( lst -- lst )
     dup is-not-allocated-list
-    if
-        cr ." arg0 is not an allocated list."
-        abort
-    then
+    abort" TOS is not an allocated list."
 ;
 
-\ Check arg1 for list, unconventional, leaves stack unchanged. 
-: assert-arg1-is-list ( arg1 arg0 -- arg1 arg0 )
+\ Check NOS for list, unconventional, leaves stack unchanged. 
+: assert-nos-is-list ( arg1 arg0 -- arg1 arg0 )
     over is-not-allocated-list
-    if
-        cr ." arg1 is not an allocated list."
-        abort
-    then
+    abort" NOS is not an allocated list."
 ;
 
 \ Return an new list struct instance address.
@@ -124,7 +112,7 @@ list-header cell+ constant list-links
 \ If data is a struct, having a use count, caller to inc use count.
 : list-push-end ( data list-addr -- )
     \ Check arg.
-    assert-arg0-is-list
+    assert-tos-is-list
 
     \ Create new link.
     swap link-new               \ list link
@@ -155,7 +143,7 @@ list-header cell+ constant list-links
 \ If data is a struct, having a use count, caller to inc use count.
 : list-push ( data list-addr -- )
     \ Check arg.
-    assert-arg0-is-list
+    assert-tos-is-list
 
     \ Create new link.
     swap link-new               \ list link-new
@@ -178,7 +166,7 @@ list-header cell+ constant list-links
 \ Print a list.
 : .list-raw ( addr -- )
     \ Check arg.
-    assert-arg0-is-list
+    assert-tos-is-list
 
     dup list-get-length
     ." length " . ."  ("
@@ -199,7 +187,7 @@ list-header cell+ constant list-links
 \ xt signature is ( link-data -- )
 : .list ( xt addr -- )
     \ Check arg.
-    assert-arg0-is-list
+    assert-tos-is-list
 
     ." ("
 
@@ -233,7 +221,7 @@ list-header cell+ constant list-links
 \ xt signature is ( item link-data -- flag ) or ( filler link-data -- flag )
 : list-member ( xt item list -- flag )
     \ Check arg.
-    assert-arg0-is-list
+    assert-tos-is-list
 
     list-get-links          \ xt item first-link
     begin                   \ List is not empty.
@@ -263,7 +251,7 @@ list-header cell+ constant list-links
 \ xt signature is ( item link-data -- flag ) or ( filler link-data -- flag )
 : list-find ( xt item list -- cell true | false )
     \ Check arg.
-    assert-arg0-is-list
+    assert-tos-is-list
 
     \ Check for an empty list.
     dup list-get-length
@@ -304,7 +292,7 @@ list-header cell+ constant list-links
 \ [ ' struct-inc-use-count ] literal over list-apply
 : list-find-all ( xt item list -- list )
     \ Check arg.
-    assert-arg0-is-list
+    assert-tos-is-list
     >R                  \ xt item
     list-new            \ xt item ret-list
     -rot                \ ret xt item
@@ -349,7 +337,7 @@ list-header cell+ constant list-links
 \ I like this one. Standard tradecraft, as L. Ron Hubbard once wrote.
 : list-remove ( xt item list -- data true | false )
     \ Check arg.
-    assert-arg0-is-list
+    assert-tos-is-list
 
     \ Check for an empty list.
     dup list-get-length
@@ -439,7 +427,7 @@ list-header cell+ constant list-links
 \ Deallocate a list that has a use count of 1.
 : list-deallocate-uc-1 ( list-addr -- )
     \ Check arg.
-    assert-arg0-is-list
+    assert-tos-is-list
     \ cr ." list-deallocate-uc-1: " dup . cr
 
     \ Deallocate links.
@@ -464,20 +452,18 @@ list-header cell+ constant list-links
 \ If the link data is struct instance addresses, the caller may need to deallocated them first.
 : list-deallocate ( list-addr -- )
     \ Check arg.
-    assert-arg0-is-list
+    assert-tos-is-list
 
     dup struct-get-use-count        \ list-addr count
 
     dup 0 < 
+    abort" invalid use count"
+
+    2 < 
     if  
-        ." invalid use count" abort
+        list-deallocate-uc-1
     else
-        2 < 
-        if  
-            list-deallocate-uc-1
-        else
-            struct-dec-use-count
-        then
+        struct-dec-use-count
     then
 ;
 
@@ -489,8 +475,8 @@ list-header cell+ constant list-links
 \ using xt list-ret list-apply.
 : list-difference ( xt list1 list0 -- list )
     \ Check arg.
-    assert-arg0-is-list
-    assert-arg1-is-list
+    assert-tos-is-list
+    assert-nos-is-list
 
     \ Allocate list to return.
     list-new                   \ xt list1 list0 list-ret
@@ -526,8 +512,8 @@ list-header cell+ constant list-links
 \ using xt list-ret list-apply.
 : list-union ( xt list1 list0 -- list )
     \ Check args.
-    assert-arg0-is-list
-    assert-arg1-is-list
+    assert-tos-is-list
+    assert-nos-is-list
 
     \ Allocate list to return.
     list-new                    \ xt list1 list0 list-ret
@@ -579,7 +565,7 @@ list-header cell+ constant list-links
 \ xt signature is ( link-data -- )
 : list-apply ( xt list0 -- )
     \ Check arg.
-    assert-arg0-is-list
+    assert-tos-is-list
 
     list-get-links      \ xt links0
     begin
@@ -598,8 +584,8 @@ list-header cell+ constant list-links
 \ xt signature is ( link-data link-data -- flag )
 : list-intersection ( xt list1 list0 -- list2 )
     \ Check args.
-    assert-arg0-is-list
-    assert-arg1-is-list
+    assert-tos-is-list
+    assert-nos-is-list
 
     \ Allocate list to return.
     list-new                   \ xt list1 list0 list-ret
@@ -640,7 +626,7 @@ list-header cell+ constant list-links
 \ Return true if a list is empty.
 : list-is-empty ( list0 -- flag )
     \ Check arg.
-    assert-arg0-is-list
+    assert-tos-is-list
 
     list-get-length
     0=
@@ -649,21 +635,16 @@ list-header cell+ constant list-links
 \ Return a data item, based on an index into a list.
 : list-get-item ( u list -- data )
     \ Check args.
-    assert-arg0-is-list
+    assert-tos-is-list
 
     over                        \ u list u
     over list-get-length        \ u list u len
     over                        \ u list u len u
     0 <
-    if
-        ." index LT 0"
-        abort
-    then                        \ u list u len
+    abort" index LT 0"
+
     >=
-    if
-        ." index too large"
-        abort
-    then                        \ u list
+    abort" index too large"
 
     \ Step through links the given number of times.
     0 swap                      \ u count list

@@ -95,10 +95,7 @@ include stack.fs
 \ ( mma-deallocate: Run like: <item-addr> <mma-addr> mma-deallocate )
 : mma-deallocate ( item-addr mma-addr -- )
     depth 2 <
-    if  
-        ." mma-deallocate: data stack has too few items"
-        abort
-    then
+    abort" mma-deallocate: data stack has too few items"
 
     _mma-get-stack  \ item-addr stack-addr
     over swap       \ item-addr item-addr stack-addr
@@ -115,13 +112,11 @@ include stack.fs
 \ ( mma-new.  Run like: <num-cells-per-item> <num-items> mma-new value <mma-name>.
 : mma-new ( num-cells-per-item  num-items -- mma-addr )
 
-    swap        \ n-i n-c-p-i
-    over        \ n-i n-c-p-i n-i
+    tuck        \ n-i n-c-p-i n-i
 
     swap        \ n-i n-i n-c-p-i
     cells       \ n-i n-i item-size
-    swap        \ n-i item-size n-i
-    over        \ n-i item-size n-i item-size
+    tuck        \ n-i item-size n-i item-size
     *           \ n-i item-size all-items-size
     dup         \ n-i item-size total-size total-size
     3 cells +   \ n-i item-size total-size ( add three cells for the stack address, item size, end of array )
@@ -131,14 +126,12 @@ include stack.fs
     \ Allocate memory for mma-array instance.
     allocate    \ n-i item-size total-size array-addr flag
     0<> 
-    if  
-        ." mma-new: memory allocation error"
-        abort
-    then
+    abort" mma-new: memory allocation error"
+
     \ n-i item-size total-size mma-addr
 
     \ Store end of array.
-    swap over           \ n-i item-size mma-addr total-size mma-addr
+    tuck                \ n-i item-size mma-addr total-size mma-addr
     _mma-get-array      \ n-i item-size mma-addr total-size array-addr
     +                   \ n-i item-size mma-addr end-addr
     over                \ n-i item-size mma-addr end-addr mma-addr
