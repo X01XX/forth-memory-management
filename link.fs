@@ -86,11 +86,11 @@ link-next   cell+ constant link-data
 
     base @ swap         \ Save the current base.
     hex
-    ." Link: "
+    ." Link: $"
     dup .
-    ." next: "
+    ." next: $"
     dup link-get-next .
-    ." data: "
+    ." data: $"
     link-get-data .
     base !              \ Restore saved base.
 ;
@@ -104,7 +104,7 @@ link-next   cell+ constant link-data
 
     dup 0 < 
     abort" invalid use count"
-    1 = 
+    2 < 
     if  
         \ Clear fields.
         0 over _link-set-next

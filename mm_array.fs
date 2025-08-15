@@ -61,17 +61,6 @@ include stack.fs
 : mma-array-start-addr ( mma-addr -- start-addr )
     _mma-get-array
 ;
-   
-
-\ Return the addr of the array end.
-: mma-array-end-addr ( mma-addr -- end-addr )
-    dup _mma-get-stack      \ mma-addr stack-addr
-    stack-get-num-free      \ mma-addr num-items-
-    over _mma-get-item-size \ mma-addr num-items- item-size
-    *                       \ mma-addr item-offset
-    swap _mma-get-array     \ item-offset array-start
-    +
-;
 
 \ Return true if an address is within an array, its a valid address and could be an instance.
 \ So the caller will avoid fetching from a random number, causing an invalid address abort.
@@ -235,25 +224,33 @@ include stack.fs
 
 \ Print out addresses that are still in use.
 : .mma-in-use ( mma-addr -- )
-    dup _mma-get-item-size swap     \ size mma
-    dup _mma-get-stack swap         \ size stack mma
-    dup mma-array-end-addr swap     \ size stack end mma
-    mma-array-start-addr            \ size stack end next-item
+
+    \ Save current base, change to hex.
+    base @ swap                     \ bs
+    hex                             \ bs
+
+    dup _mma-get-item-size swap     \ bs size mma
+    dup _mma-get-stack swap         \ bs size stack mma
+    dup _mma-get-end-addr swap      \ bs size stack end mma
+    mma-array-start-addr            \ bs size stack end next-item
 
     begin
         2dup <>
     while
-        dup                         \ size stack end item item
-        3 pick                      \ size stack end item item stack
-        stack-in                    \ size stack end item flag
+        dup                         \ bs size stack end item item
+        3 pick                      \ bs size stack end item item stack
+        stack-in                    \ bs size stack end item flag
         if
         else
-            cr dup ." In use: " .
+            cr dup ." In use: $" .
         then
 
-        3 pick                      \ size stack end item size
-        +                           \ size stack end next-item
+        3 pick                      \ bs size stack end item size
+        +                           \ bs size stack end next-item
     repeat
     cr
-    2drop 2drop
+    \ Clear stack
+    2drop 2drop                     \ bs
+    \ Restore saved base.
+    base !                          \
 ;
