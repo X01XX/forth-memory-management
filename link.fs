@@ -104,7 +104,7 @@ link-next   cell+ constant link-data
 
     dup 0 < 
     abort" invalid use count"
-    2 < 
+    2 <
     if  
         \ Clear fields.
         0 over _link-set-next

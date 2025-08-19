@@ -293,10 +293,12 @@ list-header cell+ constant list-links
 : list-find-all ( xt item list -- list )
     \ Check arg.
     assert-tos-is-list
-    >R                  \ xt item
-    list-new            \ xt item ret-list
-    -rot                \ ret xt item
-    R>                  \ ret xt item list 
+
+                        \ xt item list
+    rot                 \ item list xt
+    list-new            \ item list xt ret
+    swap                \ item list ret xt
+    2swap               \ ret xt item list
 
     \ Check for an empty list.
     dup list-get-length
