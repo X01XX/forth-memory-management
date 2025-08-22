@@ -19,19 +19,26 @@
 \
 \ Trouble-shooting leftover struct instances.
 \
-\ After running a program, display the usage of all mm-arrays, noticing some instances are still in use.
+\ Comment out freeing heap memory, if needed.
 \
-\ Comment out the freeing heap memory, if needed.
+\ Assuming mma stores are created like:
+\   0 value <struct-name>-mma
+\   <num-cells-per-item> <num-items> mma-new to <struct name>-mma
 \
-\ Run <mma addr> .mma-in-use
+\ After running a program, display the usage of all mm-arrays, like: <struct name>-mma .mma-usage
+\ noticing some instances are still in use.
 \
-\ Check in-use addresses with:  addr  is-allocated-<struct name>
-\ If that returns true, try:    addr  .<struct name>
+\ Run <struct name>-mma .mma-in-use
+\
+\ Check in-use addresses with:  addr  is-allocated-<struct name> ( see is-allocated-region in region.fs )
+\ If that returns true, try:    addr  .<struct name>             ( see .region in region.fs )
 \ and                           addr  struct-get-use-count
 \
-\ If still mistified, statements like: cr ." at ...." cr
-\ in the code, paired with the <struct name>-new address prints, can narrow down where
-\ the dangling instance is created.
+\ In the <struct name>-new function ( see region-new in region.fs ), after <struct-name>-mma mma-allocate
+\ add a line like: cr dup ." <struct name>-new" dup . cr
+\
+\ Add statements like: cr ." at ...." cr
+\ in other areas of the code, to narrow down where/when the dangling instance is created.
 include stack.fs 
 
 ' @ alias _mma-get-stack ( mma-addr -- stack-addr )
@@ -81,7 +88,7 @@ include stack.fs
     then
 ;
 
-\ ( mma-deallocate: Run like: <item-addr> <mma-addr> mma-deallocate )
+\ Run like: <item-addr> <struct name>-mma mma-deallocate
 : mma-deallocate ( item-addr mma-addr -- )
     depth 2 <
     abort" mma-deallocate: data stack has too few items"
@@ -92,13 +99,14 @@ include stack.fs
     0 swap !        \ ( zero out first cell of deallocated item )
 ;
 
-\ ( mma-allocate: Run like: <mma-addr> mma-allocate -- array-item-addr )
+\ Run like: <struct name>-mma mma-allocate
 : mma-allocate ( mma-addr -- item-addr )
     _mma-get-stack  \ stack-addr
     stack-pop       \ item-addr
 ;
 
-\ ( mma-new.  Run like: <num-cells-per-item> <num-items> mma-new value <mma-name>.
+\ Create something like: 0 value <struct name>-mma
+\ Run like: <num-cells-per-item> <num-items> mma-new to <struct name>-mma
 : mma-new ( num-cells-per-item  num-items -- mma-addr )
 
     tuck        \ n-i n-c-p-i n-i
@@ -162,15 +170,17 @@ include stack.fs
 ;
 
 \ Free heap memory when done.
+\ Run like: <struct name>-mma mma-free
 : mma-free ( addr -- )
-    dup   _mma-get-stack     \ mma-addr stack-addr
-    free                    \ mma-addr
+    dup   _mma-get-stack        \ mma-addr stack-addr
+    free                        \ mma-addr
     0<> if ." mma-array stack free failed" then
     free
     0<> if ." mma-array free failed" then   
 ;
 
 \ Return the number af array items in use.
+\ Run like: <struct name>-mma mma-in-use
 : mma-in-use ( mma-addr -- u )
     _mma-get-stack           \ stack-addr
     dup stack-get-capacity   \ stack-addr capacity
@@ -178,7 +188,8 @@ include stack.fs
     -
 ;
 
-\ .mma-usage. Run like: "<mma-name> .mma-usage"
+\ Print one-line of  
+\ Run like: "<struct name>-mma .mma-usage
 : .mma-usage ( mma-addr -- )
     dup             \ mma-addr mma-addr
     _mma-get-stack  \ mma-addr stack-addr
@@ -223,6 +234,7 @@ include stack.fs
 ;
 
 \ Print out addresses that are still in use.
+\ Run like: <struct name>-mma .mma-in-use
 : .mma-in-use ( mma-addr -- )
 
     \ Save current base, change to hex.
