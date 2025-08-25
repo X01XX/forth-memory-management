@@ -10,7 +10,13 @@ Allocation and deallocation is fairly fast because it involves simply popping, o
 Within the limit of the maximum number of array items allocated at the same time,
 an infinite number of allocations, and deallocations, are possible.
 
-The files can be brought into gforth with the command: include example.fs 
+The examples can be run with the commands:
+
+  gforth example.fs -e bye
+
+  gforth example2.fs -e bye
+
+  gforth example3.fs -e bye
 
 On deallocation, the first cell of an item is zeroed out, to make use problems apparent.
 
