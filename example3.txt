@@ -2,18 +2,14 @@
 Initializing Link store.
 Initializing List store.
 Initializing Region store.
+(0x10 00xX)(01xX 0xX1)
 
-~4 + ~5: (XXX0 X0XX XXX1 XX1X 1XXX)
-
-~3 + ~6: (X0XX XXX1 XXX0 XX0X X1XX 1XXX)
-
-Possible regions = (~4 + ~5) & (~3 + ~6) = (1xxx x11x xxx0 xxx1 x0xx)
 
 Memory use:
-    Region mma:       Capacity:   103  Free:    87  In use:    16  Item Size:  24  Array size:   2472  Overhead:    848  Total:   3320  Cells:   415
+    Region mma:       Capacity:   103  Free:    99  In use:     4  Item Size:  24  Array size:   2472  Overhead:    848  Total:   3320  Cells:   415
     List mma:         Capacity:   102  Free:    99  In use:     3  Item Size:  16  Array size:   1632  Overhead:    840  Total:   2472  Cells:   309
-    Link mma:         Capacity:   101  Free:    85  In use:    16  Item Size:  24  Array size:   2424  Overhead:    832  Total:   3256  Cells:   407
-    dstack: <3> 98762661897816 98762661897800 98762661897848 
+    Link mma:         Capacity:   101  Free:    95  In use:     6  Item Size:  24  Array size:   2424  Overhead:    832  Total:   3256  Cells:   407
+    dstack: <1> 110253984953976 
 
 Deallocating ...
 
