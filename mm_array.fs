@@ -8,7 +8,7 @@
 \
 \     Array
 \       one cell for stack address
-\       one cell for item size in bytes [0]w. Min-free [1]w, or how close did we get to using the whale stack.
+\       one cell for item size in bytes [0]w. Min-free [1]w, or how close did we get to using the whole stack.
 \       one cell for end-of-array address.
 \       items
 \
