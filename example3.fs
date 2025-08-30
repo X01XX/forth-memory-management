@@ -41,7 +41,8 @@ list-new            \ root list2
 2 6 region-new over list-push
 over list-push      \ root
 
-cr ' .region-list over list-apply cr
+cr cr ." List of lists: "
+' .region-list over list-apply cr
 
 \ Finish.
 cr

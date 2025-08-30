@@ -4,9 +4,10 @@ Initializing List store.
 Initializing Name store.
 
 Memory Use:
-  list Capacity:  15, Free:  15, In use:   0 Item Size:  16 Array size: 240 Overhead: 144 Total:  384 Cells:  48
-  link Capacity: 100, Free: 100, In use:   0 Item Size:  24 Array size: 2400 Overhead: 824 Total: 3224 Cells: 403
-  name Capacity:  50, Free:  50, In use:   0 Item Size:  24 Array size: 1200 Overhead: 424 Total: 1624 Cells: 203
+    list Capacity:    15  Min Free:    15  In use:      0  Item Size:  16  Array size:    240  Overhead:    160  Total:    400  Cells:    50
+    link Capacity:   100  Min Free:   100  In use:      0  Item Size:  24  Array size:   2400  Overhead:    840  Total:   3240  Cells:   405
+    name Capacity:    50  Min Free:    50  In use:      0  Item Size:  24  Array size:   1200  Overhead:    440  Total:   1640  Cells:   205
+    dstack: <0> 
 
 *** Working with lists of numbers, list link data field is a number.
 
@@ -17,20 +18,22 @@ list1 list2 union: (6  1  2  5  3 )
 list1 - list2: (6 )
 list2 - list1: (2 )
 list7: (10  6  2  12  10 )   (list1 * 2)
-
 list8: (4  2  0  5  4 )   (list1 + -1)
 
 Memory Use:
-  list Capacity:  15, Free:   7, In use:   8 Item Size:  16 Array size: 240 Overhead: 144 Total:  384 Cells:  48
-  link Capacity: 100, Free:  70, In use:  30 Item Size:  24 Array size: 2400 Overhead: 824 Total: 3224 Cells: 403
-  name Capacity:  50, Free:  50, In use:   0 Item Size:  24 Array size: 1200 Overhead: 424 Total: 1624 Cells: 203
+    list Capacity:    15  Min Free:     7  In use:      8  Item Size:  16  Array size:    240  Overhead:    160  Total:    400  Cells:    50
+    link Capacity:   100  Min Free:    70  In use:     30  Item Size:  24  Array size:   2400  Overhead:    840  Total:   3240  Cells:   405
+    name Capacity:    50  Min Free:    50  In use:      0  Item Size:  24  Array size:   1200  Overhead:    440  Total:   1640  Cells:   205
+    dstack: <0> 
 
 Deallocating num-lists ...
 
+
 Memory Use:
-  list Capacity:  15, Free:  15, In use:   0 Item Size:  16 Array size: 240 Overhead: 144 Total:  384 Cells:  48
-  link Capacity: 100, Free: 100, In use:   0 Item Size:  24 Array size: 2400 Overhead: 824 Total: 3224 Cells: 403
-  name Capacity:  50, Free:  50, In use:   0 Item Size:  24 Array size: 1200 Overhead: 424 Total: 1624 Cells: 203
+    list Capacity:    15  Min Free:     7  In use:      0  Item Size:  16  Array size:    240  Overhead:    160  Total:    400  Cells:    50
+    link Capacity:   100  Min Free:    70  In use:      0  Item Size:  24  Array size:   2400  Overhead:    840  Total:   3240  Cells:   405
+    name Capacity:    50  Min Free:    50  In use:      0  Item Size:  24  Array size:   1200  Overhead:    440  Total:   1640  Cells:   205
+    dstack: <0> 
 
 *** Working with lists of Name struct instances, list link data field is an instance address.
 *** Name struct instances keep track of use count, see namelist.fs, name-deallocate in name.fs.
@@ -48,18 +51,17 @@ list9 - list10: (Cindy)
 list10 - list9: (Max)
 
 Memory Use:
-  list Capacity:  15, Free:   9, In use:   6 Item Size:  16 Array size: 240 Overhead: 144 Total:  384 Cells:  48
-  link Capacity: 100, Free:  82, In use:  18 Item Size:  24 Array size: 2400 Overhead: 824 Total: 3224 Cells: 403
-  name Capacity:  50, Free:  42, In use:   8 Item Size:  24 Array size: 1200 Overhead: 424 Total: 1624 Cells: 203
+    list Capacity:    15  Min Free:     7  In use:      6  Item Size:  16  Array size:    240  Overhead:    160  Total:    400  Cells:    50
+    link Capacity:   100  Min Free:    70  In use:     18  Item Size:  24  Array size:   2400  Overhead:    840  Total:   3240  Cells:   405
+    name Capacity:    50  Min Free:    42  In use:      8  Item Size:  24  Array size:   1200  Overhead:    440  Total:   1640  Cells:   205
+    dstack: <0> 
 
 Deallocating name lists ...
 
 Memory Use:
-  list Capacity:  15, Free:  15, In use:   0 Item Size:  16 Array size: 240 Overhead: 144 Total:  384 Cells:  48
-  link Capacity: 100, Free: 100, In use:   0 Item Size:  24 Array size: 2400 Overhead: 824 Total: 3224 Cells: 403
-  name Capacity:  50, Free:  50, In use:   0 Item Size:  24 Array size: 1200 Overhead: 424 Total: 1624 Cells: 203
+    list Capacity:    15  Min Free:     7  In use:      0  Item Size:  16  Array size:    240  Overhead:    160  Total:    400  Cells:    50
+    link Capacity:   100  Min Free:    70  In use:      0  Item Size:  24  Array size:   2400  Overhead:    840  Total:   3240  Cells:   405
+    name Capacity:    50  Min Free:    42  In use:      0  Item Size:  24  Array size:   1200  Overhead:    440  Total:   1640  Cells:   205
+    dstack: <0> 
 
-dstack end: <0> 
 Freeing heap memory
- ok
-

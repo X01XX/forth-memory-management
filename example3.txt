@@ -2,21 +2,22 @@
 Initializing Link store.
 Initializing List store.
 Initializing Region store.
-(0x10 00xX)(01xX 0xX1)
+
+List of lists: (0x10 00xX)(01xX 0xX1)
 
 
 Memory use:
-    Region mma:       Capacity:   103  Free:    99  In use:     4  Item Size:  24  Array size:   2472  Overhead:    848  Total:   3320  Cells:   415
-    List mma:         Capacity:   102  Free:    99  In use:     3  Item Size:  16  Array size:   1632  Overhead:    840  Total:   2472  Cells:   309
-    Link mma:         Capacity:   101  Free:    95  In use:     6  Item Size:  24  Array size:   2424  Overhead:    832  Total:   3256  Cells:   407
-    dstack: <1> 110253984953976 
+    Region mma:       Capacity:   103  Min Free:    99  In use:      4  Item Size:  24  Array size:   2472  Overhead:    864  Total:   3336  Cells:   417
+    List mma:         Capacity:   102  Min Free:    99  In use:      3  Item Size:  16  Array size:   1632  Overhead:    856  Total:   2488  Cells:   311
+    Link mma:         Capacity:   101  Min Free:    95  In use:      6  Item Size:  24  Array size:   2424  Overhead:    848  Total:   3272  Cells:   409
+    dstack: <1> 105905525995368 
 
 Deallocating ...
 
 Memory use:
-    Region mma:       Capacity:   103  Free:   103  In use:     0  Item Size:  24  Array size:   2472  Overhead:    848  Total:   3320  Cells:   415
-    List mma:         Capacity:   102  Free:   102  In use:     0  Item Size:  16  Array size:   1632  Overhead:    840  Total:   2472  Cells:   309
-    Link mma:         Capacity:   101  Free:   101  In use:     0  Item Size:  24  Array size:   2424  Overhead:    832  Total:   3256  Cells:   407
+    Region mma:       Capacity:   103  Min Free:    99  In use:      0  Item Size:  24  Array size:   2472  Overhead:    864  Total:   3336  Cells:   417
+    List mma:         Capacity:   102  Min Free:    99  In use:      0  Item Size:  16  Array size:   1632  Overhead:    856  Total:   2488  Cells:   311
+    Link mma:         Capacity:   101  Min Free:    95  In use:      0  Item Size:  24  Array size:   2424  Overhead:    848  Total:   3272  Cells:   409
     dstack: <0> 
 
 Freeing heap memory

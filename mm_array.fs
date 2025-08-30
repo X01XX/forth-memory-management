@@ -8,7 +8,7 @@
 \
 \     Array
 \       one cell for stack address
-\       one cell for item size in bytes
+\       one cell for item size in bytes [0]w. Min-free [1]w, or how close did we get to using the whale stack.
 \       one cell for end-of-array address.
 \       items
 \
@@ -45,11 +45,19 @@ include stack.fs
 ' ! alias _mma-set-stack ( stack-addr mma-addr -- )
 
 : _mma-set-item-size ( item-size mma-addr -- )
-    cell+ !
+    cell+ w!
 ;
 
 : _mma-get-item-size ( mma-addr -- item-size )
-    cell+ @
+    cell+ uw@
+;
+
+: _mma-set-min-free ( item-size mma-addr -- )
+    cell+ 2 + w!
+;
+
+: _mma-get-min-free ( mma-addr -- item-size )
+    cell+ 2 + uw@
 ;
 
 : _mma-set-end-addr ( end-addr mma-addr -- )
@@ -101,8 +109,22 @@ include stack.fs
 
 \ Run like: <struct name>-mma mma-allocate
 : mma-allocate ( mma-addr -- item-addr )
-    _mma-get-stack  \ stack-addr
-    stack-pop       \ item-addr
+    \ Get item from stack.
+    dup _mma-get-stack  \ a-addr s-addr
+    dup stack-pop       \ a-addr s-addr item-addr
+
+    \ Check min free
+    swap stack-get-num-on-stack     \ a-addr item-addr num
+    dup                             \ a-addr item-addr num num
+    3 pick _mma-get-min-free        \ a-addr i-addr num num min-f
+    <                               \ a-addr i-addr num flag
+    if                              \ a-addr i-addr num
+        \ Update min free
+        rot                         \ i-addr num a-addr
+        _mma-set-min-free           \ i-addr
+    else                            \ a-addr i-addr num
+        drop nip                    \ i-addr
+    then
 ;
 
 \ Create something like: 0 value <struct name>-mma
@@ -162,11 +184,16 @@ include stack.fs
         mma-deallocate  \ mma-addr item-size item-addr
 
         \ Point to the next item in array.
-        over        \ mma-addr item-size item-addr item-size
-        +           \ mma-addr item-size next-item-addr
+        over            \ mma-addr item-size item-addr item-size
+        +               \ mma-addr item-size next-item-addr
     loop
-    \ Return mm_array instance addr.
-    2drop           \ array-addr
+    
+    \ Clean up.
+    2drop                       \ array-addr
+
+    dup _mma-get-stack          \ a-addr s-addr
+    stack-get-num-on-stack      \ a-addr num
+    over _mma-set-min-free      \ a-addr
 ;
 
 \ Free heap memory when done.
@@ -184,7 +211,7 @@ include stack.fs
 : mma-in-use ( mma-addr -- u )
     _mma-get-stack           \ stack-addr
     dup stack-get-capacity   \ stack-addr capacity
-    swap stack-get-num-free  \ capacity free
+    swap stack-get-num-on-stack  \ capacity free
     -
 ;
 
@@ -193,44 +220,71 @@ include stack.fs
 : .mma-usage ( mma-addr -- )
     dup             \ mma-addr mma-addr
     _mma-get-stack  \ mma-addr stack-addr
-    ." Capacity:"
-    space
-    dup             \ mma-addr stack-addr stack-addr
-    stack-get-capacity  \ mma-addr stack-addr capacity
-    dup             \ mma-addr stack-addr capacity capacity
-    5 .r            \ mma-addr stack-addr capacity (emit capacity)
+
+    ." Capacity: "
+    dup                 \ mma-addr stack-addr | stack-addr
+    stack-get-capacity  \ mma-addr stack-addr | capacity
+    5 .r                \ mma-addr stack-addr |
     2 spaces
-    ." Free:"
-    space
-    dup rot         \ mma-addr capacity capacity stack-addr 
-    stack-get-num-free  \ mma-addr capacity capacity num-free
-    dup             \ mma-addr capacity capacity num-free num-free
-    5 .r            \ mma-addr capacity capacity num-free
+
+    ." Min Free: "
+    over _mma-get-min-free  \ mma-addr stack-addr | min-free
+    5 .r                    \ mma-addr stack-addr |
     2 spaces
-   ." In use:"
-   space
-   - 5 .r           \ mma-addr capacity
-   swap             \ capacity mma-addr
-   2 spaces
-   ." Item Size:" space
-   _mma-get-item-size    \ capacity item-size
-   dup              \ capacity item-size item-size
-   3 .r 2 spaces    \ capacity item-size
-   over *           \ capacity array-size
-   tuck             \ array-size capacity array-size
-   ." Array size:" space
-   6 .r 2 spaces    \ array-size capacity
-   3 +              \ array-size capacity-cells-in-stack-plust-3-cells-overhead 
-   cells            \ array-size overhead-size
-   dup              \ array-size overhead-size overhead-size
-   ." Overhead:" space
-   6 .r  2 spaces   \ array-size overhead-size
-   ." Total:" space
-   + dup            \ total-size total-size
-   6 .r  2 spaces   \ total-size
-   cell /           \ number cells
-   ." Cells:" space
+
+    ." In use: "
+    dup                     \ mma-addr stack-addr | stack-addr
+    stack-get-capacity      \ mma-addr stack-addr | cap
+    over                    \ mma-addr stack-addr | cap stack-addr
+    stack-get-num-on-stack  \ mma-addr stack-addr | cap num-on
+    -                       \ mma-addr stack-addr | in-use
+    space
+    5 .r                    \ mma-addr stack-addr |
+    2 spaces
+
+    ." Item Size: "
+    over                    \ mma-addr stack-addr | mma-addr
+    _mma-get-item-size      \ mma-addr stack-addr | item-size
+    3 .r 2 spaces           \ mma-addr stack-addr |
+
+    ." Array size: "
+    over                    \ mma-addr stack-addr | mma-addr
+    _mma-get-item-size      \ mma-addr stack-addr | i-size
+    over                    \ mma-addr stack-addr | i-size stack-addr
+    stack-get-capacity      \ mma-addr stack-addr | i-size capacity
+    *                       \ mma-addr stack-addr | a-size
+    6 .r 2 spaces           \ mma-addr stack-addr |
+
+   ." Overhead: "
+   dup stack-get-capacity   \ mma-addr stack-addr | s-cells
+   cells                    \ mma-addr stack-addr | s-bytes
+   \ Add stack overhead
+   2 cells +
+   \ Add mma overhead
+   3 cells +                \ mma-addr stack-addr | o-bytes
+   6 .r  2 spaces           \ mma-addr stack-addr |
+   
+   ." Total: "
+   \ Get mma size
+    over                    \ mma-addr stack-addr | mma-addr
+    _mma-get-item-size      \ mma-addr stack-addr | i-size
+    over                    \ mma-addr stack-addr | i-size stack-addr
+    stack-get-capacity      \ mma-addr stack-addr | i-size capacity
+    *                       \ mma-addr stack-addr | a-item-bytes
+    3 cells +               \ mma-addr stack-addr | a-bytes
+    \ Get stack size
+    over                    \ mma-addr stack-addr | a-bytes stack-addr
+    stack-get-capacity      \ mma-addr stack-addr | a-bytes capacity
+    2 + cells               \ mma-addr stack-addr | a-bytes s-bytes
+    \ Get full size
+    + dup                   \ mma-addr stack-addr | bytes bytes
+    6 .r  2 spaces          \ mma-addr stack-addr | bytes
+
+   ." Cells: "
+   cell /                   \ mma-addr stack-addr | num-cells
    5 .r
+
+   2drop
 ;
 
 \ Print out addresses that are still in use.
