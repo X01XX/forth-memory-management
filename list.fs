@@ -108,6 +108,15 @@ list-header cell+ constant list-links
     \ cr ." list-new: " dup . cr
 ;
 
+\ Return true if a list is empty.
+: list-is-empty ( list0 -- flag )
+    \ Check arg.
+    assert-tos-is-list
+
+    list-get-length
+    0=
+;
+
 \ Add data to the end of a list.
 \ If data is a struct, having a use count, caller to inc use count.
 : list-push-end ( data list-addr -- )
@@ -330,6 +339,37 @@ list-header cell+ constant list-links
     drop 2drop              \ ret-list
 ;
 
+\ Pop an item from the beginning of a list.
+: list-pop ( lst0 -- data true | false )
+    \ Check arg.
+    assert-tos-is-list
+
+    dup list-is-empty
+    if
+        drop
+        false
+        exit
+    then
+    
+    \ Adjust first list pointer.
+    dup list-get-links  \ lst0 link
+    dup link-get-next   \ lst0 link link-next
+    2 pick              \ lst0 link link-next lst0
+    _list-set-links     \ lst0 link
+
+    \ Deallocate link.
+    dup link-get-data   \ lst0 link data
+    swap                \ lst0 data link
+    link-deallocate     \ lst0 data
+
+    \ Adjust list length.
+    swap                \ data lst0
+    _list-dec-length    \ data
+
+    \ Add flag.
+    true                \ data true
+;
+
 \ Scan a list for the first item that returns true for the given xt, 
 \ remove that link, returning the link-data contents.
 \ xt signature is ( item link-data -- flag ) or ( filler link-data -- flag )
@@ -361,24 +401,9 @@ list-header cell+ constant list-links
     execute                 \ xt item list | link data | flag
 
     if                      \ xt item list | link data
-        \ Adjust first list pointer.
-        swap                \ xt item list | data link
-        dup link-get-next   \ xt item list | data link link-next
-        3 pick              \ xt item list | data link link-next list
-        _list-set-links     \ xt item list | data link
-        
-        \ Deallocate link.
-        link-deallocate     \ xt item list | data
-
-        \ Adjust list length.
-        swap                \ xt item data list
-        _list-dec-length    \ xt item data
-
-        \ Clean up stack.
-        nip nip             \ data
-
-        \ Add flag.
-        true                \ data true
+        2drop               \ xt item list
+        nip nip             \ list
+        list-pop
         exit
     else                    \ xt item list | link data
         drop                \ xt item list | link
@@ -426,11 +451,56 @@ list-header cell+ constant list-links
     false
 ;
 
+\ Remove an item based on index.
+: list-remove-item ( u1 lst0 -- data true | false )
+    \ Check args.
+    assert-tos-is-list
+    over                        \ u1 lst0 u1
+    0< abort" index LT zero?"
+
+    over                        \ u1 lst0 u1
+    over list-get-length        \ u1 lst0 u1 l-len
+    >= abort" index too large?" \ u1 lst0
+
+    \ Check for first item
+    over 0= if
+        nip
+        list-pop
+        exit
+    then
+                                \ u1 lst0
+    tuck                        \ lst0 u1 lst0
+    list-get-links              \ lst0 u1 last-link
+    dup                         \ lst0 u1 last-link cur-link
+    rot                         \ lst0 last-link cur-link u1
+    0 do                        \ lst0 last-link cur-link
+        nip                     \ lst0 last-link'
+        dup link-get-next       \ lst0 last-link' cur-link
+    loop
+                                \ lst0 last-link cur-link
+    dup link-get-data -rot      \ lst0 data last cur
+    link-get-next               \ lst0 data last cur-next
+    swap _link-set-next         \ lst0 data
+    rot _list-dec-length        \ data
+    true
+;
+
+\ Pop the last item in a list.
+: list-pop-end ( lst0 -- data true | false )
+    \ Check arg.
+    assert-tos-is-list
+
+    dup list-is-empty
+    if drop false exit then
+
+    dup list-get-length 1-
+    swap list-remove-item
+;
+
 \ Deallocate a list that has a use count of 1.
 : list-deallocate-uc-1 ( list-addr -- )
     \ Check arg.
     assert-tos-is-list
-    \ cr ." list-deallocate-uc-1: " dup . cr
 
     \ Deallocate links.
     dup list-get-links      \ list links
@@ -625,15 +695,6 @@ list-header cell+ constant list-links
     drop nip nip                \ list-ret
 ;
 
-\ Return true if a list is empty.
-: list-is-empty ( list0 -- flag )
-    \ Check arg.
-    assert-tos-is-list
-
-    list-get-length
-    0=
-;
-
 \ Return a data item, based on an index into a list.
 : list-get-item ( u list -- data )
     \ Check args.
@@ -642,12 +703,12 @@ list-header cell+ constant list-links
     over                        \ u list u
     over list-get-length        \ u list u len
     over                        \ u list u len u
-    0 <
+    0<                          
     abort" index LT 0"
-
+                                \ u list u len
     >=
     abort" index too large"
-
+                                \ u list
     \ Step through links the given number of times.
     0 swap                      \ u count list
     list-get-links              \ u count link
@@ -663,4 +724,3 @@ list-header cell+ constant list-links
     \ Get data to return.
     2drop link-get-data
 ;
-
