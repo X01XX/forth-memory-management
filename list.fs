@@ -478,8 +478,9 @@ list-header cell+ constant list-links
         dup link-get-next       \ lst0 last-link' cur-link
     loop
                                 \ lst0 last-link cur-link
-    dup link-get-data -rot      \ lst0 data last cur
-    link-get-next               \ lst0 data last cur-next
+    dup link-get-data -rot      \ lst0 data last cur-link
+    dup link-get-next           \ lst0 data last cur-link cur-next
+    swap link-deallocate        \ lst0 data last cur-next
     swap _link-set-next         \ lst0 data
     rot _list-dec-length        \ data
     true
