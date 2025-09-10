@@ -84,15 +84,12 @@ link-next   cell+ constant link-data
     \ Check arg.
     assert-tos-is-link
 
-    base @ swap         \ Save the current base.
-    hex
-    ." Link: $"
-    dup .
-    ." next: $"
-    dup link-get-next .
-    ." data: $"
-    link-get-data .
-    base !              \ Restore saved base.
+    ." Link: "
+    dup hex.
+    ." next: "
+    dup link-get-next hex.
+    ." data: "
+    link-get-data hex.
 ;
 
 \ Deallocate a link.

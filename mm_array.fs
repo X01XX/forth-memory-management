@@ -291,32 +291,27 @@ include stack.fs
 \ Run like: <struct name>-mma .mma-in-use
 : .mma-in-use ( mma-addr -- )
 
-    \ Save current base, change to hex.
-    base @ swap                     \ bs
-    hex                             \ bs
-
-    dup _mma-get-item-size swap     \ bs size mma
-    dup _mma-get-stack swap         \ bs size stack mma
-    dup _mma-get-end-addr swap      \ bs size stack end mma
-    mma-array-start-addr            \ bs size stack end next-item
+    \ Setup for loop.
+    dup _mma-get-item-size swap     \ size mma
+    dup _mma-get-stack swap         \ size stack mma
+    dup _mma-get-end-addr swap      \ size stack end mma
+    mma-array-start-addr            \ size stack end next-item
 
     begin
         2dup <>
     while
-        dup                         \ bs size stack end item item
-        3 pick                      \ bs size stack end item item stack
-        stack-in                    \ bs size stack end item flag
+        dup                         \ size stack end item item
+        3 pick                      \ size stack end item item stack
+        stack-in                    \ size stack end item flag
         if
         else
-            cr dup ." In use: $" .
+            cr dup ." In use: " hex.
         then
 
-        3 pick                      \ bs size stack end item size
-        +                           \ bs size stack end next-item
+        3 pick                      \ size stack end item size
+        +                           \ size stack end next-item
     repeat
     cr
     \ Clear stack
-    2drop 2drop                     \ bs
-    \ Restore saved base.
-    base !                          \
+    2drop 2drop                     \
 ;

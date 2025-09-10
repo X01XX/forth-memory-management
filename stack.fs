@@ -203,7 +203,7 @@
    false
 ;
 
-: stack-test
+: stack-tests
     2 stack-new          \ stk
     dup stack-empty?
     0= abort" stock s/b empty"

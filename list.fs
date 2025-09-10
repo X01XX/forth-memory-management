@@ -178,7 +178,7 @@ list-header cell+ constant list-links
     assert-tos-is-list
 
     dup list-get-length
-    ." length " . ."  ("
+    ." length " dec. ."  ("
 
     list-get-links              \ first-link
         begin                   \ List is not empty.
