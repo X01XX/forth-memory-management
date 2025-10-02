@@ -6,17 +6,17 @@
 
 \ Fetch a number from the [1] 16 bits of a cell.
 : 1w@ ( addr  -- u-16 )
-    2 + uw@
+    #2 + uw@
 ;
 
 \ Fetch a number from the [2] 16 bits of a cell.
 : 2w@ ( addr  -- u-16 )
-    4 + uw@
+    #4 + uw@
 ;
 
 \ Fetch a number from the [3] 16 bits of a cell.
 : 3w@ ( addr  -- u-16 )
-    6 + uw@
+    #6 + uw@
 ;
 
 \ Store a number into the [0] 16 bits of a cell.
@@ -26,17 +26,17 @@
 
 \ Store a number into the [1] 16 bits of a cell.
 : 1w! ( u-16 addr -- )
-    2 + w!
+    #2 + w!
 ;
 
 \ Store a number into the [2] 16 bits of a cell.
 : 2w! ( u-16 addr -- )
-    4 + w!
+    #4 + w!
 ;
 
 \ Store a number into the [3] 16 bits of a cell.
 : 3w! ( u-16 addr -- )
-    6 + w!
+    #6 + w!
 ;
 
 : cs clearstack ; \ Shorthand.
@@ -160,7 +160,7 @@
 
 \ Check arg2 for value, unconventional, leaves stack unchanged. 
 : assert-arg2-is-value ( u ?? ?? -- u ?? ??)
-    2 pick is-not-value
+    #2 pick is-not-value
     if  
         ." arg2 is not a valid value."
         abort

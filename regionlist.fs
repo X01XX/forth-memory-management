@@ -109,18 +109,18 @@
     while
                                     \ ret-list list1 link0
         dup link-get-data           \ ret-list list1 link0 data0
-        2 pick list-get-links       \ ret-list list1 link0 data0 link1
+        #2 pick list-get-links      \ ret-list list1 link0 data0 link1
 
         begin
             dup
         while
             dup link-get-data       \ ret-list list1 link0 data0 link1 data1
-            2 pick                  \ ret-list list1 link0 data0 link1 data1 data0
+            #2 pick                 \ ret-list list1 link0 data0 link1 data1 data0
             region-intersection     \ ret-list list1 link0 data0 link1 | reg-int true | false
             if
                                         \ ret-list list1 link0 data0 link1 | reg-int
                 dup                     \ ret-list list1 link0 data0 link1 | reg-int reg-int
-                6 pick                  \ ret-list list1 link0 data0 link1 | reg-int reg-int ret-list
+                #6 pick                 \ ret-list list1 link0 data0 link1 | reg-int reg-int ret-list
                 region-list-push-nosubs \ ret-list list1 link0 data0 link1 | reg-int flag
                 if
                     drop

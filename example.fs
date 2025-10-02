@@ -9,21 +9,22 @@ include namelist.fs
 
 clearstack
 \ ### M A I N ####
-100 link-mma-init       \ Initialize store for linked list links. link-mma is set.
- 15 list-mma-init       \ Initialize linked list header store. list-mma is set.
- 50 name-mma-init       \ Initialize name struct array.  name-mma is set.
+#100 link-mma-init       \ Initialize store for linked list links. link-mma is set.
+ #15 list-mma-init       \ Initialize linked list header store. list-mma is set.
+ #50 name-mma-init       \ Initialize name struct array.  name-mma is set.
 
 \ Print memory use for mm-arays.
 : memory-use ( -- )
     cr
     ." Memory Use:"
-    cr 4 spaces ." list" space
+    cr #4 spaces ." list" space
     list-mma .mma-usage
-    cr 4 spaces ." link" space
+    cr #4 spaces ." link" space
     link-mma .mma-usage
-    cr 4 spaces ." name" space
+    cr #4 spaces ." name" space
     name-mma .mma-usage
-    cr 4 spaces ." dstack: " .s
+    cr #4 spaces ." dstack: "
+    base @ >r decimal .s r> base !
 ;
 
 cr memory-use cr
@@ -35,11 +36,11 @@ list-new value list1   \ Get linked list header for a new list, store it in word
 
 cr ." *** Working with lists of numbers, list link data field is a number." cr
 
-5 list1 list-push
-3 list1 list-push
-1 list1 list-push
-6 list1 list-push
-5 list1 list-push
+#5 list1 list-push
+#3 list1 list-push
+#1 list1 list-push
+#6 list1 list-push
+#5 list1 list-push
 
 \ To avoid duplicates, create num-list-push, which will use list-member.
 
@@ -48,11 +49,11 @@ cr
 ' . list1 .list
 
 list-new value list2   \ Get linked list header for a new list, store it in word list2
-1 list2 list-push
-2 list2 list-push
-5 list2 list-push
-5 list2 list-push
-3 list2 list-push
+#1 list2 list-push
+#2 list2 list-push
+#5 list2 list-push
+#5 list2 list-push
+#3 list2 list-push
 cr
 ." list2: "
 ' . list2 .list
@@ -76,15 +77,15 @@ cr
 ' . list6 .list
 cr
 ." list7: "
-' * 2 list1 num-list-apply value list7
+' * #2 list1 num-list-apply value list7
 list7 .num-list
-3 spaces ." (list1 * 2)"
+#3 spaces ." (list1 * 2)"
 
 cr
 ." list8: "
 ' + -1 list1 num-list-apply value list8
 list8 .num-list
-3 spaces ." (list1 + -1)"
+#3 spaces ." (list1 + -1)"
 
 cr memory-use cr
 

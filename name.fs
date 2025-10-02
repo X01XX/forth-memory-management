@@ -1,6 +1,6 @@
 \ The name struct, storing a name of up to 15 characters.
-19317 constant name-id
-   3 constant name-struct-number-cells
+#19317 constant name-id
+    #3 constant name-struct-number-cells
 
 \ Name struct fields.
 0 constant  name-header         \ [0] id [1] use count.
@@ -29,7 +29,7 @@ name-header cell+ constant name-string
 
 \ Set name data cell.
 : name-set-string ( string-addr length name-addr -- )
-    over 15 >
+    over #15 >
     if
         ." name-set-string: string length is too large"
         abort
@@ -69,7 +69,7 @@ name-header cell+ constant name-string
     struct-set-use-count        \ str-addr len name-addr
 
     -rot                        \ name-addr str-addr len
-    2 pick                      \ name-addr str-addr len name-addr
+    #2 pick                     \ name-addr str-addr len name-addr
     name-set-string             \ name-addr
 ;
 
@@ -98,7 +98,7 @@ name-header cell+ constant name-string
     if 
         ." invalid use count" abort
     else
-        2 <
+        #2 <
         if
             0 over name-string + !  \ Clear string field first cell.
             name-mma mma-deallocate \ Deallocate instance.

@@ -1,5 +1,5 @@
 #17137 constant link-id
-     3 constant link-struct-number-cells
+    #3 constant link-struct-number-cells
 
 \ Link struct fields.
 0 constant  link-header         \ 16-bits [0] struct id [1] use count.
@@ -102,7 +102,7 @@ link-next   cell+ constant link-data
 
     dup 0 < 
     abort" invalid use count"
-    2 <
+    #2 <
     if  
         \ Clear fields.
         0 over _link-set-next

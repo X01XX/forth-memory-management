@@ -11,14 +11,14 @@
     1 <     \ n stack-addr flag
     if
        ." Stack capacity must be GT 0"
-       -24 throw
+       #-24 throw
     endif
 
     over    \ n stack-addr n
-    65535 > \ n stack-addr flag
+    #65535 > \ n stack-addr flag
     if
        ." Stack capacity must be LT 65536"
-       -24 throw
+       #-24 throw
     endif
 
     w!      \ Store capacity into the first 16 bits
@@ -29,13 +29,13 @@
 
 \ Get the number used
 : stack-get-num-on-stack ( stack-addr -- n )
-    2 +     \ stack-addr-2nd-16-bits
+    #2 +     \ stack-addr-2nd-16-bits
     uw@     \ num-on-stack
 ;
 
 \ Set the number used, use only in this file.
 : _stack-set-num-on-stack ( n stack-addr -- )
-    2 +     \ n stack-addr-2nd-16-bits
+    #2 +     \ n stack-addr-2nd-16-bits
     w!      \ (num-on-stack set)
 ;
 
@@ -107,7 +107,7 @@
     if
         cr
     ." stack-push stack is full"
-        -24 throw
+        #-24 throw
     then                \ n stack-addr
 
     tuck                \ stack-addr n stack-addr
@@ -132,7 +132,7 @@
     if
         cr
         ." stack-pop stack is empty"
-        -24 throw
+        #-24 throw
     then                \ stack-addr
 
     dup                 \ array-addr stack-addr
@@ -151,11 +151,11 @@
     dup                    \ stack-addr stack-addr
     stack-get-capacity  \ stack-addr capacity
     .                   \ stack-addr (emit capacity)
-    44 emit             \ stack-addr (emit comma)
+    #44 emit            \ stack-addr (emit comma)
    stack-get-num-on-stack   \ num-on-stack
    .                    \ 
-   62 emit              \ (emit >)
-   32 emit              \ (emit space)
+   #62 emit             \ (emit >)
+   #32 emit             \ (emit space)
 ;
 
 \ .stack. Run like: "<stack-name> .stack"
@@ -188,7 +188,7 @@
      0 do               \ addr stack-start
        dup              \ addr stack-start stack-start
        I cells + @      \ addr stack-start stack-cell[I]
-       2 pick           \ addr stack-start stack-cell[I] addr
+       #2 pick          \ addr stack-start stack-cell[I] addr
        =                \ addr stack-start
        if
             2drop true
@@ -204,12 +204,12 @@
 ;
 
 : stack-tests
-    2 stack-new          \ stk
+    #2 stack-new          \ stk
     dup stack-empty?
     0= abort" stock s/b empty"
 
     1 over stack-push
-    2 over stack-push
+    #2 over stack-push
 
     dup stack-full?
     0= abort" stack s/b full"

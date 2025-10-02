@@ -73,10 +73,10 @@
         dup
     while
         dup link-get-data   \ xt u list-ret link data
-        3 pick              \ xt u list-ret link data u
-        5 pick              \ xt u list-ret link data u xt
+        #3 pick             \ xt u list-ret link data u
+        #5 pick             \ xt u list-ret link data u xt
         execute             \ xt u list-ret link result
-        2 pick              \ xt u list-ret link result list-ret
+        #2 pick             \ xt u list-ret link result list-ret
         list-push           \ xt u list-ret link
         link-get-next
     repeat

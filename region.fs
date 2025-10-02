@@ -1,7 +1,7 @@
 \ Implement a region struct and functions.
 
-19317 constant region-id
-    3 constant region-struct-number-cells
+#19317 constant region-id
+    #3 constant region-struct-number-cells
 
 \ Struct fields
 0 constant region-header        \ 16-bits [0] struct id [1] use count.
@@ -109,7 +109,7 @@ region-state-0 cell+ constant region-state-1
 
     \ Prepare to store states.
     -rot            \ addr u1 u2
-    2 pick          \ addr u1 u2 addr
+    #2 pick         \ addr u1 u2 addr
     tuck            \ addr u1 addr u2 addr
 
     \ Store states
@@ -138,7 +138,7 @@ region-state-0 cell+ constant region-state-1
 
       \ Apply msb to state 2.
       over      \ Get msb.
-      4 pick    \ Get state2 and isolate 1 bit.
+      #4 pick   \ Get state2 and isolate 1 bit.
       and       \ Isolate state 2 bit corresponding to the msb.
 
       if
@@ -187,7 +187,7 @@ region-state-0 cell+ constant region-state-1
 
     dup struct-get-use-count      \ reg0 count
 
-    2 <
+    #2 <
     if 
         \ Clear fields.
         0 over _region-set-state-0
@@ -493,31 +493,31 @@ region-state-0 cell+ constant region-state-1
     \ Change x over 1 positions to 0 over 1, one position at a time.
                                     \ reg1 reg0 list
     over region-x-mask              \ reg1 reg0 list | xmask
-    3 pick region-1-mask            \ reg1 reg0 list | xmask 1mask
+    #3 pick region-1-mask           \ reg1 reg0 list | xmask 1mask
     and                             \ reg1 reg0 list | x1mask
 
     begin
         dup
     while
         isolate-a-bit               \ reg1 reg0 list | x1mask' one-bit
-        3 pick                      \ reg1 reg0 list | x1mask' one-bit reg0
+        #3 pick                     \ reg1 reg0 list | x1mask' one-bit reg0
         region-x-to-0               \ reg1 reg0 list | x1mask' reg0'
-        2 pick region-list-push     \ reg1 reg0 list | x1mask'
+        #2 pick region-list-push    \ reg1 reg0 list | x1mask'
     repeat
     drop                            \ reg1 reg0 list
 
     \ Change x over 0 positions to 1 over 0, one position at a time.
                                     \ reg1 reg0 list
     over region-x-mask              \ reg1 reg0 list | xmask
-    3 pick region-0-mask            \ reg1 reg0 list | xmask 0mask
+    #3 pick region-0-mask           \ reg1 reg0 list | xmask 0mask
     and                             \ reg1 reg0 list | x0mask
     begin
         dup
     while
         isolate-a-bit               \ reg1 reg0 list | x0mask' one-bit
-        3 pick                      \ reg1 reg0 list | x0mask' one-bit reg0
+        #3 pick                     \ reg1 reg0 list | x0mask' one-bit reg0
         region-x-to-1               \ reg1 reg0 list | x0mask' reg0'
-        2 pick region-list-push     \ reg1 reg0 list | x0mask'
+        #2 pick region-list-push    \ reg1 reg0 list | x0mask'
     repeat
     drop                            \ reg1 reg0 list
 
@@ -554,16 +554,16 @@ region-state-0 cell+ constant region-state-1
         exit
     then
 
-    3 pick                          \ sta1 reg0 list | xmask 1mask
+    #3 pick                         \ sta1 reg0 list | xmask 1mask
     and                             \ sta1 reg0 list | x1mask
 
     begin
         dup
     while
         isolate-a-bit               \ sta1 reg0 list | x1mask' one-bit
-        3 pick                      \ sta1 reg0 list | x1mask' one-bit reg0
+        #3 pick                     \ sta1 reg0 list | x1mask' one-bit reg0
         region-x-to-0               \ sta1 reg0 list | x1mask' reg0'
-        2 pick                      \ sta1 reg0 list | x1mask' reg0 list
+        #2 pick                     \ sta1 reg0 list | x1mask' reg0 list
         region-list-push            \ sta1 reg0 list | x1mask'
     repeat
     drop                            \ sta1 reg0 list
@@ -571,15 +571,15 @@ region-state-0 cell+ constant region-state-1
     \ Change x over 0 positions to 1 over 0, one position at a time.
                                     \ sta1 reg0 list
     over region-x-mask              \ sta1 reg0 list | xmask
-    3 pick !not                     \ sta1 reg0 list | xmask 0mask
+    #3 pick !not                    \ sta1 reg0 list | xmask 0mask
     and                             \ sta1 reg0 list | x0mask
     begin
         dup
     while
         isolate-a-bit               \ sta1 reg0 list | x0mask' one-bit
-        3 pick                      \ sta1 reg0 list | x0mask' one-bit reg0
+        #3 pick                     \ sta1 reg0 list | x0mask' one-bit reg0
         region-x-to-1               \ sta1 reg0 list | x0mask' reg0'
-        2 pick region-list-push     \ sta1 reg0 list | x0mask'
+        #2 pick region-list-push    \ sta1 reg0 list | x0mask'
     repeat
     drop                            \ sta1 reg0 list
 
@@ -592,7 +592,7 @@ region-state-0 cell+ constant region-state-1
     assert-tos-is-region
 
     region-get-states           \ sta1 s1 s0
-    2 pick                      \ sta1 s1 s0 sta1
+    #2 pick                     \ sta1 s1 s0 sta1
     =                           \ sta1 s0 flag
     if                          \ sta1 s0
         2drop
@@ -610,7 +610,7 @@ region-state-0 cell+ constant region-state-1
     cr
     0 swap 0 swap 0     \ addr 0 0 n 0
     do                  \ addr 0 0
-        2 pick i +
+        #2 pick i +
         c@
 
         dup [char] _ =

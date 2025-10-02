@@ -1,9 +1,9 @@
-\ Soew list-of-lists building, deallocating.
+\ Show list-of-lists building, deallocating.
 
 \ Constants.
- 4  constant num-bits
-15 constant all-bits
- 8  constant ms-bit
+ #4  constant num-bits
+#15 constant all-bits
+ #8  constant ms-bit
 
 include tools2.fs
 include mm_array.fs
@@ -16,29 +16,30 @@ cs
 
 : memory-use ( -- )
     cr ." Memory use:"
-    cr 4 spaces ." Region mma:       " region-mma .mma-usage
-    cr 4 spaces ." List mma:         " list-mma .mma-usage
-    cr 4 spaces ." Link mma:         " link-mma .mma-usage
-    cr 4 spaces ." dstack: " .s
+    cr #4 spaces ." Region mma:       " region-mma .mma-usage
+    cr #4 spaces ." List mma:         " list-mma .mma-usage
+    cr #4 spaces ." Link mma:         " link-mma .mma-usage
+    cr #4 spaces ." dstack: "
+    base @ >r decimal .s r> base ! 
 ;
 
 \ Init array-stacks.
-101 link-mma-init
-102 list-mma-init
-103 region-mma-init
+#101 link-mma-init
+#102 list-mma-init
+#103 region-mma-init
 
 list-new            \ Root list.
 
 \ Make another list, populate it, store it.
 list-new            \ root list1
-3 5 region-new over list-push
-5 6 region-new over list-push
+#3 #5 region-new over list-push
+#5 #6 region-new over list-push
 over list-push      \ root
 
 \ Make another list, populate it, store it.
 list-new            \ root list2
-1 2 region-new over list-push
-2 6 region-new over list-push
+#1 #2 region-new over list-push
+#2 #6 region-new over list-push
 over list-push      \ root
 
 cr cr ." List of lists: "
@@ -65,3 +66,4 @@ list-mma mma-free
 link-mma mma-free
 region-mma mma-free
 cr
+
