@@ -37,10 +37,6 @@ region-state-0 cell+ constant region-state-1
     region-id =     
 ;
 
-: is-not-allocated-region ( addr -- flag )
-    is-allocated-region 0=
-;
-
 \ Check TOS for region, unconventional, leaves stack unchanged. 
 : assert-tos-is-region ( arg0 -- arg0 )
     dup is-allocated-region 0=

@@ -7,12 +7,8 @@
 
 \ Return true if a number if in a num-list
 : num-list-member ( n num-list -- flag )
-    \ Argument checking is possible.
-    dup is-not-allocated-list
-    if
-        ." num-list-member: arg0 is not an allocated list"
-        abort
-    then
+    \ Check arg.
+    assert-tos-is-list
 
     ' =         \ n list xt
     -rot        \ xt n list
@@ -21,6 +17,10 @@
 
 \ Return the intersection of two num lists
 : num-list-intersection ( list1 list0 -- list-intersection )
+    \ Check args.
+    assert-tos-is-list
+    assert-nos-is-list
+    
     ' =                 \ list1 list2 xt
     -rot                \ xt list1 list2
     list-intersection   \ list3
@@ -28,6 +28,10 @@
 
 \ Return the difference of two num lists, same order as in subrtracting numbers in forth, list1 - list0
 : num-list-difference ( list1 list0 -- list )
+    \ Check args.
+    assert-tos-is-list
+    assert-nos-is-list
+
     ' =                 \ list1 list2 xt
     -rot                \ xt list1 list2
     list-difference     \ list3
@@ -35,12 +39,19 @@
 
 \ Return the union of two num lists
 : num-list-union ( list1 list0 -- list-union )
+    \ Check args.
+    assert-tos-is-list
+    assert-nos-is-list
+
     ' =         \ list1 list2 xt
     -rot        \ xt list1 list2
     list-union  \ list3
 ;
 
 : num-list-deallocate ( list-addr -- )
+    \ Check arg.
+    assert-tos-is-list
+
     list-deallocate
 ;
 
@@ -53,6 +64,9 @@
 \ If calling from a word definition, use:  [ ' * ] literal
 \ to put the xt onto the stack.
 : num-list-apply ( xt u list0 -- list1 )
+    \ Check arg.
+    assert-tos-is-list
+
     list-new swap           \ xt u list-ret list0
     list-get-links          \ xt u list-ret link
     begin

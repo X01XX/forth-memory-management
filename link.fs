@@ -1,5 +1,5 @@
-17137 constant link-id
-    3 constant link-struct-number-cells
+#17137 constant link-id
+     3 constant link-struct-number-cells
 
 \ Link struct fields.
 0 constant  link-header         \ 16-bits [0] struct id [1] use count.
@@ -23,29 +23,6 @@ link-next   cell+ constant link-data
     abort" link-mma use GT 0"
 ;
 
-\ Start accessors.
-
-\ Get link data cell.
-: link-get-data ( link-addr -- link-data-value )
-    link-data + @
-;
-
-\ Set link data cell, use only in this file.
-: _link-set-data ( data-value link-addr -- )
-    link-data + !
-;
-
-\ Get link next cell.
-: link-get-next ( link-addr -- link-next-value )
-    link-next + @
-;
-
-\ Set link next cell, use only in this file, and list.fs.
-: _link-set-next ( next-value link-addr -- )
-    link-next + !
-;
-\ End accessors.
-
 \ Return true if TOS is an allocated link.
 : is-allocated-link ( link -- flag )
     \ Insure the given addr cannot be an invalid addr.
@@ -58,16 +35,40 @@ link-next   cell+ constant link-data
     link-id =
 ;
 
-\ Return true if TOS is not an allocated link.
-: is-not-allocated-link ( link -- flag )
-    is-allocated-link 0=
-;
-
 \ Check TOS for link, unconventional, leaves stack unchanged. 
 : assert-tos-is-link ( arg0 -- arg0 )
     dup is-allocated-link 0=
     abort" TOS is not an allocated link."
 ;
+
+\ Start accessors.
+
+\ Get link data cell.
+: link-get-data ( link-addr -- link-data-value )
+    \ Check arg.
+    assert-tos-is-link
+
+    link-data + @
+;
+
+\ Set link data cell, use only in this file.
+: _link-set-data ( data-value link-addr -- )
+    link-data + !
+;
+
+\ Get link next cell.
+: link-get-next ( link-addr -- link-next-value )
+    \ Check arg.
+    assert-tos-is-link
+
+    link-next + @
+;
+
+\ Set link next cell, use only in this file, and list.fs.
+: _link-set-next ( next-value link-addr -- )
+    link-next + !
+;
+\ End accessors.
 
 \ Return a new link struct instance address, with given data value, zero next-value.
 : link-new ( data-val -- link-addr )

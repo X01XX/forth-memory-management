@@ -2,8 +2,8 @@
 \ A parking spot for the start of a list of links, or no links, that is, an empty list.
 \ This struct wholly manages the link struct.
 
-17971 constant list-id
-    2 constant list-struct-number-cells
+#17971 constant list-id
+     2 constant list-struct-number-cells
 
 \ List struct fields.
 0 constant  list-header             \ 16-bits [0] struct id [1] use count [2] length.
@@ -26,10 +26,37 @@ list-header cell+ constant list-links
     abort" list-mma use GT 0"
 ;
 
+\  Return true if TOS is an allocated list.
+: is-allocated-list ( list -- flag )
+    \ Insure the given addr cannot be an invalid addr.
+    dup list-mma mma-within-array 0=
+    if
+        drop false exit
+    then
+
+    struct-get-id   \ Here the fetch could abort on an invalid address, like a random number.
+    list-id =       \ An unallocated instance should have an ID of zero.
+;
+
+\ Check TOS for list, unconventional, leaves stack unchanged. 
+: assert-tos-is-list ( lst -- lst )
+    dup is-allocated-list 0=
+    abort" TOS is not an allocated list."
+;
+
+\ Check NOS for list, unconventional, leaves stack unchanged. 
+: assert-nos-is-list ( arg1 arg0 -- arg1 arg0 )
+    over is-allocated-list 0=
+    abort" NOS is not an allocated list."
+;
+
 \ Start accessors.
 
 \ Get list length.
 : list-get-length ( list-addr -- u-length )
+    \ Check arg.
+    assert-tos-is-list
+
     2w@
 ;
 
@@ -40,6 +67,9 @@ list-header cell+ constant list-links
 
 \ Get list first link.
 : list-get-links ( list-addr -- list-links-value )
+    \ Check arg.
+    assert-tos-is-list
+
     list-links + @
 ;
 
@@ -65,35 +95,6 @@ list-header cell+ constant list-links
 ;
 
 \ End accessors.
-
-\  Return true if TOS is an allocated list.
-: is-allocated-list ( list -- flag )
-    \ Insure the given addr cannot be an invalid addr.
-    dup list-mma mma-within-array 0=
-    if
-        drop false exit
-    then
-
-    struct-get-id   \ Here the fetch could abort on an invalid address, like a random number.
-    list-id =       \ An unallocated instance should have an ID of zero.
-;
-
-\ Return true if TOS is not an allocated list.
-: is-not-allocated-list ( list -- flag )
-    is-allocated-list 0=
-;
-
-\ Check TOS for list, unconventional, leaves stack unchanged. 
-: assert-tos-is-list ( lst -- lst )
-    dup is-not-allocated-list
-    abort" TOS is not an allocated list."
-;
-
-\ Check NOS for list, unconventional, leaves stack unchanged. 
-: assert-nos-is-list ( arg1 arg0 -- arg1 arg0 )
-    over is-not-allocated-list
-    abort" NOS is not an allocated list."
-;
 
 \ Return an new list struct instance address.
 : list-new ( -- addr )

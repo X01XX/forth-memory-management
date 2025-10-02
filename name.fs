@@ -54,8 +54,10 @@ name-header cell+ constant name-string
     name-id =
 ;
 
-: is-not-allocated-name ( name-addr -- flag )
-    is-allocated-name 0=
+\ Check TOS for name. Unconventional, no change in stack.
+: assert-tos-is-name ( arg0 --  arg0 )
+    dup is-allocated-name 0=
+    abort" tos is not an allocated name."
 ;
 
 \ Return a new name struct instance address, with given data value.
@@ -88,11 +90,7 @@ name-header cell+ constant name-string
 \ Deallocate a name.
 : name-deallocate ( name-addr -- )
     \ Check argument.
-    dup is-not-allocated-name
-    if
-        ." name-deallocate: Arg is not an allocated name"
-        abort
-    then
+    assert-tos-is-name
 
     dup struct-get-use-count    \ name-addr count
 
