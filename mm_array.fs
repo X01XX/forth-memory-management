@@ -39,6 +39,22 @@
 \
 \ Add statements like: cr ." at ...." cr
 \ in other areas of the code, to narrow down where/when the dangling instance is created.
+\
+\ A method, tedious but effective.  For example, on empty lists:
+\
+\ In the struct code, add a source (just a number) field, probably in an unused part of the header.
+\ Add <struct>-get-source, and <struct>-set-source, functions.
+\ Change <struct>-new to take a number argument and store it in the source field.
+\ Change .<struct> to display the source number.
+\
+\ Every reference to <struct>-new in the code should be changed to: <unique number>  <struct>-new.
+\
+\ Run the program to the degree needed to cause the memory leak.
+\ End the session, deallocatating whatever can be deallocatted.
+\
+\ Use <struct>-mma .mma-in-use to see the addresses of the still-allocated structs.
+\ Use .<struct> on one of the addresses to determine its source.
+
 include stack.fs 
 
 ' @ alias _mma-get-stack ( mma-addr -- stack-addr )
