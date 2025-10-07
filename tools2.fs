@@ -95,20 +95,20 @@
   <>  
 ;  
 
-\ Return the Boolean "NOT" of an unsigned number,
+\ Return the bitwise "NOT" of an unsigned number,
 \ while remaining within the bounds of allowable bits.
 : !not ( u1 -- u2 )
     all-bits
     xor
 ;
 
-\ Return the Boolean "NXOR" of two unsigned numbers.
+\ Return the bitwise "NXOR" of two unsigned numbers.
 \ while remaining within the bounds of allowable bits.
 : !nxor ( u1 u2 -- u3 )
     xor !not
 ;
 
-\ Return the Boolean "NOR" of two unsigned numbers.
+\ Return the bitwise "NOR" of two unsigned numbers.
 \ while remaining within the bounds of allowable bits.
 : !nor ( u1 u2 -- u3 )                                                                              
     or !not
