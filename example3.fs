@@ -34,12 +34,14 @@ list-new            \ Root list.
 list-new            \ root list1
 #3 #5 region-new over list-push
 #5 #6 region-new over list-push
+dup struct-inc-use-count
 over list-push      \ root
 
 \ Make another list, populate it, store it.
 list-new            \ root list2
 #1 #2 region-new over list-push
 #2 #6 region-new over list-push
+dup struct-inc-use-count
 over list-push      \ root
 
 cr cr ." List of lists: "
