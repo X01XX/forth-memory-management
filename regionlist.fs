@@ -2,8 +2,12 @@
 
 \ Deallocate a region list.
 : region-list-deallocate ( list0 -- )
-    [ ' region-deallocate ] literal over list-apply \ Deallocate region instances in the list.
-    list-deallocate                                 \ Deallocate list and links.
+    dup struct-get-use-count                    \ list0 uc
+    2 < if
+        [ ' region-deallocate ] literal over    \ list0 xt list0
+        list-apply                              \ Deallocate region instances in the list.
+    then
+    list-deallocate                             \ Deallocate list and links.
 ;
 
 \ Return the intersection of two region lists.

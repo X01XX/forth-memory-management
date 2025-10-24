@@ -1,9 +1,13 @@
 \ Functions for a list of names.
 
 \ Deallocate a name list.
-: name-list-deallocate ( name-list-addr -- )
-    [ ' name-deallocate ] literal over list-apply   \ Deallocate name instances in the list.
-    list-deallocate                                 \ Deallocate list and links.
+: name-list-deallocate ( name-lst -- )
+    dup struct-get-use-count                    \ name-lst uc
+    2 < if
+        [ ' name-deallocate ] literal over      \ name-lst xt name-lst
+        list-apply                              \ Deallocate name instances in the list.
+    then
+    list-deallocate                             \ Deallocate list and links.
 ;
 
 \ Return the intersection of two name lists.
