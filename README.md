@@ -10,6 +10,8 @@ Allocation and deallocation is fairly fast because it involves simply popping, o
 Within the limit of the maximum number of array items allocated at the same time,
 an infinite number of allocations, and deallocations, are possible.
 
+The examples use linked lists of numbers, strings, and lists-of-lists.
+
 The examples can be run with the commands:
 
   gforth example.fs -e bye
@@ -24,8 +26,6 @@ Allocations, and deallocations, causes increasing disorder of the addresses on t
 which has no effect on the utility, or speed, of the array-stack.
 
 That a stack is used to provide memory management to a stack-based language is sublime.
-
-The examples use linked lists of numbers, and strings.
 
 Functions that manipulate a struct instance can act as wrappers to array-stack, and list, functions.
 
