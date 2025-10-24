@@ -10,16 +10,6 @@ Allocation and deallocation is fairly fast because it involves simply popping, o
 Within the limit of the maximum number of array items allocated at the same time,
 an infinite number of allocations, and deallocations, are possible.
 
-The examples use linked lists of numbers, strings, and lists-of-lists.
-
-The examples can be run with the commands:
-
-  gforth example.fs -e bye
-
-  gforth example2.fs -e bye
-
-  gforth example3.fs -e bye
-
 On deallocation, the first cell of an item is zeroed out, to make use problems apparent.
 
 Allocations, and deallocations, causes increasing disorder of the addresses on the stack,
@@ -33,4 +23,14 @@ Diagnosis of a memory leak can begin with the array-stack that becomes exhausted
 
 The first word of every struct instance, allocated from the same array-stack, can be set to a unique number, to indicate the type of struct.
 
-These ideas should work in Assembler Language and C.
+These ideas should work in Assembler Language and C (if you want faster allocation/deallocation, more control).
+
+The examples use linked lists of numbers, strings, and lists-of-lists.
+
+The examples can be run with the commands:
+
+  gforth example.fs -e bye
+
+  gforth example2.fs -e bye
+
+  gforth example3.fs -e bye
