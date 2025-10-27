@@ -15,7 +15,7 @@
 \        \ compared to using indices at a higher level.
 \        dup link-get-next               \ link link+
 \
-\        \ For each following region.
+\        \ For each following item.
 \        begin
 \           ?dup
 \       while
