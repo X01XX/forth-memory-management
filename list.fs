@@ -10,7 +10,7 @@
 \   begin
 \       ?dup
 \   while
-\        \ Get link to following regions.
+\        \ Get link to following items.
 \        \ Having direct access to the list links makes this logic effortless,
 \        \ compared to using indices at a higher level.
 \        dup link-get-next               \ link link+
