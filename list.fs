@@ -2,6 +2,34 @@
 \ A parking spot for the start of a list of links, or no links, that is, an empty list.
 \ This struct wholly manages the link struct.
 
+\ Comparing any two items in a list is easier than in a higher-level language!
+\                                       \ list
+\    list-get-links                     \ link
+\
+\   \ For each item.
+\   begin
+\       ?dup
+\   while
+\        \ Get link to following regions.
+\        \ Having direct access to the list links makes this logic effortless,
+\        \ compared to using indices at a higher level.
+\        dup link-get-next               \ link link+
+\
+\        \ For each following region.
+\        begin
+\           ?dup
+\       while
+\           over link-get-data          \ link link+ dat0
+\           over link-get-data          \ link link+ dat0 dat+
+\           .
+\           \ do comparison.
+\           .
+\           link-get-next               \ link link+
+\       repeat
+\
+\       link-get-next                   \ link
+\   repeat
+
 #17971 constant list-id
     #2 constant list-struct-number-cells
 
@@ -39,15 +67,21 @@ list-header cell+ constant list-links
 ;
 
 \ Check TOS for list, unconventional, leaves stack unchanged. 
-: assert-tos-is-list ( lst -- lst )
+: assert-tos-is-list ( lst0 -- lst0 )
     dup is-allocated-list 0=
     abort" TOS is not an allocated list."
 ;
 
 \ Check NOS for list, unconventional, leaves stack unchanged. 
-: assert-nos-is-list ( arg1 arg0 -- arg1 arg0 )
+: assert-nos-is-list ( lst1 arg0 -- lst1 arg0 )
     over is-allocated-list 0=
     abort" NOS is not an allocated list."
+;
+
+\ Check 3OS for list, unconventional, leaves stack unchanged. 
+: assert-3os-is-list ( lst2 arg1 arg0 -- lst2 arg1 arg0 )
+    #2 pick is-allocated-list 0=
+    abort" 3OS is not an allocated list."
 ;
 
 \ Start accessors.
