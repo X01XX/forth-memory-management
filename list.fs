@@ -154,6 +154,9 @@ list-header cell+ constant list-links
 
 \ Add data to the end of a list.
 \ If data is a struct, having a use count, caller to inc use count.
+\ e.g.
+\ alist of link-data = number.
+\ #5 swap list-push-end
 : list-push-end ( data list-addr -- )
     \ Check arg.
     assert-tos-is-list
@@ -185,6 +188,12 @@ list-header cell+ constant list-links
 
 \ Add an address to the beginning of a list
 \ If data is a struct, having a use count, caller to inc use count.
+\
+\ If list data are struct instances, the caller should inc the instance use count befere pushing,
+\ using: dup struct-inc-use-count
+\ e.g.
+\ alist of link-data = number.
+\ #5 swap list-push
 : list-push ( data list-addr -- )
     \ Check arg.
     assert-tos-is-list
@@ -229,6 +238,9 @@ list-header cell+ constant list-links
 
 \ Print a list, given an xt to print the data.
 \ xt signature is ( link-data -- )
+\ e.g.
+\ alist of link-data = number.
+\ [ ' . ] literal swap .list
 : .list ( xt addr -- )
     \ Check arg.
     assert-tos-is-list
@@ -263,6 +275,9 @@ list-header cell+ constant list-links
 
 \ Return true if a list contains an item, based on a given test execution token.
 \ xt signature is ( item link-data -- flag ) or ( filler link-data -- flag )
+\ e.g.
+\ alist of link-data = number.
+\ [ ' = ] literal swap #5 swap list-member
 : list-member ( xt item list -- flag )
     \ Check arg.
     assert-tos-is-list
@@ -290,9 +305,11 @@ list-header cell+ constant list-links
     false
 ;
 
-
 \ Return the first data cell of a link, based on a given test execution token and test item.
 \ xt signature is ( item link-data -- flag ) or ( filler link-data -- flag )
+\ e.g.
+\ alist of link-data = number.
+\ [ ' = ] literal swap #5 swap list-find
 : list-find ( xt item list -- cell true | false )
     \ Check arg.
     assert-tos-is-list
@@ -331,9 +348,9 @@ list-header cell+ constant list-links
 
 \ Return a list containing items that match a given test execution token and test item.
 \ xt signature is ( item link-data -- flag ) or ( filler link-data -- flag )
-\
-\ If the data is a struct that implements a use count, follow this with
-\ [ ' struct-inc-use-count ] literal over list-apply
+\ e.g.
+\ alist of link-data = number.
+\ [ ' < ] literal swap #5 swap list-find-all
 : list-find-all ( xt item list -- list )
     \ Check arg.
     assert-tos-is-list
@@ -375,6 +392,8 @@ list-header cell+ constant list-links
 ;
 
 \ Pop an item from the beginning of a list.
+\ If list data are struct instances, the caller should dec the instance use count of the result,
+\ using: if dup struct-dec-use-count then
 : list-pop ( lst0 -- data true | false )
     \ Check arg.
     assert-tos-is-list
@@ -412,6 +431,10 @@ list-header cell+ constant list-links
 \ If the data is a struct instance with a use count, that should be adjusted by the caller.
 \
 \ I like this one. Standard tradecraft, as L. Ron Hubbard once wrote.
+\
+\ e.g.
+\ alist of link-data = number.
+\ [ ' = ] literal swap #5 swap list-remove
 : list-remove ( xt item list -- data true | false )
     \ Check arg.
     assert-tos-is-list
@@ -481,12 +504,17 @@ list-header cell+ constant list-links
         nip                 \ xt item list | cur-link
     repeat
     \ xt item list | last-link 0 ( last link-next field value )
-    
     2drop 2drop drop
     false
 ;
 
 \ Remove an item based on index.
+\ e.g.
+\ alist of link-data = anything.
+\ #2 swap list-remove-item
+\
+\ If list data are struct instances, the caller should dec the instance use count of the result,
+\ using: if dup struct-dec-use-count then
 : list-remove-item ( u1 lst0 -- data true | false )
     \ Check args.
     assert-tos-is-list
@@ -522,6 +550,8 @@ list-header cell+ constant list-links
 ;
 
 \ Pop the last item in a list.
+\ If list data are struct instances, the caller should dec the instance use count of the result,
+\ using: if dup struct-dec-use-count then
 : list-pop-end ( lst0 -- data true | false )
     \ Check arg.
     assert-tos-is-list
@@ -534,7 +564,7 @@ list-header cell+ constant list-links
 ;
 
 \ Deallocate a list that has a use count of 1.
-: list-deallocate-uc-1 ( list-addr -- )
+: _list-deallocate-uc-1 ( list-addr -- )
     \ Check arg.
     assert-tos-is-list
 
@@ -558,6 +588,10 @@ list-header cell+ constant list-links
 
 \ Deallocate a list.
 \ If the link data is struct instance addresses, the caller may need to deallocated them first.
+\
+\ If the list is a list of structs using use count, dec the use count of the structs, or not, before
+\ calling this.
+\ e.g.: dup struct-get-use-count #2 < if [ ' <struct-name>-deallocate ] literal over list-apply then
 : list-deallocate ( list-addr -- )
     \ Check arg.
     assert-tos-is-list
@@ -569,7 +603,7 @@ list-header cell+ constant list-links
 
     #2 < 
     if  
-        list-deallocate-uc-1
+        _list-deallocate-uc-1
     else
         struct-dec-use-count
     then
@@ -579,8 +613,8 @@ list-header cell+ constant list-links
 \ Provide an xt for determining data equality.
 \ xt signature is ( link-data link-data -- flag )
 \
-\ If list data are struct instances, the caller should inc the instance use count,
-\ using xt list-ret list-apply.
+\ If list data are struct instances, the caller should inc the instance use count of the result,
+\ using: [ ' struct-inc-use-count ] literal over list-apply.
 : list-difference ( xt list1 list0 -- list )
     \ Check arg.
     assert-tos-is-list
@@ -616,8 +650,8 @@ list-header cell+ constant list-links
 \ Provide an xt for determining data equality.
 \ xt signature is ( link-data link-data -- flag )
 \
-\ If list data are struct instances, the caller should inc the instance use count,
-\ using xt list-ret list-apply.
+\ If list data are struct instances, the caller should inc the instance use count of the result,
+\ using: [ ' struct-inc-use-count ] literal over list-apply.
 : list-union ( xt list1 list0 -- list )
     \ Check args.
     assert-tos-is-list
@@ -690,6 +724,9 @@ list-header cell+ constant list-links
 
 \ Return the intersection of two lists.
 \ xt signature is ( link-data link-data -- flag )
+\
+\ If list data are struct instances, the caller should inc the instance use count of the result,
+\ using: [ ' struct-inc-use-count ] literal over list-apply.
 : list-intersection ( xt list1 list0 -- list2 )
     \ Check args.
     assert-tos-is-list
@@ -759,4 +796,52 @@ list-header cell+ constant list-links
 
     \ Get data to return.
     2drop link-get-data
+;
+
+\ Sort a list, given an xt that returns true if two successive items
+\ should be swapped.
+\ e.g.
+\ alist of link-data = number.
+\ [ ' < ] literal over list-sort
+: list-sort ( xt list -- )
+    \ Check args.
+    assert-tos-is-list
+
+    begin
+        \ Go through a list once.  Return true if any pairs have been swapped.
+        false                           \ xt list bool
+        over list-get-links             \ xt list bool link
+
+        begin
+            ?dup
+        while
+            dup link-get-next           \ xt list bool link link+
+            ?dup
+            if
+                over link-get-data      \ xt list bool link link+ data
+                over link-get-data      \ xt list bool link link+ data data+
+                #6 pick                 \ xt list bool link link+ data data+ xt
+                execute                 \ xt list bool link link+ bool
+                if
+                                        \ xt list bool link link+
+                    over link-get-data  \ xt list bool link link+ data
+                    over link-get-data  \ xt list bool link link+ data data+
+                    #3 pick             \ xt list bool link link+ data data+ link
+                    _link-set-data      \ xt list bool link link+ data
+                    swap                \ xt list bool link data link+
+                    _link-set-data      \ xt list bool link
+                    swap drop           \ xt list link
+                    true swap           \ xt list bool link
+                else
+                    drop                \ xt list bool link
+                then
+            then
+
+            link-get-next               \ xt list bool link
+        repeat
+                                    \ xt list bool
+        0=
+    until
+                                    \ xt list
+    2drop
 ;
