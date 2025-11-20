@@ -248,6 +248,10 @@ include stack.fs
     #5 dec.r                \ mma-addr stack-addr |
     #2 spaces
 
+    over _mma-get-min-free 100 *
+    over stack-get-capacity /
+    #3 dec.r ." %" #2 spaces
+
     ." In use: "
     dup                     \ mma-addr stack-addr | stack-addr
     stack-get-capacity      \ mma-addr stack-addr | cap
