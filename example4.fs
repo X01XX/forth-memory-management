@@ -37,7 +37,7 @@ list-new
 4 5 region-new
 dup region-deallocate
 
-cr cr ." structs on stack: " .stack
+cr cr ." structs on stack: " .stack-structs
 
 \ Finish.
 cr
@@ -50,6 +50,7 @@ drop
 region-deallocate
 list-deallocate
 link-deallocate
+drop
 
 cr memory-use cr
 

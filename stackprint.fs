@@ -1,7 +1,7 @@
 \ Print a stack, after an abort, giving information about structs on the stack.
 
 \ Print the type of one value.
-: .stack2 ( addr -- )
+: .stack-structs2 ( addr -- )
     dup link-mma mma-within-array
     if
         dup struct-get-id
@@ -46,13 +46,13 @@
 ;
 
 \ Cycle through each stack item, displaying its struct type.
-: .stack
+: .stack-structs
     depth 0=
     if
         exit
     then
     depth 0 do
         depth 1- i - pick
-        .stack2 
+        .stack-structs2 
     loop
 ;
