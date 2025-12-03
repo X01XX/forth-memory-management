@@ -42,6 +42,6 @@ The examples can be run with the commands:
   gforth example4.fs -e bye   \ Shows a struct-aware print of items on a stack, for debugging.
 </pre>
 
-Memory use before, and after, deallocating is shown.  The Min Free column shows the lowest level of struct space available during the progam run,
+Memory use before, and after, deallocating is shown.  The Min Free column shows the lowest level of struct space available during the program run,
 for tuning purposes.
 
