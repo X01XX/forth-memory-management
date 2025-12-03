@@ -28,7 +28,7 @@ These ideas should work in Assembler Language and C (if you want faster allocati
 Lists are built of List structs, and Link structs, that have an ID and use-count in their header.
 
 The examples can be run with the commands:
-
+<pre>
   gforth example.fs -e bye    \ Shows two lists of numbers, with set functions union, intersection and subtraction.
                               \ Shows applying multiplication, and addition, of all list elements, given a number.
                               \ The numbers are not structs, just numbers in the Link data field.
@@ -40,3 +40,4 @@ The examples can be run with the commands:
   gforth example3.fs -e bye   \ Shows lists of lists of regions.
 
   gforth example4.fs -e bye   \ Shows a struct-aware print of items on a stack, for debugging.
+</pre>
