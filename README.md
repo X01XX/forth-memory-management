@@ -25,12 +25,18 @@ The first word of every struct instance, allocated from the same array-stack, ca
 
 These ideas should work in Assembler Language and C (if you want faster allocation/deallocation, more control).
 
-The examples use linked lists of numbers, strings, and lists-of-lists.
+Lists are built of List structs, and Link structs, that have an ID and use-count in their header.
 
 The examples can be run with the commands:
 
-  gforth example.fs -e bye
+  gforth example.fs -e bye    \ Shows two lists of numbers, with set functions union, intersection and subtraction.
+                              \ Shows applying multiplication, and addition, of all list elements, given a number.
+                              \ The numbers are not structs, just numbers in the Link data field.
+                              \ Shows two lists of names, with set functions union, intersection and subtraction. The Name is a struct.
 
-  gforth example2.fs -e bye
+  gforth example2.fs -e bye   \ Shows my favorite calculation ~A + ~B, with Karnaugh Map regions. The Region is a struct.
+                              \ ~A + ~B forms regions with A, regions with B, regions with neither, NO regions with A and B.
 
-  gforth example3.fs -e bye
+  gforth example3.fs -e bye   \ Shows lists of lists of regions.
+
+  gforth example4.fs -e bye   \ Shows a struct-aware print of items on a stack, for debugging.
