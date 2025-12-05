@@ -38,6 +38,7 @@ The examples can be run with the commands:
                               \ A is different from B in some way.
                               \ ~A + ~B forms regions with A, regions with B, regions with neither, NO regions with A and B.
                               \ Similar calculations of other pairs, exhibiting the same difference, can be intersected for finer understanding.
+                              \ In the results of these calculations, regions completely overlapped by other regions are not important.
 
   gforth example3.fs -e bye   \ Shows lists of lists of regions.
 
