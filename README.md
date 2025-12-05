@@ -35,8 +35,9 @@ The examples can be run with the commands:
                               \ Shows two lists of names, with set functions union, intersection and subtraction. The Name is a struct.
 
   gforth example2.fs -e bye   \ Shows my favorite calculation ~A + ~B, with Karnaugh Map regions. The Region is a struct.
+                              \ A is different from B in some way.
                               \ ~A + ~B forms regions with A, regions with B, regions with neither, NO regions with A and B.
-                              \ Different (~A + ~B) calculations can be intersected for finer understanding.
+                              \ Different ~A + ~B calculations can be intersected for finer understanding.
 
   gforth example3.fs -e bye   \ Shows lists of lists of regions.
 
