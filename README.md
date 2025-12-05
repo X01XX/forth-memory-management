@@ -37,7 +37,7 @@ The examples can be run with the commands:
   gforth example2.fs -e bye   \ Shows my favorite calculation ~A + ~B, with Karnaugh Map regions. The Region is a struct.
                               \ A is different from B in some way.
                               \ ~A + ~B forms regions with A, regions with B, regions with neither, NO regions with A and B.
-                              \ Different ~A + ~B calculations can be intersected for finer understanding.
+                              \ Similar calculations of other pairs, exhibiting the same difference, can be intersected for finer understanding.
 
   gforth example3.fs -e bye   \ Shows lists of lists of regions.
 
