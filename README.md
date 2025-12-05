@@ -36,6 +36,7 @@ The examples can be run with the commands:
 
   gforth example2.fs -e bye   \ Shows my favorite calculation ~A + ~B, with Karnaugh Map regions. The Region is a struct.
                               \ ~A + ~B forms regions with A, regions with B, regions with neither, NO regions with A and B.
+                              \ Different (~A + ~B) calculations can be intersected for finer understanding.
 
   gforth example3.fs -e bye   \ Shows lists of lists of regions.
 
@@ -45,3 +46,4 @@ The examples can be run with the commands:
 Memory use before, and after, deallocating is shown.  The Min Free column shows the lowest level of struct space available during the program run,
 for tuning purposes.
 
+A stack can be created, and used, without an array.  The stack pointer is stored in a word of the allocated space.
