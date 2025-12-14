@@ -48,4 +48,4 @@ The examples can be run with the commands:
 Memory use before, and after, deallocating is shown.  The Min Free column shows the lowest level of struct space available during the program run,
 for tuning purposes.
 
-Stacks can be created, and used, without an array.  The stack pointer is stored in a word of the allocated space.
+Stacks can be created, and used, without an array.  Stack "pointer" info is stored in the allocated space.
