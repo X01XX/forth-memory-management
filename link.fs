@@ -2,9 +2,9 @@
     #3 constant link-struct-number-cells
 
 \ Link struct fields.
-0 constant  link-header         \ 16-bits [0] struct id [1] use count.
-link-header cell+ constant link-next
-link-next   cell+ constant link-data
+0                           constant link-header-disp   \ 16-bits [0] struct id, [1] use count.
+link-header-disp    cell+   constant link-next-disp
+link-next-disp      cell+   constant link-data-disp
 
 0 value link-mma    \ Storage for the link mma instance addr.
 
@@ -13,7 +13,7 @@ link-next   cell+ constant link-data
     dup 1 <
     abort" link-mma-init: Invalid number items."
 
-    cr ." Initializing Link store."  
+    cr ." Initializing Link store."
     link-struct-number-cells swap mma-new to link-mma
 ;
 
@@ -30,15 +30,15 @@ link-next   cell+ constant link-data
     if
         drop false exit
     then
-    
+
     struct-get-id \ Here the fetch could abort on an invalid address, like a random number.
     link-id =
 ;
 
-\ Check TOS for link, unconventional, leaves stack unchanged. 
+\ Check TOS for link, unconventional, leaves stack unchanged.
 : assert-tos-is-link ( arg0 -- arg0 )
-    dup is-allocated-link 0=
-    abort" TOS is not an allocated link."
+    dup is-allocated-link
+    0= abort" TOS is not an allocated link."
 ;
 
 \ Start accessors.
@@ -48,12 +48,12 @@ link-next   cell+ constant link-data
     \ Check arg.
     assert-tos-is-link
 
-    link-data + @
+    link-data-disp + @
 ;
 
 \ Set link data cell, use only in this file.
 : _link-set-data ( data-value link-addr -- )
-    link-data + !
+    link-data-disp + !
 ;
 
 \ Get link next cell.
@@ -61,12 +61,12 @@ link-next   cell+ constant link-data
     \ Check arg.
     assert-tos-is-link
 
-    link-next + @
+    link-next-disp + @
 ;
 
 \ Set link next cell, use only in this file, and list.fs.
 : _link-set-next ( next-value link-addr -- )
-    link-next + !
+    link-next-disp + !
 ;
 \ End accessors.
 
@@ -100,10 +100,10 @@ link-next   cell+ constant link-data
 
     dup struct-get-use-count    \ link-addr count
 
-    dup 0 < 
+    dup 0 <
     abort" invalid use count"
     #2 <
-    if  
+    if
         \ Clear fields.
         0 over _link-set-next
         0 over _link-set-data
