@@ -3,8 +3,8 @@
     #3 constant name-struct-number-cells
 
 \ Name struct fields.
-0 constant  name-header         \ [0] id [1] use count.
-name-header cell+ constant name-string
+0                       constant name-header-disp   \ 16 bits, [0] id, [1] use count.
+name-header-disp cell+  constant name-string-disp
 
 0 value name-mma    \ Storage for the name mma instance addr.
 
@@ -24,7 +24,7 @@ name-header cell+ constant name-string
 
 \ Get name data cell.
 : name-get-string ( name-addr -- string-addr length )
-    name-string + string@
+    name-string-disp + string@
 ;
 
 \ Set name data cell.
@@ -39,7 +39,7 @@ name-header cell+ constant name-string
         ." name-set-string: string length is too small/invalid"
         abort
     then
-    name-string + string!
+    name-string-disp + string!
 ;
 
 \ Check instance type.
@@ -100,7 +100,7 @@ name-header cell+ constant name-string
     else
         #2 <
         if
-            0 over name-string + !  \ Clear string field first cell.
+            0 over name-string-disp + !  \ Clear string field first cell.
             name-mma mma-deallocate \ Deallocate instance.
         else
             struct-dec-use-count
