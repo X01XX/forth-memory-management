@@ -60,12 +60,18 @@ name-header-disp cell+  constant name-string-disp
     abort" tos is not an allocated name."
 ;
 
+\ Check list mma usage.
+: assert-name-mma-none-in-use ( -- )
+    name-mma mma-in-use 0<>
+    abort" name-mma use GT 0"
+;
+
 \ Return a new name struct instance address, with given data value.
 : name-new ( string-addr length -- name-addr )
     name-mma mma-allocate       \ str-addr len name-addr
     name-id over                \ str-addr len name-addr id name-addr
     struct-set-id               \ str-addr len name-addr
-    1 over                      \ str-addr len name-addr 1 addr
+    0 over                      \ str-addr len name-addr 1 addr
     struct-set-use-count        \ str-addr len name-addr
 
     -rot                        \ name-addr str-addr len

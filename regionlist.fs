@@ -2,6 +2,9 @@
 
 \ Deallocate a region list.
 : region-list-deallocate ( list0 -- )
+    \ Check arg.
+    assert-tos-is-list
+
     dup struct-get-use-count                    \ list0 uc
     2 < if
         [ ' region-deallocate ] literal over    \ list0 xt list0
@@ -11,7 +14,12 @@
 ;
 
 \ Return the intersection of two region lists.
+\ Or use ' region-eq list1 list0 list-intersection-struct
 : region-list-set-intersection ( list1 list0 -- list-result )
+    \ Check args.
+    assert-tos-is-list
+    assert-nos-is-list
+
     [ ' region-eq ] literal -rot        \ xt list1 list0
     list-intersection                   \ list-result
     [ ' struct-inc-use-count ] literal  \ list-result xt
@@ -19,7 +27,12 @@
 ;
 
 \ Return the union of two region lists.
+\ Or use ' region-eq list1 list0 list-union-struct
 : region-list-set-union ( list1 list0 -- list-result )
+    \ Check args.
+    assert-tos-is-list
+    assert-nos-is-list
+
     [ ' region-eq ] literal -rot        \ xt list1 list0
     list-union                          \ list-result
     [ ' struct-inc-use-count ] literal  \ list-result xt
@@ -27,7 +40,12 @@
 ;
 
 \ Return the difference of two region lists.
+\ Or use ' region-eq list1 list0 list-difference-struct
 : region-list-set-difference ( list1 list0 -- list-result )
+    \ Check args.
+    assert-tos-is-list
+    assert-nos-is-list
+
     [ ' region-eq ] literal -rot        \ xt list1 list0
     list-difference                     \ list-result
     [ ' struct-inc-use-count ] literal  \ list-result xt
@@ -36,12 +54,14 @@
 
 \ Print a region-list
 : .region-list ( list0 -- )
-    \ Check args.
+    \ Check arg.
     assert-tos-is-list
+
     [ ' .region ] literal swap .list
 ;
 
 \ Push a region to a region-list.
+\ Or use list-push-struct
 : _region-list-push ( reg1 list0 -- )
     \ Check args.
     assert-tos-is-list

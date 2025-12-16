@@ -1,8 +1,10 @@
 
 include tools.fs
+include struct.fs
 include mm_array.fs
 include link.fs
 include list.fs
+include structlist.fs
 include numlist.fs
 include name.fs
 include namelist.fs
@@ -112,31 +114,31 @@ cr ." *** Working with lists of Name struct instances, list link data field is a
 cr ." *** Name struct instances keep track of use count, see namelist.fs, name-deallocate in name.fs."
 cr
 list-new value list9   \ Start a new linked list.
-s" Mary" name-new list9 list-push
-s" Dan" name-new list9 list-push
-s" Dave" name-new list9 list-push
-s" Cindy" name-new list9 list-push
+s" Mary" name-new list9 list-push-struct
+s" Dan" name-new list9 list-push-struct
+s" Dave" name-new list9 list-push-struct
+s" Cindy" name-new list9 list-push-struct
 cr ." list9: " ' .name list9 .list
 
 cr
 list-new value list10   \ Start a new linked list.
-s" Mary" name-new list10 list-push
-s" Dan" name-new list10 list-push
-s" Dave" name-new list10 list-push
-s" Max" name-new list10 list-push
+s" Mary" name-new list10 list-push-struct
+s" Dan" name-new list10 list-push-struct
+s" Dave" name-new list10 list-push-struct
+s" Max" name-new list10 list-push-struct
 cr ." list10: " ' .name list10 .list
 
-cr list9 list10 name-list-intersection value list11
-cr ." list9 list10 intersection: " ' .name list11 .list
+' name-eq list9 list10 list-intersection-struct value list11
+cr cr ." list9 list10 intersection: " ' .name list11 .list
 
-cr list9 list10 name-list-union value list12
-cr ." list9 list10 union: " ' .name list12 .list
+' name-eq list9 list10 list-union-struct value list12
+cr cr ." list9 list10 union: " ' .name list12 .list
 
-cr list9 list10 name-list-difference value list13
-cr ." list9 - list10: " ' .name list13 .list
+' name-eq list9 list10 list-difference-struct value list13
+cr cr ." list9 - list10: " ' .name list13 .list
 
-cr list10 list9 name-list-difference value list14
-cr ." list10 - list9: " ' .name list14 .list
+' name-eq list10 list9 list-difference-struct value list14
+cr cr ." list10 - list9: " ' .name list14 .list
 
 cr memory-use
 
@@ -149,6 +151,10 @@ list12 name-list-deallocate
 list13 name-list-deallocate
 list14 name-list-deallocate
 cr memory-use
+
+assert-list-mma-none-in-use
+assert-link-mma-none-in-use
+assert-name-mma-none-in-use
 
 \ Free heap memory.
 cr

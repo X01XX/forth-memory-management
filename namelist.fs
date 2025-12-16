@@ -11,6 +11,7 @@
 ;
 
 \ Return the intersection of two name lists.
+\ Or use ' name-eq list1 list0 list-intersection-struct
 : name-list-intersection ( name-list-addr1 name-list-addr0 -- name-list-result-addr )
     [ ' name-eq ] literal -rot          \ xt name-list-addr1 name-list-addr0
     list-intersection                   \ name-list-result-addr
@@ -19,6 +20,7 @@
 ;
 
 \ Return the union of two name lists.
+\ Or use ' name-eq list1 list0 list-union-struct
 : name-list-union ( name-list-addr1 name-list-addr0 -- name-list-result-addr )
     [ ' name-eq ] literal -rot          \ xt name-list-addr1 name-list-addr0
     list-union                          \ name-list-result-addr
@@ -27,6 +29,7 @@
 ;
 
 \ Return the difference of two name lists.
+\ Or use ' name-eq list1 list0 list-difference-struct
 : name-list-difference ( name-list-addr1 name-list-addr0 -- name-list-result-addr )
     [ ' name-eq ] literal -rot          \ xt name-list-addr1 name-list-addr0
     list-difference                     \ name-list-result-addr

@@ -5,10 +5,13 @@
 #15 constant all-bits
  #8  constant ms-bit
 
+include tools.fs
 include tools2.fs
+include struct.fs
 include mm_array.fs
 include link.fs
 include list.fs
+include structlist.fs
 include region.fs
 include regionlist.fs
 include state.fs
@@ -39,10 +42,10 @@ over list-push      \ root
 
 \ Make another list, populate it, store it.
 list-new            \ root list2
-#1 #2 region-new over list-push
-#2 #6 region-new over list-push
-dup struct-inc-use-count
-over list-push      \ root
+#1 #2 region-new over list-push-struct
+#2 #6 region-new over list-push-struct
+\ dup struct-inc-use-count
+over list-push-struct      \ root
 
 cr cr ." List of lists: "
 ' .region-list over list-apply cr
@@ -61,6 +64,10 @@ swap list-apply                 \ root
 list-deallocate                 \ 
 
 cr memory-use cr
+
+assert-list-mma-none-in-use
+assert-link-mma-none-in-use
+assert-region-mma-none-in-use
 
 \ Free heap memory before exiting.
 cr ." Freeing heap memory"

@@ -4,10 +4,13 @@
 #15 constant all-bits
  #8  constant ms-bit
 
+include tools.fs
 include tools2.fs
+include struct.fs
 include mm_array.fs
 include link.fs
 include list.fs
+include structlist.fs
 include region.fs
 include regionlist.fs
 include state.fs
@@ -55,6 +58,10 @@ region-list-deallocate
 region-list-deallocate
 
 cr memory-use cr
+
+assert-list-mma-none-in-use
+assert-link-mma-none-in-use
+assert-region-mma-none-in-use
 
 \ Free heap memory before exiting.
 cr ." Freeing heap memory"
