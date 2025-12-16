@@ -155,6 +155,7 @@ cr memory-use
 assert-list-mma-none-in-use
 assert-link-mma-none-in-use
 assert-name-mma-none-in-use
+assert-stack-empty
 
 \ Free heap memory.
 cr

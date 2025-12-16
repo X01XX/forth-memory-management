@@ -60,6 +60,7 @@ cr memory-use cr
 assert-list-mma-none-in-use
 assert-link-mma-none-in-use
 assert-region-mma-none-in-use
+assert-stack-empty
 
 \ Free heap memory before exiting.
 cr ." Freeing heap memory"

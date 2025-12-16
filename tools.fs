@@ -54,3 +54,7 @@
     swap 1+ swap    \ addr+1 length
 ;
 
+: assert-stack-empty ( -- )
+    depth 0<> abort" Stack not empty"
+;
+
