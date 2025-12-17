@@ -15,7 +15,7 @@ On deallocation, the first cell of an item is zeroed out, to make use problems a
 Allocations, and deallocations, causes increasing disorder of the addresses on the stack,
 which has no effect on the utility, or speed, of the array-stack.
 
-That a stack is used to provide memory management to a stack-based language is sublime.
+That a stack is used to provide memory management to a stack-based language is sublime. Its stacks, all the way down.
 
 Functions that manipulate a struct instance can act as wrappers to array-stack, and list, functions.
 
