@@ -3,6 +3,8 @@ Pair an array of potential struct instances, with a special-purpose stack, givin
 
 Multiple array-stacks can be created, with the number of items, and the size of each item, varying by array-stack as needed.
 
+Array-stacks are allocated on the heap, avoiding the dangerous habit, in some texts, of storing data in the word list. 
+
 The stack of an array-stack is initialized with the address of each array item.
 
 Allocation and deallocation is fairly fast because it involves simply popping, or pushing, the stack.
