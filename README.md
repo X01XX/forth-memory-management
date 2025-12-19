@@ -47,7 +47,7 @@ The examples can be run with the commands:
   gforth example4.fs -e bye   \ Shows a struct-aware print of items on the Forth stack, for debugging.
 </pre>
 
-Memory use before, and after, deallocating is shown.  The Min Free column shows the lowest level of struct space available during the program run,
+Memory use before, and after, deallocating is shown.  The Min Free column shows the lowest level of struct instances available during the program run,
 for tuning purposes.
 
 Stacks can be created, and used, without an array.  Stack "pointer" info is stored in the allocated space.
