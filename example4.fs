@@ -16,6 +16,7 @@ include link.fs
 include list.fs
 include structlist.fs
 include region.fs
+include regionlist.fs
 include stackprint.fs
 cs
 
@@ -40,6 +41,9 @@ list-new
 4 5 region-new
 dup region-deallocate
 
+list-new
+4 5 region-new over list-push-struct
+
 cr cr ." structs on stack: " .stack-structs
 
 \ Finish.
@@ -49,6 +53,7 @@ cr
 
 \ Deallocate remaining struct instances.
 cr ." Deallocating ..."
+region-list-deallocate
 drop
 region-deallocate
 list-deallocate

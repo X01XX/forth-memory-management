@@ -3,20 +3,20 @@ Initializing Link store.
 Initializing List store.
 Initializing Region store.
 
-structs on stack: 23 link list-0 region region-u 
+structs on stack: 23 link list-0 region region list-1-region 
 
 Memory use:
-    Region mma:       Capacity:   103  Min Free:   101   98%  In use:      1  Item Size:  24  Array size:   2472  Overhead:    864  Total:   3336  Cells:   417
-    List mma:         Capacity:   102  Min Free:   101   99%  In use:      1  Item Size:  16  Array size:   1632  Overhead:    856  Total:   2488  Cells:   311
-    Link mma:         Capacity:   101  Min Free:   100   99%  In use:      1  Item Size:  24  Array size:   2424  Overhead:    848  Total:   3272  Cells:   409
-    dstack: <5> 23 101641195168808 101641195161496 101641195172152 101641195172128 
+    Region mma:       Capacity:   103  Min Free:   101   98%  In use:      2  Item Size:  24  Array size:   2472  Overhead:    864  Total:   3336  Cells:   417
+    List mma:         Capacity:   102  Min Free:   100   98%  In use:      2  Item Size:  16  Array size:   1632  Overhead:    856  Total:   2488  Cells:   311
+    Link mma:         Capacity:   101  Min Free:    99   98%  In use:      2  Item Size:  24  Array size:   2424  Overhead:    848  Total:   3272  Cells:   409
+    dstack: <6> 23 104813087720248 104813087721928 104813087724424 104813087724400 104813087721912 
 
 Deallocating ...
 
 Memory use:
     Region mma:       Capacity:   103  Min Free:   101   98%  In use:      0  Item Size:  24  Array size:   2472  Overhead:    864  Total:   3336  Cells:   417
-    List mma:         Capacity:   102  Min Free:   101   99%  In use:      0  Item Size:  16  Array size:   1632  Overhead:    856  Total:   2488  Cells:   311
-    Link mma:         Capacity:   101  Min Free:   100   99%  In use:      0  Item Size:  24  Array size:   2424  Overhead:    848  Total:   3272  Cells:   409
+    List mma:         Capacity:   102  Min Free:   100   98%  In use:      0  Item Size:  16  Array size:   1632  Overhead:    856  Total:   2488  Cells:   311
+    Link mma:         Capacity:   101  Min Free:    99   98%  In use:      0  Item Size:  24  Array size:   2424  Overhead:    848  Total:   3272  Cells:   409
     dstack: <0> 
 
 Freeing heap memory
