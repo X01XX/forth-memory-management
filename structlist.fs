@@ -74,3 +74,34 @@
     [ ' struct-inc-use-count ] literal over         \ ret-list xt ret-list
     list-apply                                      \ ret-list
 ;
+
+\ Return a list that is a copy of a given list, but with a specific item replaced by a given struct item.
+: list-copy-except-struct ( new-item2 index1 lst0 -- lst )
+     \ Check args.
+    assert-tos-is-list
+    over 0< abort" list-copy-except: index negative?"
+    over over list-get-length < 0= abort" list-copy-except: index out of range?"
+
+    list-get-links                  \ new-item2 index1 link
+    list-new -rot                   \ new-item2 lst-new index1 link 
+    begin
+        ?dup
+    while
+        over 0=
+        if
+            #3 pick #3 pick         \ new-item2 lst-new index1 link new-item2 lst-new
+            list-push-end-struct    \ new-item2 lst-new index1 link
+        else
+            dup link-get-data       \ new-item2 lst-new index1 link data
+            #3 pick                 \ new-item2 lst-new index1 link data lst-new
+            list-push-end-struct    \ new-item2 lst-new index1 link
+        then
+
+        \ Dec index.
+        swap 1- swap
+        link-get-next
+    repeat
+                                    \ new-item2 lst-new index1
+    drop nip
+;
+
