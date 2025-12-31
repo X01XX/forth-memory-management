@@ -36,11 +36,12 @@ The examples can be run with the commands:
                               \ The numbers are not structs, just numbers in the Link data field.
                               \ Shows two lists of names, with set functions union, intersection and subtraction. The Name is a struct.
 
-  gforth example2.fs -e bye   \ Shows my favorite equation, Understanding = ~A + ~B, with Karnaugh Map regions. The Region is a struct.
-                              \ A is different from B in some way.
+  gforth example2.fs -e bye   \ Shows my favorite equation, Understanding = ~A + ~B, with Karnaugh Map regions.
+                              \  A is different from B in some way.
                               \ ~A + ~B forms regions with A, regions with B, regions with neither, NO regions with A and B.
                               \ Similar calculations of other pairs, exhibiting the same difference, can be intersected for finer understanding.
                               \ In the results of these calculations, regions completely overlapped by other regions are important only as placeholders.
+                              \ The Region is a struct.
 
   gforth example3.fs -e bye   \ Shows lists of lists of regions.
 
