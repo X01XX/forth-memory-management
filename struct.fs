@@ -35,3 +35,17 @@
     swap struct-set-use-count
 ;
 
+: struct-one-free-deallocate ( struct-addr -- ) \ Guarantee that a struct will survive one extra deallocation.
+    dup struct-inc-use-count        \ sa
+    dup struct-get-use-count        \ sa uc
+    1 = if
+        struct-inc-use-count
+    else
+        drop
+    then
+;
+
+: !struct ( struct addr -- )    \ Store a struct at a given address.
+    over struct-inc-use-count
+    !
+;
