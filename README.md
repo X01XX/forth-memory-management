@@ -40,7 +40,7 @@ The examples can be run with the commands:
                               \  A is different from B in some way.
                               \ ~A + ~B forms regions with A, regions with B, regions with neither, NO regions with A and B.
                               \ Similar calculations of other pairs, exhibiting the same difference, can be intersected for finer understanding.
-                              \ The results are better with adjacent pairs, an "edge".
+                              \ The results are better with adjacent pairs, a point on an "edge".
                               \ The results are even better with multiple adjacencies, like (~A + ~B) & (~A + ~C), a "corner".
                               \ In the results of these calculations, regions completely overlapped by other regions are important only as placeholders.
                               \ The Region is a struct.
