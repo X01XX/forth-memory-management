@@ -38,7 +38,7 @@ The examples can be run with the commands:
 
   gforth example2.fs -e bye   \ Shows my favorite equation, Understanding = ~A + ~B, with Karnaugh Map regions.
                               \  A is different from B in some way.
-                              \ ~A + ~B covers everything, with regions containing A, regions containing B, regions cantaining neither, NO regions containing A and B.
+                              \ ~A + ~B covers everything, with regions containing A, regions containing B, regions containing neither, NO regions containing A and B.
                               \ Similar calculations of other pairs, exhibiting the same difference, can be intersected for finer understanding.
                               \ The results are better with adjacent pairs, points on a "logical edge".
                               \ The results are even better with multiple adjacencies, like (~A + ~B) & (~A + ~C), a "logical corner".
