@@ -43,6 +43,7 @@ The examples can be run with the commands:
                               \ Everything intersecting everything, is still everything.
                               \ The results are better with adjacent pairs, points on a "logical edge".
                               \ The results are even better with multiple adjacencies, like (~A + ~B) & (~A + ~C), a "logical corner".
+                              \ The results are even better with a cluster of corners, like (~A + ~B) & (~A + ~C) & ( ~C & ~D).
                               \ In the results, regions not completely overlapped by other regions are <i>defining</i> regions, others are placeholders.
                               \ The Region is a struct.
 
