@@ -40,7 +40,7 @@ The examples can be run with the commands:
                               \  A is different from B in some way.
                               \ ~A + ~B covers everything, with regions containing A, regions containing B, regions containing neither, NO regions containing A and B.
                               \ Similar calculations of other pairs, exhibiting the same difference, can be intersected for a finer understanding.
-                              \ Everything intersecting everything, is still everything.
+                              \ Everything intersecting everything, is still everything. The arrangement of the underlying regions changes.
                               \ The results are better with adjacent pairs, points on a "logical edge".
                               \ The results are even better with multiple adjacencies, like (~A + ~B) & (~A + ~C), a "logical corner".
                               \ The results are even better with a cluster of corners, like (~A + ~B) & (~A + ~C) & (~C + ~D).
