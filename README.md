@@ -45,6 +45,7 @@ The examples can be run with the commands:
                               \ The results are even better with multiple adjacencies, like (~A + ~B) & (~A + ~C), a "logical corner".
                               \ The results are even better with a cluster of corners, like (~A + ~B) & (~A + ~C) & (~C + ~D).
                               \ In the results, regions not completely overlapped by other regions are <i>defining</i> regions, others are placeholders.
+                              \ Understanding is tenuous at first, then improves with more data, selected judiciously to find/test corners, like IRL.
                               \ The Region is a struct.
 
   gforth example3.fs -e bye   \ Shows lists of lists of regions.
