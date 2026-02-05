@@ -37,18 +37,23 @@ The examples can be run with the commands:
                               \ Shows two lists of names, with set functions union, intersection and subtraction. The Name is a struct.
 
   gforth example2.fs -e bye   \ Shows my favorite equation, Understanding = ~A + ~B, with Karnaugh Map regions.
+                              \
                               \  A is different from B in some way.
                               \ ~A + ~B covers everything, with regions containing A, regions containing B, regions containing neither, NO regions containing A and B.
                               \ Similar calculations of other pairs, exhibiting the same difference, can be intersected for a finer understanding.
                               \ Everything intersecting everything, is still everything. The arrangement of the underlying regions changes.
+                              \
                               \ The results are better with adjacent pairs, points on a "logical edge".
                               \ The results are even better with multiple adjacencies, like (~A + ~B) & (~A + ~C), a "logical corner".
                               \ The results are even better with a cluster of corners, like (~A + ~B) & (~A + ~C) & (~C + ~D).
+                              \ The corners, above, are ~A + (~B & ~C), ~C + (~A & ~D).
+                              \
                               \ In the results, regions not completely overlapped by other regions are <i>defining</i> regions, others are placeholders.
-                              \ When well developed, the central part of a corner, that is A in (~A + ~B) & (~A + ~C), will be in only one region, a defining region.
-                              \ Each defining region will have a corner.  More than one corner is possible, but not needed.
+                              \ When well developed, all adjacent disimmilar samples tested, the anchor of a corner, that is A in ~A + (~B & ~C), 
+                              \ will be in only one region, a defining region, else it will not be a valid corner.
+                              \ Each defining region will have a corner.  Having more than one corner is possible, but not needed.
+                              \
                               \ Understanding is tenuous at first, then improves with more data, selected judiciously to find/test corners, like IRL.
-                              \ The Region is a struct.
 
   gforth example3.fs -e bye   \ Shows lists of lists of regions.
 
