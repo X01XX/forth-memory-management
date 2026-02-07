@@ -1,0 +1,27 @@
+
+Initializing Link store.
+Initializing List store.
+Initializing Struct info store.
+Initializing Region store.
+
+Memory use:
+    Link:        Capacity:   101  Min Free:    97   96%  In use:      4  Item Size:  24  Array size:   2424  Overhead:    848  Total:     3272  Cells:   409
+    List:        Capacity:   102  Min Free:   101   99%  In use:      1  Item Size:  16  Array size:   1632  Overhead:    856  Total:     2488  Cells:   311
+    Struct-info: Capacity:    10  Min Free:     6   60%  In use:      4  Item Size:  56  Array size:    560  Overhead:    120  Total:      680  Cells:    85
+    Region:      Capacity:   103  Min Free:   102   99%  In use:      1  Item Size:  24  Array size:   2472  Overhead:    864  Total:     3336  Cells:   417
+                                                                                                                               Total:     9776
+    Forth stack: <1> region 
+
+
+Deallocating ...
+
+Memory use:
+    Link:        Capacity:   101  Min Free:    97   96%  In use:      4  Item Size:  24  Array size:   2424  Overhead:    848  Total:     3272  Cells:   409
+    List:        Capacity:   102  Min Free:   101   99%  In use:      1  Item Size:  16  Array size:   1632  Overhead:    856  Total:     2488  Cells:   311
+    Struct-info: Capacity:    10  Min Free:     6   60%  In use:      4  Item Size:  56  Array size:    560  Overhead:    120  Total:      680  Cells:    85
+    Region:      Capacity:   103  Min Free:   102   99%  In use:      0  Item Size:  24  Array size:   2472  Overhead:    864  Total:     3336  Cells:   417
+                                                                                                                               Total:     9776
+    Forth stack: <0> 
+
+
+Freeing heap memory

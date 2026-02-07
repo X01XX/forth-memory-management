@@ -77,6 +77,25 @@ array-end-disp      cell+   constant array-items-disp   \ The start of the array
     uw@
 ;
 
+\ Return the total memory use in cells.
+: mma-get-total-memory-use ( mma-addr -- u )
+    dup _mma-get-stack      \ mma-addr stack-addr
+    stack-get-capacity      \ mma-addr capacity
+    swap                    \ capacity mma-addr
+    mma-get-item-size       \ capacity item-size        
+
+    \ Get array bytes, plus 4 cells overhead.
+    over *                  \ capacity array-size
+    4 cells +               \ capacity array-size
+
+    \ Get stack bytes, plus 1 cell overhead.
+    swap                    \ array-size capacity
+    cells                   \ array-size stack-size
+    1 cells +               \ array-size stack-size
+ 
+    +                       \ u
+;
+
 : _mma-set-min-free ( item-size mma-addr -- )
     array-info-disp +
     1w!
@@ -306,7 +325,7 @@ array-end-disp      cell+   constant array-items-disp   \ The start of the array
     #2 + cells              \ mma-addr stack-addr | a-bytes s-bytes
     \ Get full size
     + dup                   \ mma-addr stack-addr | bytes bytes
-    #6 dec.r  #2 spaces     \ mma-addr stack-addr | bytes
+    #8 dec.r  #2 spaces     \ mma-addr stack-addr | bytes
 
    ." Cells: "
    cell /                   \ mma-addr stack-addr | num-cells
