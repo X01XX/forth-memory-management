@@ -49,7 +49,7 @@ The examples can be run with the commands:
                               \ The corners, above, are ~A + (~B & ~C), ~C + (~A & ~D).  I call A, and C, <i>anchors</i>.
                               \
                               \ In the results, regions not completely overlapped by other regions are <i>defining</i> regions, others are placeholders.
-                              \ When well developed, all adjacent disimmilar samples tested, the anchor of a corner,
+                              \ When well developed, all adjacent dissimilar samples tested, the anchor of a corner,
                               \ will be in only one region, a defining region, else it will not be a valid corner.
                               \ Each defining region will have a corner.  Having more than one corner is possible, but not needed.
                               \
