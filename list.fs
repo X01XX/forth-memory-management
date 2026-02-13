@@ -56,14 +56,12 @@ list-header-disp    cell+   constant list-links-disp
 
 \  Return true if TOS is an allocated list.
 : is-allocated-list ( list -- flag )
-    \ Insure the given addr cannot be an invalid addr.
-    dup list-mma mma-within-array 0=
+    get-first-word          \ w t | f
     if
-        drop false exit
+        list-id =
+    else
+        false
     then
-
-    struct-get-id   \ Here the fetch could abort on an invalid address, like a random number.
-    list-id =       \ An unallocated instance should have an ID of zero.
 ;
 
 \ Check TOS for list, unconventional, leaves stack unchanged.

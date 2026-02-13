@@ -86,7 +86,7 @@ array-end-disp      cell+   constant array-items-disp   \ The start of the array
 
     \ Get array bytes, plus 4 cells overhead.
     over *                  \ capacity array-size
-    4 cells +               \ capacity array-size
+    #4 cells +              \ capacity array-size
 
     \ Get stack bytes, plus 1 cell overhead.
     swap                    \ array-size capacity

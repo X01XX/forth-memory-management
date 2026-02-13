@@ -44,14 +44,12 @@ name-header-disp cell+  constant name-string-disp
 
 \ Check instance type.
 : is-allocated-name ( name-addr -- flag )
-    \ Insure the given addr cannot be an invalid addr.
-    dup name-mma mma-within-array 0=
+    get-first-word          \ w t | f
     if
-        drop false exit
+        name-id =
+    else
+        false
     then
-    
-    struct-get-id   \ Here the fetch could abort on an invalid address, like a random number.
-    name-id =
 ;
 
 \ Check TOS for name. Unconventional, no change in stack.

@@ -45,6 +45,7 @@
 
 \ Cycle through each stack item, displaying its struct type.
 : .stack-structs
+    ." Forth stack: <" depth dup abs 0 <# #S rot sign #> type ." > "    
     depth 0=
     if
         exit

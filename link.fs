@@ -25,14 +25,12 @@ link-next-disp      cell+   constant link-data-disp
 
 \ Return true if TOS is an allocated link.
 : is-allocated-link ( link -- flag )
-    \ Insure the given addr cannot be an invalid addr.
-    dup link-mma mma-within-array 0=
+    get-first-word          \ w t | f
     if
-        drop false exit
+        link-id =
+    else
+        false
     then
-
-    struct-get-id \ Here the fetch could abort on an invalid address, like a random number.
-    link-id =
 ;
 
 \ Check TOS for link, unconventional, leaves stack unchanged.

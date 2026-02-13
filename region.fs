@@ -27,14 +27,12 @@ region-state-0-disp cell+   constant region-state-1-disp
 
 \ Check instance type.
 : is-allocated-region ( addr -- flag )
-    \ Insure the given addr cannot be an invalid addr.
-    dup region-mma mma-within-array 0=
+    get-first-word          \ w t | f
     if
-        drop false exit
+        region-id =
+    else
+        false
     then
-
-    struct-get-id   \ Here the fetch could abort on an invalid address, like a random number.
-    region-id =     
 ;
 
 \ Check TOS for region, unconventional, leaves stack unchanged. 
