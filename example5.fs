@@ -30,7 +30,7 @@ cs
 \ Init structinfo list.
 list-new to structinfo-list-store
 ' link-deallocate ' .link s" Link" link-mma link-id structinfo-new structinfo-list-store structinfo-list-push
-' list-deallocate ' .list s" List" list-mma list-id structinfo-new structinfo-list-store structinfo-list-push-end
+' structinfo-list-deallocate-struct-list ' structinfo-list-print-struct-list s" List" list-mma list-id structinfo-new structinfo-list-store structinfo-list-push-end
 ' structinfo-deallocate ' .structinfo s" Struct-info" structinfo-mma structinfo-id structinfo-new structinfo-list-store structinfo-list-push-end
 
 #103 region-mma-init
