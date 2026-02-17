@@ -1,5 +1,7 @@
 \ Functions for a list of structinfos.
 
+0 value .stack-structs-xt
+
 \ Check if tos is an empty list, or has a structinfo instance as its first item.                                             
 : assert-tos-is-structinfo-list ( tos -- tos )
     assert-tos-is-list
@@ -104,7 +106,7 @@
     swap spaces 
     #116 spaces ." Total: " dup #8 dec.r
     cell / #9 spaces #6 dec.r
-    cr .stack-structs cr
+    cr .stack-structs-xt execute cr
 ;
 
 \ Check all project instances are deallocated.
@@ -174,14 +176,121 @@
         dup link-get-data                   \ cnt snf-link snfx
         structinfo-get-mma                 \ cnt snf-link snf-mma
         -rot                                \ snf-mma cnt snf-link
-    
+
         link-get-next
     repeat
-    
+
     \ Free each mm array.
                                             \ mma ... mma cnt
     0 do
         mma-free
     loop
+;
+
+\ Push a structinfo instance, insure no duplicat id.
+: structinfo-list-push-end ( snf1 snf-lst0 -- )
+    \ Check args.
+    assert-tos-is-structinfo-list
+    assert-nos-is-structinfo
+
+    \ Check for duplicate struct id.
+    [ ' structinfo-id-eq ] literal      \ snf1 snf-lst0 xt
+    #2 pick #2 pick                     \ snf1 snf-lst0 xt snf1 snf-lst1
+    list-member                         \ snf1 snf-lst0 bool
+    abort" structinfo-list-push-end: Duplicat struct id?"
+
+    list-push-end-struct
+;
+
+\ Push a structinfo instance, insure no duplicat id.
+: structinfo-list-push ( snf1 snf-lst0 -- )
+    \ Check args.
+    assert-tos-is-structinfo-list
+    assert-nos-is-structinfo
+
+    \ Check for duplicate struct id.
+    [ ' structinfo-id-eq ] literal      \ snf1 snf-lst0 xt
+    #2 pick #2 pick                     \ snf1 snf-lst0 xt snf1 snf-lst1
+    list-member                         \ snf1 snf-lst0 bool
+    abort" structinfo-list-push: Duplicate struct id?"
+
+    list-push-struct
+;
+
+\ Print a list of structures. 
+: structinfo-list-print-struct-list ( lst1 snf-lst0 -- )
+    \ Check args.
+    assert-tos-is-structinfo-list
+    assert-nos-is-list
+
+    ." ("
+
+    over list-get-links                 \ lst1 snf-lst0 lst-link
+    begin
+        ?dup
+    while
+        dup link-get-data               \ lst1 snf-lst0 lst-link struct
+
+        dup get-first-word              \ lst1 snf-lst0 lst-link struct, w t | f
+        if
+            #3 pick                     \ lst1 snf-lst0 lst-link struct w snf-lst0
+            structinfo-list-find        \ lst1 snf-lst0 lst-link struct, snf t | f
+            if
+                structinfo-get-print-xt \ lst1 snf-lst0 lst-link struct xt
+                execute                 \ lst1 snf-lst0 lst-link 
+            else
+                hex.                    \ lst1 snf-lst0 lst-link
+            then
+        else
+            hex.                        \ lst1 snf-lst0 lst-link
+        then
+
+        link-get-next
+        dup 0<> if space then
+    repeat
+    ." )"
+    2drop
+;
+
+\ Deallocate a list of structures. 
+: structinfo-list-deallocate-struct-list ( lst1 snf-lst0 -- )
+    \ Check args.
+    assert-tos-is-structinfo-list
+    assert-nos-is-list
+
+    over struct-get-use-count           \ lst1 snf-lst0 uc
+    dup 0 < abort" Invalid use count"
+
+    #2 <                                    \ lst1 snf-lst0
+    if
+        over list-get-links                 \ lst1 snf-lst0 lst-link
+        begin
+            ?dup
+        while
+            dup link-get-data               \ lst1 snf-lst0 lst-link struct
+    
+            dup get-first-word              \ lst1 snf-lst0 lst-link struct, w t | f
+            if
+                #3 pick                     \ lst1 snf-lst0 lst-link struct w snf-lst0
+                structinfo-list-find        \ lst1 snf-lst0 lst-link struct, snf t | f
+                if
+                    structinfo-get-deallocate-xt    \ lst1 snf-lst0 lst-link struct xt
+                    execute                 \ lst1 snf-lst0 lst-link 
+                else
+                    drop
+                then
+            else
+                drop
+            then
+    
+            link-get-next
+        repeat
+                                            \ lst1 snf-lst0
+        drop
+        list-deallocate
+    else                                    \ lst1 snf-lst0
+        drop
+        struct-dec-use-count
+    then
 ;
 

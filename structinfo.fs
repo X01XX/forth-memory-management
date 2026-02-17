@@ -1,12 +1,14 @@
 \ The structinfo struct, storing a structinfo of up to 15 characters.
 #53731 constant structinfo-id
-    #7 constant structinfo-struct-number-cells
+    #9 constant structinfo-struct-number-cells
 
 \ Struct info struct fields.
-0                                   constant structinfo-header-disp     \ 16 bits, [0] id, [1] use count.
-structinfo-header-disp      cell+   constant structinfo-inst-id-disp    \ Struct ID this structinfo instance describes.
-structinfo-inst-id-disp     cell+   constant structinfo-mma-disp        \ Struct mma address.
-structinfo-mma-disp         cell+   constant structinfo-name-disp       \ Up to 4 cells for name string.
+0                                       constant structinfo-header-disp         \ 16 bits, [0] id, [1] use count.
+structinfo-header-disp          cell+   constant structinfo-inst-id-disp        \ Struct ID this structinfo instance describes.
+structinfo-inst-id-disp         cell+   constant structinfo-mma-disp            \ Struct mma address.
+structinfo-mma-disp             cell+   constant structinfo-print-xt-disp       \ ' noop, or xt to print a struct.
+structinfo-print-xt-disp        cell+   constant structinfo-deallocate-xt-disp  \ ' noop, or xt to deallocate a struct.
+structinfo-deallocate-xt-disp   cell+   constant structinfo-name-disp           \ Up to 4 cells for name string.
 
 0 value structinfo-mma     \ Storage for the structinfo mma instance addr.
 
@@ -38,10 +40,10 @@ structinfo-mma-disp         cell+   constant structinfo-name-disp       \ Up to 
     abort" tos is not an allocated structinfo."
 ;
 
-\ Check list mma usage.
-: assert-structinfo-mma-none-in-use ( -- )
-    structinfo-mma mma-in-use 0<>
-    abort" structinfo-mma use GT 0"
+\ Check NOS for structinfo. Unconventional, no change in stack.
+: assert-nos-is-structinfo ( nos tos --  nos tos )
+    over is-allocated-structinfo 0=
+    abort" nos is not an allocated structinfo."
 ;
 
 \ Start accessors.
@@ -95,31 +97,63 @@ structinfo-mma-disp         cell+   constant structinfo-name-disp       \ Up to 
     structinfo-name-disp + string!
 ;
 
+\ Set structinfo print-xt cell, can be ' noop.
+: _structinfo-set-print-xt ( xt1 snf0 -- )
+    structinfo-print-xt-disp + !
+;
+
+\ Get structinfo print-xt cell, may be ' noop.
+: structinfo-get-print-xt ( snf0 -- xt )
+    \ Check arg.
+    assert-tos-is-structinfo
+
+    structinfo-print-xt-disp + @
+;
+
+\ Set structinfo deallocate-xt cell, can be ' noop.
+: _structinfo-set-deallocate-xt ( xt1 snf0 -- )
+    structinfo-deallocate-xt-disp + !
+;
+
+\ Get structinfo deallocate-xt cell, may be ' noop.
+: structinfo-get-deallocate-xt ( snf0 -- xt )
+    \ Check arg.
+    assert-tos-is-structinfo
+
+    structinfo-deallocate-xt-disp + @
+;
+
 \ End accessors.
 
 \ Return a new structinfo struct instance address, with given data value.
-: structinfo-new ( c-addr u mma1 id0 -- snf )
-    depth #4 < abort" structinfo-new: too few items on stack"
+: structinfo-new ( deallcate-xt print-xt c-addr u mma1 id0 -- snf )
 
-    structinfo-mma mma-allocate     \ c-addr u snf
+    structinfo-mma mma-allocate     \ d-xt p-xt c-addr u snf
 
     \ Set struct id.
-    structinfo-id over              \ c-addr u mma1 id0 snf id0 snf
-    struct-set-id                   \ c-addr u mma1 id0 snf
+    structinfo-id over              \ d-xt p-xt c-addr u mma1 id0 snf id0 snf
+    struct-set-id                   \ d-xt p-xt c-addr u mma1 id0 snf
 
     \ Init use count.
-    0 over                          \ c-addr u mma1 id0 snf 0 snf
-    struct-set-use-count            \ c-addr u mma1 id0 snf
+    0 over                          \ d-xt p-xt c-addr u mma1 id0 snf 0 snf
+    struct-set-use-count            \ d-xt p-xt c-addr u mma1 id0 snf
 
     \ Set struct instance id.
-    tuck _structinfo-set-inst-id    \ c-addr u mma1 snf 
+    tuck _structinfo-set-inst-id    \ d-xt p-xt c-addr u mma1 snf 
 
     \ Set struct mma.
-    tuck _structinfo-set-mma        \ c-addr u snf 
+    tuck _structinfo-set-mma        \ d-xt p-xt c-addr u snf 
 
-    -rot                            \ snf c-addr u
-    #2 pick                         \ snf c-addr u snf
-    _structinfo-set-name            \ snf
+    \ Set struct name.
+    -rot                            \ d-xt p-xt snf c-addr u
+    #2 pick                         \ d-xt p-xt snf c-addr u snf
+    _structinfo-set-name            \ d-xt p-xt snf
+
+    \ Set print xt.
+    tuck _structinfo-set-print-xt   \ d-xt snf
+
+    \ Set deallocate xt.
+    tuck _structinfo-set-deallocate-xt  \ snf
 ;
 
 \ Print a structinfo struct instance.
@@ -130,7 +164,7 @@ structinfo-mma-disp         cell+   constant structinfo-name-disp       \ Up to 
 ;
 
 \ Return true if two structinfos have equal inst id.
-: structinfo-eq ( snf1 snf0 -- flag )
+: structinfo-id-eq ( snf1 snf0 -- flag )
     structinfo-get-inst-id          \ snf1 id0
     swap                            \ id0 snf1
     structinfo-get-inst-id          \ id0 id1

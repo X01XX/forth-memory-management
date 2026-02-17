@@ -1,5 +1,5 @@
 \ The name struct, storing a name of up to 15 characters.
-#19317 constant name-id
+#61979 constant name-id
     #3 constant name-struct-number-cells
 
 \ Name struct fields.

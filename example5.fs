@@ -4,6 +4,8 @@
 #15 constant all-bits
  #8 constant ms-bit
 
+0 value structinfo-list-store
+
 include tools.fs
 include tools2.fs
 include struct.fs
@@ -14,12 +16,11 @@ include structlist.fs
 include region.fs
 include regionlist.fs
 include state.fs
-include stackprint.fs
 include structinfo.fs
 include structinfolist.fs
+include stackprint2.fs
+include name.fs
 cs
-
-0 value structinfo-list-store
 
 \ Init array-stacks.
 #101 link-mma-init
@@ -28,14 +29,27 @@ cs
 
 \ Init structinfo list.
 list-new to structinfo-list-store
-s" Link" link-mma link-id structinfo-new structinfo-list-store list-push-struct
-s" List" list-mma list-id structinfo-new structinfo-list-store list-push-end-struct
-s" Struct-info" structinfo-mma structinfo-id structinfo-new structinfo-list-store list-push-end-struct
+' link-deallocate ' .link s" Link" link-mma link-id structinfo-new structinfo-list-store structinfo-list-push
+' list-deallocate ' .list s" List" list-mma list-id structinfo-new structinfo-list-store structinfo-list-push-end
+' structinfo-deallocate ' .structinfo s" Struct-info" structinfo-mma structinfo-id structinfo-new structinfo-list-store structinfo-list-push-end
 
 #103 region-mma-init
-s" Region" region-mma region-id structinfo-new structinfo-list-store list-push-end-struct
+' region-deallocate ' .region s" Region" region-mma region-id structinfo-new structinfo-list-store structinfo-list-push-end
 
-#5 #6 region-new
+#50 name-mma-init       \ Initialize name struct array.  name-mma is set.
+' name-deallocate ' .name s" Name" name-mma name-id structinfo-new structinfo-list-store structinfo-list-push-end
+
+list-new                \ lst
+
+#5 #6 region-new        \ lst region
+over list-push-struct   \ lst
+
+s" Mary" name-new       \ lst name
+over list-push-struct   \ lst
+
+cr cr ." list: "
+dup structinfo-list-store structinfo-list-print-struct-list
+cr
 
 \ Finish.
 cr structinfo-list-store structinfo-list-print-memory-use cr
@@ -44,7 +58,7 @@ cr structinfo-list-store structinfo-list-print-memory-use cr
 cr ." Deallocating ..."
 
 \ project items deallocate
-region-deallocate
+structinfo-list-store structinfo-list-deallocate-struct-list
 
 cr structinfo-list-store structinfo-list-print-memory-use cr
 
