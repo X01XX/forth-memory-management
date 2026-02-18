@@ -47,6 +47,7 @@ The examples can be run with the commands:
                               \ The results are even better with multiple adjacencies, like (~A + ~B) & (~A + ~C), a "logical corner".
                               \ The results are even better with a cluster of corners, like (~A + ~B) & (~A + ~C) & (~C + ~D).
                               \ The corners, above, are ~A + (~B & ~C), ~C + (~A & ~D).  I call A, and C, <i>anchors</i>.
+                              \ The number of adjacent, dissimilar, terms used for a corner, equals the number of edges of the region the anchor is in.
                               \
                               \ In the results, regions not completely overlapped by other regions are <i>defining</i> regions, others are placeholders.
                               \ When well developed, all adjacent dissimilar samples tested, the anchor of a corner,
