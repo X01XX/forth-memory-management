@@ -218,10 +218,10 @@
 ;
 
 \ Print a list of structures. 
-: structinfo-list-print-struct-list ( lst1 snf-lst0 -- )
+: structinfo-list-print-struct-list ( lst1 -- )
     \ Check args.
-    assert-tos-is-structinfo-list
-    assert-nos-is-list
+    assert-tos-is-list
+    structinfo-list-store
 
     ." ("
 
@@ -253,10 +253,10 @@
 ;
 
 \ Deallocate a list of structures. 
-: structinfo-list-deallocate-struct-list ( lst1 snf-lst0 -- )
+: structinfo-list-deallocate-struct-list ( lst1 -- )
     \ Check args.
-    assert-tos-is-structinfo-list
-    assert-nos-is-list
+    assert-tos-is-list
+    structinfo-list-store
 
     over struct-get-use-count           \ lst1 snf-lst0 uc
     dup 0 < abort" Invalid use count"

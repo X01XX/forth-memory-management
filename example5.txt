@@ -5,27 +5,27 @@ Initializing StructInfo store.
 Initializing Region store.
 Initializing Name store.
 
-list: (Mary 01xX)
+list: ((Dan 0x11) (Mary 01xX))
 
 
 Memory use:
-    Link:        Capacity:   101  Min Free:    94   93%  In use:      7  Item Size:  24  Array size:   2424  Overhead:    848  Total:     3272  Cells:   409
-    List:        Capacity:   102  Min Free:   100   98%  In use:      2  Item Size:  16  Array size:   1632  Overhead:    856  Total:     2488  Cells:   311
+    Link:        Capacity:   101  Min Free:    90   89%  In use:     11  Item Size:  24  Array size:   2424  Overhead:    848  Total:     3272  Cells:   409
+    List:        Capacity:   102  Min Free:    98   96%  In use:      4  Item Size:  16  Array size:   1632  Overhead:    856  Total:     2488  Cells:   311
     Struct-info: Capacity:    10  Min Free:     5   50%  In use:      5  Item Size:  72  Array size:    720  Overhead:    120  Total:      840  Cells:   105
-    Region:      Capacity:   103  Min Free:   102   99%  In use:      1  Item Size:  24  Array size:   2472  Overhead:    864  Total:     3336  Cells:   417
-    Name:        Capacity:    50  Min Free:    49   98%  In use:      1  Item Size:  24  Array size:   1200  Overhead:    440  Total:     1640  Cells:   205
+    Region:      Capacity:   103  Min Free:   101   98%  In use:      2  Item Size:  24  Array size:   2472  Overhead:    864  Total:     3336  Cells:   417
+    Name:        Capacity:    50  Min Free:    48   96%  In use:      2  Item Size:  24  Array size:   1200  Overhead:    440  Total:     1640  Cells:   205
                                                                                                                                Total:    11576           1447
-Forth stack: <1> List-2-Name 
+Forth stack: <1> List-2-List 
 
 
 Deallocating ...
 
 Memory use:
-    Link:        Capacity:   101  Min Free:    94   93%  In use:      5  Item Size:  24  Array size:   2424  Overhead:    848  Total:     3272  Cells:   409
-    List:        Capacity:   102  Min Free:   100   98%  In use:      1  Item Size:  16  Array size:   1632  Overhead:    856  Total:     2488  Cells:   311
+    Link:        Capacity:   101  Min Free:    90   89%  In use:      5  Item Size:  24  Array size:   2424  Overhead:    848  Total:     3272  Cells:   409
+    List:        Capacity:   102  Min Free:    98   96%  In use:      1  Item Size:  16  Array size:   1632  Overhead:    856  Total:     2488  Cells:   311
     Struct-info: Capacity:    10  Min Free:     5   50%  In use:      5  Item Size:  72  Array size:    720  Overhead:    120  Total:      840  Cells:   105
-    Region:      Capacity:   103  Min Free:   102   99%  In use:      0  Item Size:  24  Array size:   2472  Overhead:    864  Total:     3336  Cells:   417
-    Name:        Capacity:    50  Min Free:    49   98%  In use:      0  Item Size:  24  Array size:   1200  Overhead:    440  Total:     1640  Cells:   205
+    Region:      Capacity:   103  Min Free:   101   98%  In use:      0  Item Size:  24  Array size:   2472  Overhead:    864  Total:     3336  Cells:   417
+    Name:        Capacity:    50  Min Free:    48   96%  In use:      0  Item Size:  24  Array size:   1200  Overhead:    440  Total:     1640  Cells:   205
                                                                                                                                Total:    11576           1447
 Forth stack: <0> 
 

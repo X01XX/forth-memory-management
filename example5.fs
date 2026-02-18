@@ -39,16 +39,29 @@ list-new to structinfo-list-store
 #50 name-mma-init       \ Initialize name struct array.  name-mma is set.
 ' name-deallocate ' .name s" Name" name-mma name-id structinfo-new structinfo-list-store structinfo-list-push-end
 
-list-new                \ lst
+list-new                \ lst0
+list-new                \ lst0 lst1
 
-#5 #6 region-new        \ lst region
-over list-push-struct   \ lst
+#5 #6 region-new        \ lst0 lst1 region
+over list-push-struct   \ lst0 lst1
 
-s" Mary" name-new       \ lst name
-over list-push-struct   \ lst
+s" Mary" name-new       \ lst0 lst1 name
+over list-push-struct   \ lst0 lst1
+
+over list-push-struct   \ lst0
+
+list-new                \ lst0 lst1
+
+#3 #7 region-new        \ lst0 lst1 region
+over list-push-struct   \ lst0 lst1
+
+s" Dan" name-new        \ lst0 lst1 name
+over list-push-struct   \ lst0 lst1
+
+over list-push-struct   \ lst0
 
 cr cr ." list: "
-dup structinfo-list-store structinfo-list-print-struct-list
+dup structinfo-list-print-struct-list
 cr
 
 \ Finish.
@@ -58,7 +71,7 @@ cr structinfo-list-store structinfo-list-print-memory-use cr
 cr ." Deallocating ..."
 
 \ project items deallocate
-structinfo-list-store structinfo-list-deallocate-struct-list
+structinfo-list-deallocate-struct-list
 
 cr structinfo-list-store structinfo-list-print-memory-use cr
 
