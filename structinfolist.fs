@@ -238,16 +238,22 @@
             structinfo-list-find        \ lst0 snf-lst lst-link struct, snf t | f
             if
                 structinfo-get-print-xt \ lst0 snf-lst lst-link struct xt
-                execute                 \ lst0 snf-lst lst-link 
+                execute                 \ lst0 snf-lst lst-link
+                false                   \ lst0 snf-lst lst-link bool
             else
-                hex.                    \ lst0 snf-lst lst-link
+                hex. true               \ lst0 snf-lst lst-link bool
             then
         else
-            hex.                        \ lst0 snf-lst lst-link
+            hex. true                   \ lst0 snf-lst lst-link true
         then
 
-        link-get-next
-        dup 0<> if space then
+        \ Skip extra space after a number.
+        if
+           link-get-next
+        else
+           link-get-next
+           dup 0<> if space then
+        then
     repeat
     ." )"
     2drop
