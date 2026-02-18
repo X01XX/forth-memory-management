@@ -60,6 +60,12 @@ over list-push-struct   \ lst0 lst1
 
 over list-push-struct   \ lst0
 
+s" Jerry" name-new      \ lst0 lst1 name
+over list-push-struct   \ lst0 lst1
+
+#5
+over list-push          \ lst0 lst1
+
 cr cr ." list: "
 dup structinfo-list-print-struct-list
 cr
