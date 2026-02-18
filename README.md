@@ -59,6 +59,8 @@ The examples can be run with the commands:
   gforth example3.fs -e bye   \ Shows lists of lists of regions.
 
   gforth example4.fs -e bye   \ Shows a struct-aware print of items on the Forth stack, for debugging.
+
+  gforth example5.fs -e bye   \ Shows print, and deallocate, of a list-of-lists of mixed structs.
 </pre>
 
 Memory use before, and after, deallocating is shown.  The Min Free column shows the lowest level of struct instances available during the program run,
