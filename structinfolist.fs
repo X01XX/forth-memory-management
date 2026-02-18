@@ -241,10 +241,10 @@
                 execute                 \ lst0 snf-lst lst-link
                 false                   \ lst0 snf-lst lst-link bool
             else
-                hex. true               \ lst0 snf-lst lst-link bool
+                . true                  \ lst0 snf-lst lst-link bool
             then
         else
-            hex. true                   \ lst0 snf-lst lst-link true
+            . true                      \ lst0 snf-lst lst-link true
         then
 
         \ Skip extra space after a number.

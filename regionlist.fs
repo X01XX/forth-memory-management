@@ -6,7 +6,7 @@
     assert-tos-is-list
 
     dup struct-get-use-count                    \ list0 uc
-    2 < if
+    #2 < if
         [ ' region-deallocate ] literal over    \ list0 xt list0
         list-apply                              \ Deallocate region instances in the list.
     then
