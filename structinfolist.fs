@@ -218,31 +218,32 @@
 ;
 
 \ Print a list of structures. 
-: structinfo-list-print-struct-list ( lst1 -- )
+: structinfo-list-print-struct-list ( lst0 -- )
     \ Check args.
     assert-tos-is-list
-    structinfo-list-store
+
+    structinfo-list-store               \ lst0 snf-lst
 
     ." ("
 
-    over list-get-links                 \ lst1 snf-lst0 lst-link
+    over list-get-links                 \ lst0 snf-lst lst-link
     begin
         ?dup
     while
-        dup link-get-data               \ lst1 snf-lst0 lst-link struct
+        dup link-get-data               \ lst0 snf-lst lst-link struct
 
-        dup get-first-word              \ lst1 snf-lst0 lst-link struct, w t | f
+        dup get-first-word              \ lst0 snf-lst lst-link struct, w t | f
         if
-            #3 pick                     \ lst1 snf-lst0 lst-link struct w snf-lst0
-            structinfo-list-find        \ lst1 snf-lst0 lst-link struct, snf t | f
+            #3 pick                     \ lst0 snf-lst lst-link struct w snf-lst
+            structinfo-list-find        \ lst0 snf-lst lst-link struct, snf t | f
             if
-                structinfo-get-print-xt \ lst1 snf-lst0 lst-link struct xt
-                execute                 \ lst1 snf-lst0 lst-link 
+                structinfo-get-print-xt \ lst0 snf-lst lst-link struct xt
+                execute                 \ lst0 snf-lst lst-link 
             else
-                hex.                    \ lst1 snf-lst0 lst-link
+                hex.                    \ lst0 snf-lst lst-link
             then
         else
-            hex.                        \ lst1 snf-lst0 lst-link
+            hex.                        \ lst0 snf-lst lst-link
         then
 
         link-get-next
@@ -253,29 +254,30 @@
 ;
 
 \ Deallocate a list of structures. 
-: structinfo-list-deallocate-struct-list ( lst1 -- )
+: structinfo-list-deallocate-struct-list ( lst0 -- )
     \ Check args.
     assert-tos-is-list
-    structinfo-list-store
 
-    over struct-get-use-count           \ lst1 snf-lst0 uc
+    structinfo-list-store                   \ lst0 snf-lst
+
+    over struct-get-use-count               \ lst0 snf-lst uc
     dup 0 < abort" Invalid use count"
 
-    #2 <                                    \ lst1 snf-lst0
+    #2 <                                    \ lst0 snf-lst
     if
-        over list-get-links                 \ lst1 snf-lst0 lst-link
+        over list-get-links                 \ lst0 snf-lst lst-link
         begin
             ?dup
         while
-            dup link-get-data               \ lst1 snf-lst0 lst-link struct
+            dup link-get-data               \ lst0 snf-lst lst-link struct
     
-            dup get-first-word              \ lst1 snf-lst0 lst-link struct, w t | f
+            dup get-first-word              \ lst0 snf-lst lst-link struct, w t | f
             if
-                #3 pick                     \ lst1 snf-lst0 lst-link struct w snf-lst0
-                structinfo-list-find        \ lst1 snf-lst0 lst-link struct, snf t | f
+                #3 pick                     \ lst0 snf-lst lst-link struct w snf-lst
+                structinfo-list-find        \ lst0 snf-lst lst-link struct, snf t | f
                 if
-                    structinfo-get-deallocate-xt    \ lst1 snf-lst0 lst-link struct xt
-                    execute                 \ lst1 snf-lst0 lst-link 
+                    structinfo-get-deallocate-xt    \ lst0 snf-lst lst-link struct xt
+                    execute                 \ lst0 snf-lst lst-link 
                 else
                     drop
                 then
@@ -285,10 +287,10 @@
     
             link-get-next
         repeat
-                                            \ lst1 snf-lst0
+                                            \ lst0 snf-lst
         drop
         list-deallocate
-    else                                    \ lst1 snf-lst0
+    else                                    \ lst0 snf-lst
         drop
         struct-dec-use-count
     then
