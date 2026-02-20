@@ -1,7 +1,5 @@
 \ Functions for a list of structinfos.
 
-0 value .stack-structs-xt
-
 \ Check if tos is an empty list, or has a structinfo instance as its first item.                                             
 : assert-tos-is-structinfo-list ( tos -- tos )
     assert-tos-is-list
@@ -31,6 +29,8 @@
 
     [ ' structinfo-inst-id-eq ] literal -rot list-find
 ;
+
+' structinfo-list-find to structinfo-list-find-xt
 
 \ Return the length of the longest struct name.
 : structinfo-list-max-name-length ( si-lst0 -- u )
@@ -106,8 +106,10 @@
     swap spaces 
     #116 spaces ." Total: " dup #8 dec.r
     cell / #9 spaces #6 dec.r
-    cr .stack-structs-xt execute cr
+    cr .stack-structs cr
 ;
+
+' structinfo-list-print-memory-use to structinfo-list-print-memory-use-xt
 
 \ Check all project instances are deallocated.
 : structinfo-list-project-deallocated ( snf-lst0 -- )
@@ -160,6 +162,8 @@
     assert-forth-stack-empty
 ;
 
+' structinfo-list-project-deallocated to structinfo-list-project-deallocated-xt
+
 \ Free heap of all mm_arrays.
 : structinfo-list-free-heap ( snf-lst0 -- )
     \ Check args.
@@ -174,7 +178,7 @@
         ?dup
     while
         dup link-get-data                   \ cnt snf-link snfx
-        structinfo-get-mma                 \ cnt snf-link snf-mma
+        structinfo-get-mma                  \ cnt snf-link snf-mma
         -rot                                \ snf-mma cnt snf-link
 
         link-get-next
@@ -244,16 +248,17 @@
                 . true                  \ lst0 snf-lst lst-link bool
             then
         else
-            . true                      \ lst0 snf-lst lst-link true
+            . true                      \ lst0 snf-lst lst-link bool
         then
 
         \ Skip extra space after a number.
-        if
+        if  
            link-get-next
         else
            link-get-next
            dup 0<> if space then
         then
+
     repeat
     ." )"
     2drop
@@ -299,6 +304,22 @@
     else                                    \ lst0 snf-lst
         drop
         struct-dec-use-count
+    then
+;
+
+: is-struct? ( addr -- bool )
+    get-first-word              \ w t | f
+    if
+        structinfo-list-store   \ w snf-lst
+        structinfo-list-find    \ snf t | f
+        if
+            drop
+            true
+        else
+            false
+        then
+    else
+        false
     then
 ;
 
