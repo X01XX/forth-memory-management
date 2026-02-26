@@ -1,4 +1,6 @@
-\ The structinfo struct, storing a structinfo of up to 15 characters.
+\ The structinfo struct, storing information about structs.
+\ This is an add-on to the memory managment code, it is not required for memory management
+\ unless you want the functions it provides.
 #53731 constant structinfo-id
     #9 constant structinfo-struct-number-cells
 

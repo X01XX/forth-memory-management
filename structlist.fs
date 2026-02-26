@@ -79,11 +79,11 @@
 : list-copy-except-struct ( new-item2 index1 lst0 -- lst )
      \ Check args.
     assert-tos-is-list
-    over 0< abort" list-copy-except: index negative?"
-    over over list-get-length < 0= abort" list-copy-except: index out of range?"
+    over 0< abort" list-copy-except-struct: index negative?"
+    over over list-get-length < 0= abort" list-copy-except-struct: index out of range?"
 
     list-get-links                  \ new-item2 index1 link
-    list-new -rot                   \ new-item2 lst-new index1 link 
+    list-new -rot                   \ new-item2 lst-new index1 link
     begin
         ?dup
     while
@@ -103,5 +103,27 @@
     repeat
                                     \ new-item2 lst-new index1
     drop nip
+;
+
+\ Return a copy of a list of structs.
+: list-copy-struct ( lst0 -- lst )
+    \ Check arg.
+    assert-tos-is-list
+
+    list-copy                           \ ret-lst
+
+    [ ' struct-inc-use-count ] literal  \ ret-lst xt
+    over list-apply                     \ ret-lst
+;
+
+\ Return a flattened struct list.
+: list-flatten-struct ( lst0 -- lst )
+    \ Check arg.
+    assert-tos-is-list
+
+    list-flatten                        \ ret-list
+
+    [ ' struct-inc-use-count ] literal  \ ret-lst xt
+    over list-apply                     \ ret-lst
 ;
 

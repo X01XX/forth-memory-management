@@ -81,3 +81,9 @@
     throw
 ;
 
+\ Drop two items from the stack, return true.
+: 2drop-true ( agr1 arg0 -- t )
+    2drop
+    true
+;
+

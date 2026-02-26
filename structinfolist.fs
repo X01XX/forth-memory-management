@@ -1,5 +1,7 @@
 \ Functions for a list of structinfos.
 
+0 value .stack-structs-xt
+
 \ Check if tos is an empty list, or has a structinfo instance as its first item.                                             
 : assert-tos-is-structinfo-list ( tos -- tos )
     assert-tos-is-list
@@ -29,8 +31,6 @@
 
     [ ' structinfo-inst-id-eq ] literal -rot list-find
 ;
-
-' structinfo-list-find to structinfo-list-find-xt
 
 \ Return the length of the longest struct name.
 : structinfo-list-max-name-length ( si-lst0 -- u )
@@ -106,10 +106,8 @@
     swap spaces 
     #116 spaces ." Total: " dup #8 dec.r
     cell / #9 spaces #6 dec.r
-    cr .stack-structs cr
+    cr .stack-structs-xt execute cr
 ;
-
-' structinfo-list-print-memory-use to structinfo-list-print-memory-use-xt
 
 \ Check all project instances are deallocated.
 : structinfo-list-project-deallocated ( snf-lst0 -- )
@@ -161,8 +159,6 @@
     drop
     assert-forth-stack-empty
 ;
-
-' structinfo-list-project-deallocated to structinfo-list-project-deallocated-xt
 
 \ Free heap of all mm_arrays.
 : structinfo-list-free-heap ( snf-lst0 -- )
@@ -221,92 +217,7 @@
     list-push-struct
 ;
 
-\ Print a list of structures. 
-: structinfo-list-print-struct-list ( lst0 -- )
-    \ Check args.
-    assert-tos-is-list
-
-    structinfo-list-store               \ lst0 snf-lst
-
-    ." ("
-
-    over list-get-links                 \ lst0 snf-lst lst-link
-    begin
-        ?dup
-    while
-        dup link-get-data               \ lst0 snf-lst lst-link struct
-
-        dup get-first-word              \ lst0 snf-lst lst-link struct, w t | f
-        if
-            #3 pick                     \ lst0 snf-lst lst-link struct w snf-lst
-            structinfo-list-find        \ lst0 snf-lst lst-link struct, snf t | f
-            if
-                structinfo-get-print-xt \ lst0 snf-lst lst-link struct xt
-                execute                 \ lst0 snf-lst lst-link
-                false                   \ lst0 snf-lst lst-link bool
-            else
-                . true                  \ lst0 snf-lst lst-link bool
-            then
-        else
-            . true                      \ lst0 snf-lst lst-link bool
-        then
-
-        \ Skip extra space after a number.
-        if  
-           link-get-next
-        else
-           link-get-next
-           dup 0<> if space then
-        then
-
-    repeat
-    ." )"
-    2drop
-;
-
-\ Deallocate a list of structures. 
-: structinfo-list-deallocate-struct-list ( lst0 -- )
-    \ Check args.
-    assert-tos-is-list
-
-    structinfo-list-store                   \ lst0 snf-lst
-
-    over struct-get-use-count               \ lst0 snf-lst uc
-    dup 0 < abort" Invalid use count"
-
-    #2 <                                    \ lst0 snf-lst
-    if
-        over list-get-links                 \ lst0 snf-lst lst-link
-        begin
-            ?dup
-        while
-            dup link-get-data               \ lst0 snf-lst lst-link struct
-    
-            dup get-first-word              \ lst0 snf-lst lst-link struct, w t | f
-            if
-                #3 pick                     \ lst0 snf-lst lst-link struct w snf-lst
-                structinfo-list-find        \ lst0 snf-lst lst-link struct, snf t | f
-                if
-                    structinfo-get-deallocate-xt    \ lst0 snf-lst lst-link struct xt
-                    execute                 \ lst0 snf-lst lst-link 
-                else
-                    drop
-                then
-            else
-                drop
-            then
-    
-            link-get-next
-        repeat
-                                            \ lst0 snf-lst
-        drop
-        list-deallocate
-    else                                    \ lst0 snf-lst
-        drop
-        struct-dec-use-count
-    then
-;
-
+\ Return true if an number/address refers to a strcut.
 : is-struct? ( addr -- bool )
     get-first-word              \ w t | f
     if
@@ -320,6 +231,83 @@
         then
     else
         false
+    then
+;
+
+\ Return a structinfo instance for an address, if its a struct instance.
+: get-structinfo ( addr -- snf t | f )
+    get-first-word              \ w t | f
+    if
+        structinfo-list-store   \ w snf-lst
+        structinfo-list-find    \ snf t | f
+    else
+        false
+    then
+;
+
+\ Print a list of structures. 
+: structinfo-list-print-struct-list ( lst0 -- )
+    \ Check args.
+    assert-tos-is-list
+
+    ." ("
+
+    list-get-links                      \ lst-link
+    begin
+        ?dup
+    while
+        dup link-get-data               \ lst-link data
+
+        dup get-structinfo              \ lst-link data, snf t | f
+        if                              \ lst-link data snf
+            \ Print a struct instance.
+            structinfo-get-print-xt     \ lst-link data xt
+            execute                     \ lst-link
+
+            link-get-next
+            dup 0<> if space then
+        else                            \ lst-link data
+            \ Print a number.
+            .
+
+            link-get-next
+        then
+    repeat
+    ." )"                               \
+;
+
+\ Deallocate a list of structures. 
+: structinfo-list-deallocate-struct-list ( lst0 -- )
+    \ Check args.
+    assert-tos-is-list
+
+    dup struct-get-use-count                \ lst0 uc
+    dup 0 < abort" Invalid use count"
+
+    #2 <                                    \ lst0 bool
+    if
+        dup list-get-links                  \ lst0 lst-link
+        begin
+            ?dup
+        while
+            dup link-get-data               \ lst0 lst-link link-data 
+    
+            dup get-structinfo              \ lst0 lst-link link-data, snf t | f
+            if
+                \ Deallocate struct instance.
+                structinfo-get-deallocate-xt    \ lst0 lst-link link-struct xt
+                execute                     \ lst0 lst-link 
+            else
+                \ Just a number.            \ lst0 lst-link u
+                drop
+            then
+    
+            link-get-next
+        repeat
+                                            \ lst0
+        list-deallocate
+    else                                    \ lst0
+        struct-dec-use-count
     then
 ;
 

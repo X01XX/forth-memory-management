@@ -46,7 +46,7 @@ list-new            \ root list2
 over list-push-struct      \ root
 
 cr cr ." List of lists: "
-' .region-list over list-apply cr
+' .region over .list cr
 
 \ Finish.
 cr
@@ -57,7 +57,7 @@ cr
 cr ." Deallocating ..."
 
 dup                             \ root root
-' region-list-deallocate        \ root root xt
+' region-deallocate             \ root root xt
 swap list-apply                 \ root
 list-deallocate                 \ 
 
