@@ -1,4 +1,4 @@
-\ Show list-of-lists, printing, deallocating, withou structinfo functions.
+\ Show list-of-lists, printing, deallocating, without structinfo functions.
 
 \ Constants.
  #4  constant num-bits

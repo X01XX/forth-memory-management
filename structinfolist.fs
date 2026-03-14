@@ -124,33 +124,54 @@
         swap structinfo-get-inst-id        \ snf-lst0 snf-link snf-mma snf-id
         case
             \ Handle links.
-            #17137   of
-                        mma-in-use          \ snf-lst0 snf-link in-use
-                        #2 pick             \ snf-lst0 snf-link in-use snf-lst0
-                        list-get-length     \ snf-lst0 snf-link in-use lst-len
-                        <> abort" Links left over"
+            #17137   of  
+                        dup mma-in-use      \ snf-lst0 snf-link snf-mma in-use
+                        #3 pick             \ snf-lst0 snf-link snf-mma in-use snf-lst0
+                        list-get-length     \ snf-lst0 snf-link snf-mma in-use lst-len
+                        <> if
+                            cr ." Links left over" cr
+                            .mma-in-use
+                            abort
+                        else
+                            drop
+                        then
                     endof
             \ Handle lists.
-            #17971   of
-                        mma-in-use          \ snf-lst0 snf-link in-use
-                        1 <> abort" Lists left over"
+            #17971   of  
+                        dup mma-in-use      \ snf-lst0 snf-link snf-mma in-use
+                        1 <> if
+                            cr ." Lists left over" cr
+                            .mma-in-use
+                            abort
+                        else
+                            drop
+                        then
                     endof
             \ Handle structinfo.
-            #53731   of
-                        mma-in-use          \ snf-lst0 snf-link in-use
-                        #2 pick             \ snf-lst0 snf-link in-use snf-lst0
-                        list-get-length     \ snf-lst0 snf-link in-use lst-len
-                        <> abort" structinfo left over"
+            #53731   of  
+                        dup mma-in-use      \ snf-lst0 snf-link snf-mma in-use
+                        #3 pick             \ snf-lst0 snf-link snf-mma in-use snf-lst0
+                        list-get-length     \ snf-lst0 snf-link snf-mma in-use lst-len
+                        <> if
+                            cr ." structinfo left over" cr
+                            .mma-in-use
+                            abort
+                        else
+                            drop
+                        then
                     endof
             \ Handle other structs.
-            swap
-            mma-in-use                      \ snf-lst0 snf-link u
+                                            \ snf-lst0 snf-link snf-mma snf-id
+            over mma-in-use                 \ snf-lst0 snf-link snf-mma snf-id u
             0<> if
+                drop                        \ snf-lst0 snf-link snf-mma
                 over link-get-data
                 structinfo-get-name cr type space ." instances not fully deallocated" cr
+                .mma-in-use
                 abort
+            else
+                drop
             then
-            
         endcase            
 
         link-get-next
