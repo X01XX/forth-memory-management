@@ -62,7 +62,7 @@ The examples can be run with the commands:
 
   gforth example4.fs -e bye   \ Shows a struct-aware print of items on the Forth stack, for debugging.
 
-  gforth example5.fs -e bye   \ Shows print, and deallocate, of a list-of-lists of mixed structs.
+  gforth example5.fs -e bye   \ Shows print, and deallocate, of a list of mixed lists, structs and numbers.
 
   gforth example6.fs -e bye   \ Test list functions that can work with lists with sub-lists.
 </pre>
