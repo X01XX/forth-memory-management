@@ -31,42 +31,23 @@ Lists are built of List structs, and Link structs, that have an ID and use-count
 
 The examples can be run with the commands:
 <pre>
-  gforth example.fs -e bye    \ Shows two lists of numbers, with set functions union, intersection and subtraction.
-                              \ Shows applying multiplication, and addition, of all list elements, given a number.
-                              \ The numbers are not structs, just numbers in the Link data field.
-                              \ Shows two lists of names, with set functions union, intersection and subtraction. The Name is a struct.
+  gforth example.fs   \ Shows two lists of numbers, with set functions union, intersection and subtraction.
+                      \ Shows applying multiplication, and addition, of all list elements, given a number.
+                      \ The numbers are not structs, just numbers in the Link data field.
+                      \ Shows two lists of names, with set functions union, intersection and subtraction. The Name is a struct.
 
-  gforth example2.fs -e bye   \ Shows my favorite equation, Understanding = ~A + ~B, with Karnaugh Map regions.
-                              \
-                              \  A is different from B in some way.
-                              \ ~A + ~B covers everything, with regions containing A, regions containing B, regions containing neither, NO regions containing A and B.
-                              \ Similar calculations of other pairs, exhibiting the same difference, can be intersected for a finer understanding.
-                              \ Everything intersecting everything, is still everything. The arrangement of the underlying regions changes.
-                              \
-                              \ The results are better with adjacent pairs, points on a "logical edge".
-                              \ The results are even better with multiple adjacencies, like (~A + ~B) & (~A + ~C), a "logical corner".
-                              \ The results are even better with a cluster of corners, like (~A + ~B) & (~A + ~C) & (~C + ~D).
-                              \ The corners, above, are ~A + (~B & ~C), ~C + (~A & ~D).  I call A, and C, <i>anchors</i>.
-                              \ The number of adjacent, dissimilar, terms used for a corner, equals the number of edges of the region the anchor is in.
-                              \
-                              \ In the results, regions not completely overlapped by other regions are <i>defining</i> regions, others are placeholders.
-                              \ When well developed, all adjacent dissimilar samples tested, the anchor of a corner,
-                              \ will be in only one region, a defining region, else it will not be a valid corner.
-                              \ Each defining region will have a corner.  Having more than one corner is possible, but not needed.
-                              \ One of a region's corners may be better than another, to be part of a corner cluster.
-                              \ Placeholder regions suppress anchors in overlapped parts of defining regions, since an anchor cannot be in more than one region.
-                              \
-                              \ Understanding is tenuous at first, then improves with more data, selected judiciously to find/test corners, like IRL.
+  gforth example2.fs  \ Shows my favorite equation, Understanding = ~A + ~B.
+                      \ See more detailed notes under the UES-Forth project.
 
-  gforth example3.fs -e bye   \ Shows lists of lists of regions.
+  gforth example3.fs  \ Shows lists of lists of regions.
 
-  gforth example4.fs -e bye   \ Shows a struct-aware print of items on the Forth stack, for debugging.
+  gforth example4.fs  \ Shows a struct-aware print of items on the Forth stack, for debugging.
 
-  gforth example5.fs -e bye   \ Shows print, and deallocate, of a list of mixed lists, structs and numbers.
+  gforth example5.fs  \ Shows print, and deallocate, of a list of mixed lists, structs and numbers.
 
-  gforth example6.fs -e bye   \ Test list functions that can work with lists with sub-lists.
+  gforth example6.fs  \ Test list functions that can work with lists with sub-lists.
 
-  gforth example7.fs -e bye   \ Shows a link being dropped, and detected later.
+  gforth example7.fs  \ Shows a link being dropped, and detected later.
 </pre>
 
 Memory use before, and after, deallocating is shown.  The Min Free column shows the lowest level of struct instances available during the program run,
