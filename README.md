@@ -65,6 +65,8 @@ The examples can be run with the commands:
   gforth example5.fs -e bye   \ Shows print, and deallocate, of a list of mixed lists, structs and numbers.
 
   gforth example6.fs -e bye   \ Test list functions that can work with lists with sub-lists.
+
+  gforth example7.fs -e bye   \ Shows a link being dropped, and detected later.
 </pre>
 
 Memory use before, and after, deallocating is shown.  The Min Free column shows the lowest level of struct instances available during the program run,
