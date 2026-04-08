@@ -109,6 +109,85 @@
     cr .stack-structs-xt execute cr
 ;
 
+\ Return true if the structinfo-list-store is using a given address
+\ for a list, link, or structinfo instance.
+: structinfo-list-store-using-addr?  ( addr -- bool )
+    \ Check list itself.
+    structinfo-list-store            \ addr store
+    over =                          \ addr bool
+    if
+        drop
+        true
+        exit
+    then
+
+    \ Check links and stores.
+    structinfo-list-store          \ addr store
+    list-get-links                  \ addr lnk
+
+    begin
+        ?dup
+    while                           \ addr lnk
+        \ Check link.
+        2dup =                      \ addr lnk bool
+        if
+            2drop
+            true
+            exit
+        then
+
+        \ Check structinfo.
+        dup link-get-data           \ addr lnk stkinf
+        #2 pick =                   \ addr lnk bool
+        if
+            2drop
+            true
+            exit
+        then
+
+        link-get-next
+    repeat
+                                    \ addr
+    drop
+    false
+;
+
+\ Print out addresses that are still in use,
+\ except those in the structinfo-list-store.
+\ Run like: <struct name>-mma .mma-in-use-except
+\ Returns a count of printed addresses.
+: .mma-in-use-except ( mma-addr -- )
+
+    \ Setup for loop.
+    dup mma-get-item-size swap      \ size mma
+    dup _mma-get-stack swap         \ size stack mma
+    dup _mma-get-end-addr swap      \ size stack end mma
+
+    _mma-get-array                  \ size stack end next-item
+
+    begin
+        2dup <>
+    while
+        dup                         \ size stack end item item
+        #3 pick                     \ size stack end item item stack
+        stack-in                    \ size stack end item flag
+        if
+        else
+            dup structinfo-list-store-using-addr?
+            if
+            else                    \ size stack end item
+                cr dup ." In use: " hex.
+            then
+        then
+
+        #3 pick                     \ size stack end item size
+        +                           \ size stack end next-item
+    repeat
+    cr
+    \ Clear stack
+    2drop 2drop
+;
+
 \ Check all project instances are deallocated.
 : structinfo-list-project-deallocated ( snf-lst0 -- )
     \ Check args.
@@ -123,6 +202,17 @@
         dup structinfo-get-mma             \ snf-lst0 snf-link snfx snf-mma
         swap structinfo-get-inst-id        \ snf-lst0 snf-link snf-mma snf-id
         case
+            \ Handle lists.
+            #17971   of  
+                        dup mma-in-use      \ snf-lst0 snf-link snf-mma in-use
+                        1 <> if
+                            cr ." Lists left over" cr
+                            .mma-in-use-except
+                            abort
+                        else
+                            drop
+                        then
+                    endof
             \ Handle links.
             #17137   of  
                         dup mma-in-use      \ snf-lst0 snf-link snf-mma in-use
@@ -130,18 +220,7 @@
                         list-get-length     \ snf-lst0 snf-link snf-mma in-use lst-len
                         <> if
                             cr ." Links left over" cr
-                            .mma-in-use
-                            abort
-                        else
-                            drop
-                        then
-                    endof
-            \ Handle lists.
-            #17971   of  
-                        dup mma-in-use      \ snf-lst0 snf-link snf-mma in-use
-                        1 <> if
-                            cr ." Lists left over" cr
-                            .mma-in-use
+                            .mma-in-use-except
                             abort
                         else
                             drop
@@ -154,7 +233,7 @@
                         list-get-length     \ snf-lst0 snf-link snf-mma in-use lst-len
                         <> if
                             cr ." structinfo left over" cr
-                            .mma-in-use
+                            .mma-in-use-except
                             abort
                         else
                             drop
