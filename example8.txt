@@ -3,12 +3,12 @@ Initializing Link store.
 Initializing List store.
 Initializing StructInfo store.
 
-Dropped link: $635C5BCB42F0 
+Dropped list: $63B6E44699B8 
 
 
 Memory use:
-    Link:       Capacity:   101  Min Free:    97   96%  In use:      4  Item Size:  24  Array size:   2424  Overhead:    848  Total:     3272  Cells:    409
-    List:       Capacity:   102  Min Free:   101   99%  In use:      1  Item Size:  16  Array size:   1632  Overhead:    856  Total:     2488  Cells:    311
+    Link:       Capacity:   101  Min Free:    98   97%  In use:      3  Item Size:  24  Array size:   2424  Overhead:    848  Total:     3272  Cells:    409
+    List:       Capacity:   102  Min Free:   100   98%  In use:      2  Item Size:  16  Array size:   1632  Overhead:    856  Total:     2488  Cells:    311
     StructInfo: Capacity:    10  Min Free:     7   70%  In use:      3  Item Size:  72  Array size:    720  Overhead:    120  Total:      840  Cells:    105
                                                                                                                               Total:     6600            825
 Forth stack: <0> 
@@ -17,14 +17,14 @@ Forth stack: <0>
 Deallocating ...
 
 Memory use:
-    Link:       Capacity:   101  Min Free:    97   96%  In use:      4  Item Size:  24  Array size:   2424  Overhead:    848  Total:     3272  Cells:    409
-    List:       Capacity:   102  Min Free:   101   99%  In use:      1  Item Size:  16  Array size:   1632  Overhead:    856  Total:     2488  Cells:    311
+    Link:       Capacity:   101  Min Free:    98   97%  In use:      3  Item Size:  24  Array size:   2424  Overhead:    848  Total:     3272  Cells:    409
+    List:       Capacity:   102  Min Free:   100   98%  In use:      2  Item Size:  16  Array size:   1632  Overhead:    856  Total:     2488  Cells:    311
     StructInfo: Capacity:    10  Min Free:     7   70%  In use:      3  Item Size:  72  Array size:    720  Overhead:    120  Total:      840  Cells:    105
                                                                                                                               Total:     6600            825
 Forth stack: <0> 
 
 
-Link instances not fully deallocated
+List instances not fully deallocated
 
-In use: $635C5BCB42F0 
+In use: $63B6E44699B8 
 

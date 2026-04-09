@@ -206,7 +206,7 @@
             #17971   of  
                         dup mma-in-use      \ snf-lst0 snf-link snf-mma in-use
                         1 <> if
-                            cr ." Lists left over" cr
+                            cr ." List instances not fully deallocated" cr
                             .mma-in-use-except
                             abort
                         else
@@ -219,7 +219,7 @@
                         #3 pick             \ snf-lst0 snf-link snf-mma in-use snf-lst0
                         list-get-length     \ snf-lst0 snf-link snf-mma in-use lst-len
                         <> if
-                            cr ." Links left over" cr
+                            cr ." Link instances not fully deallocated" cr
                             .mma-in-use-except
                             abort
                         else
@@ -232,7 +232,7 @@
                         #3 pick             \ snf-lst0 snf-link snf-mma in-use snf-lst0
                         list-get-length     \ snf-lst0 snf-link snf-mma in-use lst-len
                         <> if
-                            cr ." structinfo left over" cr
+                            cr ." structinfo instances not fully deallocated" cr
                             .mma-in-use-except
                             abort
                         else

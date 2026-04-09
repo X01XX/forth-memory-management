@@ -29,7 +29,7 @@ list-new to structinfo-list-store
 ' structinfo-list-deallocate-struct-list ' structinfo-list-print-struct-list s" List" list-mma list-id structinfo-new structinfo-list-store structinfo-list-push-end
 ' structinfo-deallocate ' .structinfo s" StructInfo" structinfo-mma structinfo-id structinfo-new structinfo-list-store structinfo-list-push-end
 
-cr 5 link-new  cr ." Dropped link: " hex. cr
+cr list-new  cr ." Dropped list: " hex. cr
 
 \ Finish.
 cr structinfo-list-store structinfo-list-print-memory-use cr

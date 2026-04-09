@@ -13,6 +13,9 @@ include mm_array.fs
 include link.fs
 include list.fs
 include structlist.fs
+include region.fs
+include regionlist.fs
+include state.fs
 include structinfo.fs
 include structinfolist.fs
 include stackprint2.fs
@@ -22,14 +25,16 @@ cs
 #101 link-mma-init
 #102 list-mma-init
 #010 structinfo-mma-init
+#010 region-mma-init
 
 \ Init structinfo list.
 list-new to structinfo-list-store
 ' link-deallocate ' .link s" Link" link-mma link-id structinfo-new structinfo-list-store structinfo-list-push
 ' structinfo-list-deallocate-struct-list ' structinfo-list-print-struct-list s" List" list-mma list-id structinfo-new structinfo-list-store structinfo-list-push-end
 ' structinfo-deallocate ' .structinfo s" StructInfo" structinfo-mma structinfo-id structinfo-new structinfo-list-store structinfo-list-push-end
+' region-deallocate ' .link s" Region" region-mma region-id structinfo-new structinfo-list-store structinfo-list-push
 
-cr 5 link-new  cr ." Dropped link: " hex. cr
+cr 5 5 region-new  cr ." Dropped region: " hex. cr
 
 \ Finish.
 cr structinfo-list-store structinfo-list-print-memory-use cr
