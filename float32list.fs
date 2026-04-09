@@ -52,7 +52,7 @@
 
 \ Do an opperation on a list, returning a result list.
 \ The xt signature is expected to be ( f32 f32 -- f32 )
-: float32-do-op ( xt f32-1 f32-lst0 -- f32-lst )
+: float32-list-do-op ( xt f32-1 f32-lst0 -- f32-lst )
     \ Check args.
     assert-tos-is-float32-list
     assert-nos-is-float32

@@ -55,7 +55,7 @@ over                                    \ f32-lst f32-add xt f32-add
 #3 pick                                 \ f32-lst f32-add xt f32-add f32-lst
 
 \ Do the operation.
-float32-do-op                           \ f32-lst f32-add f32-lst2
+float32-list-do-op                           \ f32-lst f32-add f32-lst2
 
 cr cr ." List after adding 3.2e: " dup .float32-list cr
 
