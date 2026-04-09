@@ -48,6 +48,10 @@ The examples can be run with the commands:
   gforth example6.fs  \ Test list functions that can work with lists with sub-lists.
 
   gforth example7.fs  \ Shows a link being dropped, and detected later.
+
+  gforth example8.fs  \ Shows a list being dropped, and detected later.
+
+  gforth example9.fs  \ Shows a region being dropped, and detected later.
 </pre>
 
 Memory use before, and after, deallocating is shown.  The Min Free column shows the lowest level of struct instances available during the program run,
