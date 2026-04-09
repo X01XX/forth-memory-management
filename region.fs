@@ -184,6 +184,7 @@ region-state-0-disp cell+   constant region-state-1-disp
     assert-tos-is-region
 
     dup struct-get-use-count      \ reg0 count
+    dup 0< abort" invalid use count"
 
     #2 <
     if 

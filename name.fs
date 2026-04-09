@@ -69,7 +69,7 @@ name-header-disp cell+  constant name-string-disp
     name-mma mma-allocate       \ str-addr len name-addr
     name-id over                \ str-addr len name-addr id name-addr
     struct-set-id               \ str-addr len name-addr
-    0 over                      \ str-addr len name-addr 1 addr
+    0 over                      \ str-addr len name-addr 0 addr
     struct-set-use-count        \ str-addr len name-addr
 
     -rot                        \ name-addr str-addr len
@@ -98,16 +98,14 @@ name-header-disp cell+  constant name-string-disp
 
     dup struct-get-use-count    \ name-addr count
 
-    dup 1 <
-    if 
-        ." invalid use count" abort
+    dup 0 <
+    abort" invalid use count"
+
+    #2 <
+    if
+        0 over name-string-disp + !  \ Clear string field first cell.
+        name-mma mma-deallocate \ Deallocate instance.
     else
-        #2 <
-        if
-            0 over name-string-disp + !  \ Clear string field first cell.
-            name-mma mma-deallocate \ Deallocate instance.
-        else
-            struct-dec-use-count
-        then
+        struct-dec-use-count
     then
 ;

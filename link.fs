@@ -100,6 +100,7 @@ link-next-disp      cell+   constant link-data-disp
 
     dup 0 <
     abort" invalid use count"
+
     #2 <
     if
         \ Clear fields.
