@@ -52,6 +52,8 @@ The examples can be run with the commands:
   gforth example8.fs  \ Shows a list being dropped, and detected later.
 
   gforth example9.fs  \ Shows a region being dropped, and detected later.
+
+  gforth example10.fs \ Shows a 32 bit floating point list, and an operation on the list.
 </pre>
 
 Memory use before, and after, deallocating is shown.  The Min Free column shows the lowest level of struct instances available during the program run,
