@@ -2,7 +2,7 @@
 Initializing Link store.
 Initializing List store.
 Initializing StructInfo store.
-Initializing Float store.
+Initializing FloatNum store.
 
 List: (3.2  2.2  1.2 )
 
@@ -11,10 +11,10 @@ List after adding 3.2e: (6.4  5.4  4.4 )
 
 
 Memory use:
-    Float32:    Capacity:   100  Min Free:    93   93%  In use:      0  Item Size:  24  Array size:   2400  Overhead:    840  Total:     3240  Cells:    405
     Link:       Capacity:   101  Min Free:    91   90%  In use:      4  Item Size:  24  Array size:   2424  Overhead:    848  Total:     3272  Cells:    409
     List:       Capacity:   102  Min Free:    99   97%  In use:      1  Item Size:  16  Array size:   1632  Overhead:    856  Total:     2488  Cells:    311
     StructInfo: Capacity:    10  Min Free:     6   60%  In use:      4  Item Size:  72  Array size:    720  Overhead:    120  Total:      840  Cells:    105
+    FloatNum:   Capacity:   100  Min Free:    93   93%  In use:      0  Item Size:  24  Array size:   2400  Overhead:    840  Total:     3240  Cells:    405
                                                                                                                               Total:     9840           1230
 Forth stack: <0> 
 
@@ -22,10 +22,10 @@ Forth stack: <0>
 Deallocating ...
 
 Memory use:
-    Float32:    Capacity:   100  Min Free:    93   93%  In use:      0  Item Size:  24  Array size:   2400  Overhead:    840  Total:     3240  Cells:    405
     Link:       Capacity:   101  Min Free:    91   90%  In use:      4  Item Size:  24  Array size:   2424  Overhead:    848  Total:     3272  Cells:    409
     List:       Capacity:   102  Min Free:    99   97%  In use:      1  Item Size:  16  Array size:   1632  Overhead:    856  Total:     2488  Cells:    311
     StructInfo: Capacity:    10  Min Free:     6   60%  In use:      4  Item Size:  72  Array size:    720  Overhead:    120  Total:      840  Cells:    105
+    FloatNum:   Capacity:   100  Min Free:    93   93%  In use:      0  Item Size:  24  Array size:   2400  Overhead:    840  Total:     3240  Cells:    405
                                                                                                                               Total:     9840           1230
 Forth stack: <0> 
 
