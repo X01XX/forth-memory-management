@@ -1,6 +1,6 @@
 \ The floatnum struct, storing a float number.
 #61717 constant floatnum-id
-    #3 constant floatnum-struct-number-cells
+    #2 constant floatnum-struct-number-cells
 
 \ Float struct fields.
 0                            constant floatnum-header-disp   \ 16 bits, [0] id, [1] use count.
