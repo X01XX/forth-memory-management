@@ -21,7 +21,7 @@ That a stack is used to provide memory management to a stack-based language is s
 
 Functions that manipulate a struct instance can act as wrappers to array-stack, and list, functions.
 
-Diagnosis of a memory leak can begin with the array-stack that becomes exhausted.
+A memory leak can be automatically detected, the type of struct, and the specific instance addresses.
 
 The first word of every struct instance, allocated from the same array-stack, can be set to a unique number, to indicate the type of struct.
 
