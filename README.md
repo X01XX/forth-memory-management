@@ -40,7 +40,7 @@ The examples can be run with the commands:
   gforth example2.fs  \ Shows my favorite equation, Understanding = ~A + ~B.
                       \ See more detailed notes under the UES-Forth project.
                       \ UES-Forth is a large application that uses this code to make 25 different structs and 20 struct lists.
-                      \ It ends with thousands of struct instances deallocated, none lost, nothing left on the Forth stack, or it aborts.
+                      \ At end it deallocates around two thousand struct instances, checks for memory leaks, and nothing left on the Forth stack.
 
   gforth example3.fs  \ Shows lists of lists of regions.
 
