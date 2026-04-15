@@ -188,7 +188,8 @@
     2drop 2drop
 ;
 
-\ Check all project instances are deallocated.
+\ Check all project struct instances are deallocated.
+\ A lost higher-level struct instance will also complain about struct instances it contains.
 : structinfo-list-project-deallocated ( snf-lst0 -- )
     \ Check args.
     assert-tos-is-structinfo-list
@@ -202,39 +203,36 @@
         dup structinfo-get-mma             \ snf-lst0 snf-link snfx snf-mma
         swap structinfo-get-inst-id        \ snf-lst0 snf-link snf-mma snf-id
         case
-            \ Handle lists.
-            #17971   of  
+            \ Handle lists, except the list defining structinfo-list-store.
+            #17971  of
                         dup mma-in-use      \ snf-lst0 snf-link snf-mma in-use
                         1 <> if
                             cr ." List instances not fully deallocated" cr
                             .mma-in-use-except
-                            abort
                         else
                             drop
                         then
                     endof
-            \ Handle links.
-            #17137   of  
-                        dup mma-in-use      \ snf-lst0 snf-link snf-mma in-use
-                        #3 pick             \ snf-lst0 snf-link snf-mma in-use snf-lst0
-                        list-get-length     \ snf-lst0 snf-link snf-mma in-use lst-len
+            \ Handle links, except the links in structinfo-list-store.
+            #17137  of
+                        dup mma-in-use          \ snf-lst0 snf-link snf-mma in-use
+                        #3 pick                 \ snf-lst0 snf-link snf-mma in-use snf-lst0
+                        list-get-length         \ snf-lst0 snf-link snf-mma in-use lst-len
                         <> if
                             cr ." Link instances not fully deallocated" cr
                             .mma-in-use-except
-                            abort
                         else
                             drop
                         then
                     endof
-            \ Handle structinfo.
-            #53731   of  
-                        dup mma-in-use      \ snf-lst0 snf-link snf-mma in-use
-                        #3 pick             \ snf-lst0 snf-link snf-mma in-use snf-lst0
-                        list-get-length     \ snf-lst0 snf-link snf-mma in-use lst-len
+            \ Handle structinfo, except the instances in structinfo-list-store.
+            #53731  of
+                        dup mma-in-use          \ snf-lst0 snf-link snf-mma in-use
+                        #3 pick                 \ snf-lst0 snf-link snf-mma in-use snf-lst0
+                        list-get-length         \ snf-lst0 snf-link snf-mma in-use lst-len
                         <> if
                             cr ." structinfo instances not fully deallocated" cr
                             .mma-in-use-except
-                            abort
                         else
                             drop
                         then
@@ -243,15 +241,13 @@
                                             \ snf-lst0 snf-link snf-mma snf-id
             over mma-in-use                 \ snf-lst0 snf-link snf-mma snf-id u
             0<> if
-                drop                        \ snf-lst0 snf-link snf-mma
-                over link-get-data
+                #2 pick link-get-data
                 structinfo-get-name cr type space ." instances not fully deallocated" cr
-                .mma-in-use
-                abort
+                swap .mma-in-use
             else
                 drop
             then
-        endcase            
+        endcase
 
         link-get-next
     repeat

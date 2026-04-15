@@ -33,6 +33,8 @@ list-new to structinfo-list-store
 ' structinfo-list-deallocate-struct-list ' structinfo-list-print-struct-list s" List" list-mma list-id structinfo-new structinfo-list-store structinfo-list-push-end
 ' structinfo-deallocate ' .structinfo s" StructInfo" structinfo-mma structinfo-id structinfo-new structinfo-list-store structinfo-list-push-end
 
+\ The list, link, and StructInfo structs allow for the creation of the structinfo-list-store,                                                                                
+
 #103 region-mma-init
 ' region-deallocate ' .region s" Region" region-mma region-id structinfo-new structinfo-list-store structinfo-list-push-end
 

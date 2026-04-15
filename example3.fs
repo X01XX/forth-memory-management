@@ -19,9 +19,9 @@ cs
 
 : memory-use ( -- )
     cr ." Memory use:"
-    cr #4 spaces ." Region mma:       " region-mma .mma-usage
     cr #4 spaces ." List mma:         " list-mma .mma-usage
     cr #4 spaces ." Link mma:         " link-mma .mma-usage
+    cr #4 spaces ." Region mma:       " region-mma .mma-usage
     cr #4 spaces ." dstack: "
     base @ >r decimal .s r> base ! 
 ;

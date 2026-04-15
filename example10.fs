@@ -31,6 +31,9 @@ list-new to structinfo-list-store
 ' link-deallocate ' .link s" Link" link-mma link-id structinfo-new structinfo-list-store structinfo-list-push
 ' structinfo-list-deallocate-struct-list ' structinfo-list-print-struct-list s" List" list-mma list-id structinfo-new structinfo-list-store structinfo-list-push-end
 ' structinfo-deallocate ' .structinfo s" StructInfo" structinfo-mma structinfo-id structinfo-new structinfo-list-store structinfo-list-push-end
+
+\ The list, link, and StructInfo structs allow for the creation of the structinfo-list-store,
+
 ' floatnum-deallocate ' f. s" FloatNum" floatnum-mma floatnum-id structinfo-new structinfo-list-store structinfo-list-push-end
 
 \ Init a list.

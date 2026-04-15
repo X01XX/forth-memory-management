@@ -10,17 +10,17 @@ Initializing Region store.
 Possible regions = (~4 + ~5) & (~3 + ~6) = (1xxx x11x xxx0 xxx1 x0xx)
 
 Memory use:
-    Region mma:       Capacity:   103  Min Free:    83  In use:     16  Item Size:  24  Array size:   2472  Overhead:    864  Total:   3336  Cells:   417
-    List mma:         Capacity:   102  Min Free:    98  In use:      3  Item Size:  16  Array size:   1632  Overhead:    856  Total:   2488  Cells:   311
-    Link mma:         Capacity:   101  Min Free:    82  In use:     16  Item Size:  24  Array size:   2424  Overhead:    848  Total:   3272  Cells:   409
-    dstack: <3> 102277555750728 102277555750712 102277555750760 
+    List mma:         Capacity:   102  Min Free:    98   96%  In use:      3  Item Size:  16  Array size:   1632  Overhead:    856  Total:     2488  Cells:    311
+    Link mma:         Capacity:   101  Min Free:    82   81%  In use:     16  Item Size:  24  Array size:   2424  Overhead:    848  Total:     3272  Cells:    409
+    Region mma:       Capacity:   103  Min Free:    83   80%  In use:     16  Item Size:  24  Array size:   2472  Overhead:    864  Total:     3336  Cells:    417
+    dstack: <3> 99201997617912 99201997617896 99201997617944 
 
 Deallocating ...
 
 Memory use:
-    Region mma:       Capacity:   103  Min Free:    83  In use:      0  Item Size:  24  Array size:   2472  Overhead:    864  Total:   3336  Cells:   417
-    List mma:         Capacity:   102  Min Free:    98  In use:      0  Item Size:  16  Array size:   1632  Overhead:    856  Total:   2488  Cells:   311
-    Link mma:         Capacity:   101  Min Free:    82  In use:      0  Item Size:  24  Array size:   2424  Overhead:    848  Total:   3272  Cells:   409
+    List mma:         Capacity:   102  Min Free:    98   96%  In use:      0  Item Size:  16  Array size:   1632  Overhead:    856  Total:     2488  Cells:    311
+    Link mma:         Capacity:   101  Min Free:    82   81%  In use:      0  Item Size:  24  Array size:   2424  Overhead:    848  Total:     3272  Cells:    409
+    Region mma:       Capacity:   103  Min Free:    83   80%  In use:      0  Item Size:  24  Array size:   2472  Overhead:    864  Total:     3336  Cells:    417
     dstack: <0> 
 
 Freeing heap memory
