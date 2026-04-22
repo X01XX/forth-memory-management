@@ -34,7 +34,7 @@ link-next-disp      cell+   constant link-data-disp
 ;
 
 \ Check TOS for link, unconventional, leaves stack unchanged.
-: assert-tos-is-link ( arg0 -- arg0 )
+: assert-tos-is-link ( tos -- tos )
     dup is-allocated-link
     0= abort" TOS is not an allocated link."
 ;
@@ -85,10 +85,16 @@ link-next-disp      cell+   constant link-data-disp
 
     ." Link: "
     dup hex.
-    ." next: "
-    dup link-get-next hex.
+    ." uc: " dup struct-get-use-count dec.
     ." data: "
-    link-get-data hex.
+    link-get-data dup hex.
+    dup get-first-word
+    if
+        swap ." uc: " struct-get-use-count dec.
+        ." id: " dec.
+    else
+        drop
+    then
 ;
 
 \ Deallocate a link.
@@ -98,8 +104,7 @@ link-next-disp      cell+   constant link-data-disp
 
     dup struct-get-use-count    \ link-addr count
 
-    dup 0 <
-    abort" invalid use count"
+    dup 0 < abort" invalid use count"
 
     #2 <
     if

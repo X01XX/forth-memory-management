@@ -15,6 +15,7 @@ include structlist.fs
 include region.fs
 include regionlist.fs
 include state.fs
+include stackprint.fs
 cs
 
 : memory-use ( -- )
@@ -23,7 +24,7 @@ cs
     cr #4 spaces ." Link mma:         " link-mma .mma-usage
     cr #4 spaces ." Region mma:       " region-mma .mma-usage
     cr #4 spaces ." dstack: "
-    base @ >r decimal .s r> base ! 
+    base @ >r decimal .s r> base !
 ;
 
 \ Init array-stacks.
@@ -54,8 +55,8 @@ dup list-copy               \ root-lst copy-lst
 
 \ Add a number to the beginning of the copy list, to distinguish it.
 list-new
-2 over list-push
-7 over list-push
+#2 over list-push
+#7 over list-push
 over list-push
 1 over list-push            \ root-lst copy-lst
 
@@ -102,7 +103,7 @@ list-new
 #7 #3 region-new over list-push-struct
 over list-push-struct
 
-dup list-copy-struct 
+dup list-copy-struct
 #0 #0 region-new over list-push-struct
 cr cr ." Region list: " over .region-list
 cr cr ." Region list copy + 0000: " dup .region-list cr
@@ -119,11 +120,18 @@ cr
 cr ." Deallocating ..."
                                 \ root copy flat reg-lst reg-copy reg-f
 region-list-deallocate          \ root copy flat reg-lst reg-copy
-region-list-deallocate          \ root copy flat reg-lst
-region-list-deallocate          \ root copy flat
-list-deallocate                 \ root copy
+
+' region-deallocate over list-apply-recursive
+list-deallocate-recursive
+
+' region-deallocate over list-apply-recursive
+list-deallocate-recursive       \ root copy
+
 list-deallocate                 \ root
-list-deallocate                 \
+
+list-deallocate-recursive       \
+
+list-deallocate-recursive       \
 
 cr memory-use cr
 

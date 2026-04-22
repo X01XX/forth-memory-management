@@ -20,7 +20,7 @@
     \ Check args.
     assert-tos-is-list
     assert-nos-is-list
-    
+
     ' =                 \ list1 list2 xt
     -rot                \ xt list1 list2
     list-intersection   \ list3

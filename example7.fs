@@ -4,8 +4,6 @@
 #15 constant all-bits
  #8 constant ms-bit
 
-0 value structinfo-list-store
-
 include tools.fs
 include tools2.fs
 include struct.fs
@@ -29,7 +27,7 @@ list-new to structinfo-list-store
 ' structinfo-list-deallocate-struct-list ' structinfo-list-print-struct-list s" List" list-mma list-id structinfo-new structinfo-list-store structinfo-list-push-end
 ' structinfo-deallocate ' .structinfo s" StructInfo" structinfo-mma structinfo-id structinfo-new structinfo-list-store structinfo-list-push-end
 
-cr 5 link-new  cr ." Dropped link: " hex. cr
+cr #5 link-new  cr ." Dropped link: " hex. cr
 
 \ Finish.
 cr structinfo-list-store structinfo-list-print-memory-use cr

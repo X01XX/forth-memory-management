@@ -1,11 +1,15 @@
 \ Functions for a list of structinfos.
 
+0 value structinfo-list-store   \ Storage for a list containing info on all structs.
+                                \ Used for memory use print, memory leak checking,
+                                \ freeing heap, struct-aware printing of the Forth stack.
+
 0 value .stack-structs-xt
 
-\ Check if tos is an empty list, or has a structinfo instance as its first item.                                             
+\ Check if tos is an empty list, or has a structinfo instance as its first item.
 : assert-tos-is-structinfo-list ( tos -- tos )
     assert-tos-is-list
-    dup list-is-empty
+    dup list-is-empty?
     if
     else
         dup list-get-links link-get-data
@@ -25,7 +29,7 @@
 ;
 
 \ Find a structinfo instance in a list, by instance id, if any.
-: structinfo-list-find ( id1 si-lst0 -- si true | false )
+: structinfo-list-find ( id1 si-lst0 -- si t | f )
     \ Check args.
     assert-tos-is-structinfo-list
 
@@ -59,54 +63,128 @@
 
 \ Print memory use of structs.
 : structinfo-list-print-memory-use ( si-lst0 -- )
-   \ cr ." At start: " .stack-structs cr
     \ Check args.
     assert-tos-is-structinfo-list
 
     cr ." Memory use:"
     \ Get/store longest name length.
-    dup structinfo-list-max-name-length     \ si-lst0 max
-    swap                                    \ max si-lst0
-
-   \ cr ." At mid 1: " .stack-structs cr
-    \ Init total counter.
-    0 swap                                  \ max tot si-lst0
+    dup structinfo-list-max-name-length \ si-lst0 max
+    over                                \ si-lst0 max si-lst0
 
     \ Prep for loop.
-    list-get-links                          \ max tot si-link
+    list-get-links                      \ si-lst0 max si-link
 
     begin
         ?dup
     while
-        dup link-get-data                   \ max tot si-link six
+        dup link-get-data               \ si-lst0 max si-link six
 
         \ Print struct name, and filler.
-        dup                         \ max tot si-link six six
-        structinfo-get-name         \ max tot si-link six c-addr u
-        tuck                        \ max tot si-link six u c-addr u
-        cr #4 spaces type           \ max tot si-link six u
+        dup                             \ si-lst0 max si-link six six
+        structinfo-get-name             \ si-lst0 max si-link six c-addr u
+        tuck                            \ si-lst0 max si-link six u c-addr u
+        cr #4 spaces type               \ si-lst0 max si-link six u
         [char] : emit space
-        #4 pick swap  - spaces      \ max tot si-link six
+        #3 pick swap -
+        spaces           \ si-lst0 max si-link six
 
         \ Print memory use.
-        structinfo-get-mma          \ max tot si-link mmax
-        .mma-usage                  \ max tot si-link
+        structinfo-get-mma              \ si-lst0 max si-link mmax
+        .mma-usage                      \ si-lst0 max si-link
 
-        swap                        \ max si-link tot
-        over link-get-data          \ max si-link tot six
-        structinfo-get-mma          \ max si-link tot mma
-        mma-get-total-memory-use    \ max si-link tot mem-use
-        +                           \ max si-link tot
-        swap                        \ max tot si-link
- 
         link-get-next
     repeat
-                                    \ max tot
+                                        \ si-lst0 max
+    \ Print Summary line.
     cr
-    swap spaces 
-    #116 spaces ." Total: " dup #8 dec.r
-    cell / #9 spaces #6 dec.r
+    spaces
+    #82 spaces ." Totals: "
+
+    \ Sum array memory use.
+    0 over list-get-links           \ si-lst0 cnt si-link
+
+    begin
+        ?dup
+    while
+        dup link-get-data           \ si-lst0 cnt si-link six
+        structinfo-get-mma          \ si-lst0 cnt si-link mmax
+        mma-get-array-memory-use    \ si-lst0 cnt si-link totx
+        rot                         \ si-lst0 si-link totx cnt
+        + swap                      \ si-lst0 cnt+ si-link
+
+        link-get-next
+    repeat
+
+    \ Print array memory use.
+    #7 dec.r
+
+    \ Sum overhead memory use.
+    0 over list-get-links           \ si-lst0 cnt si-link
+
+    begin
+        ?dup
+    while
+        dup link-get-data           \ si-lst0 cnt si-link six
+        structinfo-get-mma          \ si-lst0 cnt si-link mmax
+        mma-get-overhead-memory-use \ si-lst0 cnt si-link totx
+        rot                         \ si-lst0 si-link totx cnt
+        + swap                      \ si-lst0 cnt+ si-link
+
+        link-get-next
+    repeat
+
+    \ Print overhead memory use.
+    #11 spaces #7 dec.r
+
+    \ Sum total memory use.
+    0 over list-get-links           \ si-lst0 cnt si-link
+
+    begin
+        ?dup
+    while
+        dup link-get-data           \ si-lst0 cnt si-link six
+        structinfo-get-mma          \ si-lst0 cnt si-link mmax
+        mma-get-total-memory-use    \ si-lst0 cnt si-link totx
+        rot                         \ si-lst0 si-link totx cnt
+        + swap                      \ si-lst0 cnt+ si-link
+
+        link-get-next
+    repeat
+
+    \ Print total memory use.
+    #8 spaces
+    dup #9 dec.r
+    cell / #8 spaces #7 dec.r
+
+    \ Sum number allocations.
+    0 over list-get-links           \ si-lst0 cnt si-link
+
+    begin
+        ?dup
+    while
+        dup link-get-data           \ si-lst0 cnt si-link six
+        structinfo-get-mma          \ si-lst0 cnt si-link mmax
+        _mma-get-num-allocations    \ si-lst0 cnt si-link allocx
+        rot                         \ si-lst0 si-link allocx cnt
+        + swap                      \ si-lst0 cnt+ si-link
+
+        link-get-next
+    repeat
+
+    \ Print number allocations.
+    #7 spaces #12 dec.r
+
+    drop
     cr .stack-structs-xt execute cr
+;
+
+: assert-forth-stack-empty ( -- )
+    depth 0<>
+    if
+        cr ." Forth stack is not empty"
+        cr .stack-structs-xt execute cr
+        abort
+    then
 ;
 
 \ Return true if the structinfo-list-store is using a given address
@@ -193,57 +271,64 @@
 : structinfo-list-project-deallocated ( snf-lst0 -- )
     \ Check args.
     assert-tos-is-structinfo-list
+    \ cr ." structinfo-list-project-deallocated" cr
 
-    dup list-get-links                      \ snf-lst0 snf-link
+    \ Init error flag.
+    0                                           \ snf-lst0 flg
+    over list-get-links                         \ snf-lst0 flg snf-link
 
     begin
         ?dup
     while
-        dup link-get-data                   \ snf-lst0 snf-link snfx
-        dup structinfo-get-mma             \ snf-lst0 snf-link snfx snf-mma
-        swap structinfo-get-inst-id        \ snf-lst0 snf-link snf-mma snf-id
+        dup link-get-data                       \ snf-lst0 flg snf-link snfx
+        dup structinfo-get-mma                  \ snf-lst0 flg snf-link snfx snf-mma
+        swap structinfo-get-inst-id             \ snf-lst0 flg snf-link snf-mma snf-id
         case
             \ Handle lists, except the list defining structinfo-list-store.
             #17971  of
-                        dup mma-in-use      \ snf-lst0 snf-link snf-mma in-use
+                        dup mma-in-use          \ snf-lst0 flg snf-link snf-mma in-use
                         1 <> if
                             cr ." List instances not fully deallocated" cr
-                            .mma-in-use-except
+                            .mma-in-use-except  \ snf-lst0 flg snf-link
+                            nip true swap
                         else
                             drop
                         then
                     endof
             \ Handle links, except the links in structinfo-list-store.
             #17137  of
-                        dup mma-in-use          \ snf-lst0 snf-link snf-mma in-use
-                        #3 pick                 \ snf-lst0 snf-link snf-mma in-use snf-lst0
-                        list-get-length         \ snf-lst0 snf-link snf-mma in-use lst-len
+                        dup mma-in-use          \ snf-lst0 flg snf-link snf-mma in-use
+                        #4 pick                 \ snf-lst0 flg snf-link snf-mma in-use snf-lst0
+                        list-get-length         \ snf-lst0 flg snf-link snf-mma in-use lst-len
                         <> if
                             cr ." Link instances not fully deallocated" cr
                             .mma-in-use-except
+                            nip true swap
                         else
                             drop
                         then
                     endof
             \ Handle structinfo, except the instances in structinfo-list-store.
             #53731  of
-                        dup mma-in-use          \ snf-lst0 snf-link snf-mma in-use
-                        #3 pick                 \ snf-lst0 snf-link snf-mma in-use snf-lst0
-                        list-get-length         \ snf-lst0 snf-link snf-mma in-use lst-len
+                        dup mma-in-use          \ snf-lst0 flg snf-link snf-mma in-use
+                        #4 pick                 \ snf-lst0 flg snf-link snf-mma in-use snf-lst0
+                        list-get-length         \ snf-lst0 flg snf-link snf-mma in-use lst-len
                         <> if
                             cr ." structinfo instances not fully deallocated" cr
                             .mma-in-use-except
+                            nip true swap
                         else
                             drop
                         then
                     endof
             \ Handle other structs.
-                                            \ snf-lst0 snf-link snf-mma snf-id
-            over mma-in-use                 \ snf-lst0 snf-link snf-mma snf-id u
+                                            \ snf-lst0 flg snf-link snf-mma snf-id
+            over mma-in-use                 \ snf-lst0 flg snf-link snf-mma snf-id u
             0<> if
                 #2 pick link-get-data
                 structinfo-get-name cr type space ." instances not fully deallocated" cr
                 swap .mma-in-use
+                rot drop true -rot
             else
                 drop
             then
@@ -251,7 +336,9 @@
 
         link-get-next
     repeat
-                                    \ snf-lst
+                                    \ snf-lst flg
+    abort" errors found"
+
     drop
     assert-forth-stack-empty
 ;
@@ -341,7 +428,7 @@
     then
 ;
 
-\ Print a list of structures. 
+\ Print a list of structures.
 : structinfo-list-print-struct-list ( lst0 -- )
     \ Check args.
     assert-tos-is-list
@@ -372,7 +459,7 @@
     ." )"                               \
 ;
 
-\ Deallocate a list of structures. 
+\ Deallocate a list of structures.
 : structinfo-list-deallocate-struct-list ( lst0 -- )
     \ Check args.
     assert-tos-is-list
@@ -386,18 +473,18 @@
         begin
             ?dup
         while
-            dup link-get-data               \ lst0 lst-link link-data 
-    
+            dup link-get-data               \ lst0 lst-link link-data
+
             dup get-structinfo              \ lst0 lst-link link-data, snf t | f
             if
                 \ Deallocate struct instance.
                 structinfo-get-deallocate-xt    \ lst0 lst-link link-struct xt
-                execute                     \ lst0 lst-link 
+                execute                     \ lst0 lst-link
             else
                 \ Just a number.            \ lst0 lst-link u
                 drop
             then
-    
+
             link-get-next
         repeat
                                             \ lst0

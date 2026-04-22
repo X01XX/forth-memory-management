@@ -4,9 +4,9 @@ Initializing List store.
 Initializing Name store.
 
 Memory Use:
-    list Capacity:    15  Min Free:    15  100%  In use:      0  Item Size:  16  Array size:    240  Overhead:    160  Total:      400  Cells:     50
-    link Capacity:   100  Min Free:   100  100%  In use:      0  Item Size:  24  Array size:   2400  Overhead:    840  Total:     3240  Cells:    405
-    name Capacity:    50  Min Free:    50  100%  In use:      0  Item Size:  24  Array size:   1200  Overhead:    440  Total:     1640  Cells:    205
+    list Capacity:    15  Min Free:    15  100%  In use:      0  Item Size:  16  Array size:     240  Overhead:    160  Total:      400  Cells:     50  Allocs:         0
+    link Capacity:   100  Min Free:   100  100%  In use:      0  Item Size:  24  Array size:    2400  Overhead:    840  Total:     3240  Cells:    405  Allocs:         0
+    name Capacity:    50  Min Free:    50  100%  In use:      0  Item Size:  24  Array size:    1200  Overhead:    440  Total:     1640  Cells:    205  Allocs:         0
     dstack: <0> 
 
 *** Working with lists of numbers, list link data field is a number.
@@ -21,18 +21,18 @@ list7: (10  6  2  12  10 )   (list1 * 2)
 list8: (4  2  0  5  4 )   (list1 + -1)
 
 Memory Use:
-    list Capacity:    15  Min Free:     7   46%  In use:      8  Item Size:  16  Array size:    240  Overhead:    160  Total:      400  Cells:     50
-    link Capacity:   100  Min Free:    70   70%  In use:     30  Item Size:  24  Array size:   2400  Overhead:    840  Total:     3240  Cells:    405
-    name Capacity:    50  Min Free:    50  100%  In use:      0  Item Size:  24  Array size:   1200  Overhead:    440  Total:     1640  Cells:    205
+    list Capacity:    15  Min Free:     7   46%  In use:      8  Item Size:  16  Array size:     240  Overhead:    160  Total:      400  Cells:     50  Allocs:         8
+    link Capacity:   100  Min Free:    70   70%  In use:     30  Item Size:  24  Array size:    2400  Overhead:    840  Total:     3240  Cells:    405  Allocs:        30
+    name Capacity:    50  Min Free:    50  100%  In use:      0  Item Size:  24  Array size:    1200  Overhead:    440  Total:     1640  Cells:    205  Allocs:         0
     dstack: <0> 
 
 Deallocating num-lists ...
 
 
 Memory Use:
-    list Capacity:    15  Min Free:     7   46%  In use:      0  Item Size:  16  Array size:    240  Overhead:    160  Total:      400  Cells:     50
-    link Capacity:   100  Min Free:    70   70%  In use:      0  Item Size:  24  Array size:   2400  Overhead:    840  Total:     3240  Cells:    405
-    name Capacity:    50  Min Free:    50  100%  In use:      0  Item Size:  24  Array size:   1200  Overhead:    440  Total:     1640  Cells:    205
+    list Capacity:    15  Min Free:     7   46%  In use:      0  Item Size:  16  Array size:     240  Overhead:    160  Total:      400  Cells:     50  Allocs:         8
+    link Capacity:   100  Min Free:    70   70%  In use:      0  Item Size:  24  Array size:    2400  Overhead:    840  Total:     3240  Cells:    405  Allocs:        30
+    name Capacity:    50  Min Free:    50  100%  In use:      0  Item Size:  24  Array size:    1200  Overhead:    440  Total:     1640  Cells:    205  Allocs:         0
     dstack: <0> 
 
 *** Working with lists of Name struct instances, list link data field is an instance address.
@@ -51,17 +51,17 @@ list9 - list10: (Cindy)
 list10 - list9: (Max)
 
 Memory Use:
-    list Capacity:    15  Min Free:     7   46%  In use:      6  Item Size:  16  Array size:    240  Overhead:    160  Total:      400  Cells:     50
-    link Capacity:   100  Min Free:    70   70%  In use:     18  Item Size:  24  Array size:   2400  Overhead:    840  Total:     3240  Cells:    405
-    name Capacity:    50  Min Free:    42   84%  In use:      8  Item Size:  24  Array size:   1200  Overhead:    440  Total:     1640  Cells:    205
+    list Capacity:    15  Min Free:     7   46%  In use:      6  Item Size:  16  Array size:     240  Overhead:    160  Total:      400  Cells:     50  Allocs:        14
+    link Capacity:   100  Min Free:    70   70%  In use:     18  Item Size:  24  Array size:    2400  Overhead:    840  Total:     3240  Cells:    405  Allocs:        48
+    name Capacity:    50  Min Free:    42   84%  In use:      8  Item Size:  24  Array size:    1200  Overhead:    440  Total:     1640  Cells:    205  Allocs:         8
     dstack: <0> 
 
 Deallocating name lists ...
 
 Memory Use:
-    list Capacity:    15  Min Free:     7   46%  In use:      0  Item Size:  16  Array size:    240  Overhead:    160  Total:      400  Cells:     50
-    link Capacity:   100  Min Free:    70   70%  In use:      0  Item Size:  24  Array size:   2400  Overhead:    840  Total:     3240  Cells:    405
-    name Capacity:    50  Min Free:    42   84%  In use:      0  Item Size:  24  Array size:   1200  Overhead:    440  Total:     1640  Cells:    205
+    list Capacity:    15  Min Free:     7   46%  In use:      0  Item Size:  16  Array size:     240  Overhead:    160  Total:      400  Cells:     50  Allocs:        14
+    link Capacity:   100  Min Free:    70   70%  In use:      0  Item Size:  24  Array size:    2400  Overhead:    840  Total:     3240  Cells:    405  Allocs:        48
+    name Capacity:    50  Min Free:    42   84%  In use:      0  Item Size:  24  Array size:    1200  Overhead:    440  Total:     1640  Cells:    205  Allocs:         8
     dstack: <0> 
 
 Freeing heap memory

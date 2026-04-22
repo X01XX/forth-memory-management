@@ -26,7 +26,7 @@ cs
     cr #4 spaces ." Link mma:         " link-mma .mma-usage
     cr #4 spaces ." Region mma:       " region-mma .mma-usage
     cr #4 spaces ." dstack: "
-    base @ >r decimal .s r> base ! 
+    base @ >r decimal .s r> base !
 ;
 
 \ Init array-stacks.
@@ -34,15 +34,15 @@ cs
 #102 list-mma-init
 #103 region-mma-init
 
-23
-2 link-new
+#23
+#2 link-new
 list-new
-2 3 region-new
-4 5 region-new
+#2 #3 region-new
+#4 #5 region-new
 dup region-deallocate
 
 list-new
-4 5 region-new over list-push-struct
+#4 #5 region-new over list-push-struct
 
 cr cr ." structs on stack: " .stack-structs
 

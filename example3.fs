@@ -23,7 +23,7 @@ cs
     cr #4 spaces ." Link mma:         " link-mma .mma-usage
     cr #4 spaces ." Region mma:       " region-mma .mma-usage
     cr #4 spaces ." dstack: "
-    base @ >r decimal .s r> base ! 
+    base @ >r decimal .s r> base !
 ;
 
 \ Init array-stacks.
@@ -58,8 +58,8 @@ cr ." Deallocating ..."
 
 dup                             \ root root
 ' region-deallocate             \ root root xt
-swap list-apply                 \ root
-list-deallocate                 \ 
+swap list-apply-recursive       \ root
+list-deallocate-recursive       \
 
 cr memory-use cr
 

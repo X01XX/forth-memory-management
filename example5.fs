@@ -4,8 +4,6 @@
 #15 constant all-bits
  #8 constant ms-bit
 
-0 value structinfo-list-store
-
 include tools.fs
 include tools2.fs
 include struct.fs
@@ -33,7 +31,7 @@ list-new to structinfo-list-store
 ' structinfo-list-deallocate-struct-list ' structinfo-list-print-struct-list s" List" list-mma list-id structinfo-new structinfo-list-store structinfo-list-push-end
 ' structinfo-deallocate ' .structinfo s" StructInfo" structinfo-mma structinfo-id structinfo-new structinfo-list-store structinfo-list-push-end
 
-\ The list, link, and StructInfo structs allow for the creation of the structinfo-list-store,                                                                                
+\ The list, link, and StructInfo structs allow for the creation of the structinfo-list-store,
 
 #103 region-mma-init
 ' region-deallocate ' .region s" Region" region-mma region-id structinfo-new structinfo-list-store structinfo-list-push-end
@@ -68,9 +66,11 @@ over list-push-struct   \ lst0 lst1
 #5
 over list-push          \ lst0 lst1
 
+cr .stack-structs cr
 cr cr ." list: "
 dup structinfo-list-print-struct-list
 cr
+cr .stack-structs cr
 
 \ Finish.
 cr structinfo-list-store structinfo-list-print-memory-use cr

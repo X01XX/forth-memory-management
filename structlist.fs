@@ -113,7 +113,7 @@
     list-copy                           \ ret-lst
 
     [ ' struct-inc-use-count ] literal  \ ret-lst xt
-    over list-apply                     \ ret-lst
+    over list-apply-recursive           \ ret-lst
 ;
 
 \ Return a flattened struct list.
@@ -127,3 +127,22 @@
     over list-apply                     \ ret-lst
 ;
 
+\ Remove a struct item based on index.
+: list-remove-item-struct ( u1 lst0 -- item )
+    \ Check arg.
+    assert-tos-is-list
+
+    list-remove-item        \ item
+    dup struct-dec-use-count
+;
+
+\ Return a list with elements reversed.
+: list-reverse-struct ( lst0 -- lst )
+    \ Check arg.
+    assert-tos-is-list
+
+    list-reverse                        \ ret-list
+
+    [ ' struct-inc-use-count ] literal  \ ret-lst xt
+    over list-apply                     \ ret-lst
+;

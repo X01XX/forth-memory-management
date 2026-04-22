@@ -23,16 +23,16 @@ floatnum-header-disp cell+   constant floatnum-number-disp
 \ Check instance type.
 : is-allocated-floatnum ( addr -- flag )
     dup floatnum-mma mma-is-item  \ addr bool
-    if  
+    if
         get-first-word          \ w t | f
-        if  
+        if
             floatnum-id =         \ bool
         else
-            false               \ f 
+            false               \ f
         then
     else
         drop
-        false                   \ f 
+        false                   \ f
     then
 ;
 

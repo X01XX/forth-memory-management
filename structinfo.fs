@@ -141,10 +141,10 @@ structinfo-deallocate-xt-disp   cell+   constant structinfo-name-disp           
     struct-set-use-count            \ d-xt p-xt c-addr u mma1 id0 snf
 
     \ Set struct instance id.
-    tuck _structinfo-set-inst-id    \ d-xt p-xt c-addr u mma1 snf 
+    tuck _structinfo-set-inst-id    \ d-xt p-xt c-addr u mma1 snf
 
     \ Set struct mma.
-    tuck _structinfo-set-mma        \ d-xt p-xt c-addr u snf 
+    tuck _structinfo-set-mma        \ d-xt p-xt c-addr u snf
 
     \ Set struct name.
     -rot                            \ d-xt p-xt snf c-addr u
@@ -179,7 +179,6 @@ structinfo-deallocate-xt-disp   cell+   constant structinfo-name-disp           
     assert-tos-is-structinfo
 
     dup struct-get-use-count    \ structinfo-addr count
-
     dup 0< abort" invalid use count"
 
     #2 <
@@ -191,7 +190,7 @@ structinfo-deallocate-xt-disp   cell+   constant structinfo-name-disp           
 ;
 
 \ Return true if a structinfo-inst-id matches a number.
-: structinfo-inst-id-eq ( id1 snf0 -- flag )                                                                                      
+: structinfo-inst-id-eq ( id1 snf0 -- flag )
     \ Check args.
     assert-tos-is-structinfo
 

@@ -3,7 +3,7 @@
 \ Deallocate a name list.
 : name-list-deallocate ( name-lst -- )
     dup struct-get-use-count                    \ name-lst uc
-    2 < if
+    #2 < if
         [ ' name-deallocate ] literal over      \ name-lst xt name-lst
         list-apply                              \ Deallocate name instances in the list.
     then

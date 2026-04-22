@@ -1,15 +1,15 @@
 \ Functions for a list of floatnums.
 
 \ Check if tos is an empty list, or has a floatnum instance as its first item.
-: assert-tos-is-floatnum-list ( tos -- tos )                                                                             
-    dup list-is-empty
+: assert-tos-is-floatnum-list ( tos -- tos )
+    dup list-is-empty?
     if
     else
         dup list-get-links link-get-data
         assert-tos-is-floatnum
         drop
     then
-;   
+;
 
 \ Deallocate a float list.
 : floatnum-list-deallocate ( fnum-lst0 -- )
@@ -17,7 +17,7 @@
     assert-tos-is-floatnum-list
 
     dup struct-get-use-count                    \ floatnum-lst uc
-    2 < if
+    #2 < if
         [ ' floatnum-deallocate ] literal over   \ floatnum-lst xt floatnum-lst
         list-apply                              \ Deallocate float instances in the list.
     then
@@ -33,7 +33,7 @@
 ;
 
 \ Push a floatnum to a floatnum-list.
-: floatnum-list-push ( fnum fnum-lst0 -- )                                                                                   
+: floatnum-list-push ( fnum fnum-lst0 -- )
     \ Check args.
     assert-tos-is-floatnum-list
     assert-nos-is-floatnum
@@ -42,7 +42,7 @@
 ;
 
 \ Push a floatnum to the end floatnum-list.
-: floatnum-list-push-end ( fnum fnum-lst0 -- )                                                                                   
+: floatnum-list-push-end ( fnum fnum-lst0 -- )
     \ Check args.
     assert-tos-is-floatnum-list
     assert-nos-is-floatnum

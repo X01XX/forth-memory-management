@@ -39,7 +39,7 @@ list-header-disp    cell+   constant list-links-disp
 
 0 value list-mma  \ Storage for list mma struct instance.
 
-\ Init lisp, and lisk, mma.
+\ Init list mma.
 : list-mma-init ( num-items -- ) \ Sets list-mma
     dup 1 <
     abort" list-mma-init: Invalid number items."
@@ -65,7 +65,7 @@ list-header-disp    cell+   constant list-links-disp
 ;
 
 \ Check TOS for list, unconventional, leaves stack unchanged.
-: assert-tos-is-list ( lst0 -- lst0 )
+: assert-tos-is-list ( tos -- tos )
     dup is-allocated-list
     0= abort" TOS is not an allocated list."
 ;
@@ -77,7 +77,7 @@ list-header-disp    cell+   constant list-links-disp
 ;
 
 \ Check 3OS for list, unconventional, leaves stack unchanged.
-: assert-3os-is-list ( lst2 arg1 arg0 -- lst2 arg1 arg0 )
+: assert-3os-is-list ( 3os nos tos -- 3os nos tos )
     #2 pick is-allocated-list
     0= abort" 3OS is not an allocated list."
 ;
@@ -141,7 +141,7 @@ list-header-disp    cell+   constant list-links-disp
 ;
 
 \ Return true if a list is empty.
-: list-is-empty ( list0 -- flag )
+: list-is-empty? ( list0 -- flag )
     \ Check arg.
     assert-tos-is-list
 
@@ -218,24 +218,23 @@ list-header-disp    cell+   constant list-links-disp
     \ Check arg.
     assert-tos-is-list
 
-    ." (List: " dup hex.
+    ." (List: " dup hex. ." uc: " dup struct-get-use-count dec.
 
     list-get-links              \ lst-link
     begin
         ?dup
     while
-        dup .link               \ lst-link
-
         \ Check for sub-list.
-        dup link-get-data       \ lst-lisk link-data
+        dup link-get-data       \ lst-link link-data
         is-allocated-list       \ lst-link bool
         if
             \ Process sub-list.
-            dup link-get-data   \ lst-link lst-data
+            dup link-get-data   \ lst-link link-data
             recurse             \ lst-link
             link-get-next       \ lst-link
             dup 0<> if space then
         else
+            dup .link           \ lst-link
             link-get-next       \ link-next
         then
     repeat
@@ -265,7 +264,7 @@ list-header-disp    cell+   constant list-links-disp
         if
             \ Process sub-list.
             #2 pick             \ xt lst-link link-data xt
-            swap                \ xt lst-lisk xt link-data
+            swap                \ xt lst-link xt link-data
             recurse             \ xt lst-link
         else
             #2 pick             \ xt lst-link link-data xt
@@ -322,7 +321,7 @@ list-header-disp    cell+   constant list-links-disp
         link-get-next       \ xt item link-next
     repeat
 
-    \ Cleanup, return.      \ xt item  
+    \ Cleanup, return.      \ xt item
     2drop
     false
 ;
@@ -332,7 +331,7 @@ list-header-disp    cell+   constant list-links-disp
 \
 \ e.g. TOS is a list of numbers.
 \ [ ' = ] literal over #5 swap list-find
-: list-find ( xt item list -- cell true | false )
+: list-find ( xt item list -- cell t | f )
     \ Check arg.
     assert-tos-is-list
 
@@ -411,11 +410,11 @@ list-header-disp    cell+   constant list-links-disp
 \
 \ If list data are struct instances, use list-pop-struct, to dec the use count.
 \ or dec the instance use count of the result.
-: list-pop ( lst0 -- data true | false )
+: list-pop ( lst0 -- data t | f )
     \ Check arg.
     assert-tos-is-list
 
-    dup list-is-empty
+    dup list-is-empty?
     if
         drop
         false
@@ -451,7 +450,7 @@ list-header-disp    cell+   constant list-links-disp
 \
 \ e.g. TOS is a list of numbers.
 \ [ ' = ] literal over #5 swap list-remove
-: list-remove ( xt item list -- data true | false )
+: list-remove ( xt item list -- data t | f )
     \ Check arg.
     assert-tos-is-list
 
@@ -531,7 +530,7 @@ list-header-disp    cell+   constant list-links-disp
 \
 \ If list data are struct instances, the caller should dec the instance use count of the result.
 \ e.g. if dup struct-dec-use-count then
-: list-remove-item ( u1 lst0 -- data true | false )
+: list-remove-item ( u1 lst0 -- data )
     \ Check args.
     assert-tos-is-list
     over                        \ u1 lst0 u1
@@ -543,8 +542,8 @@ list-header-disp    cell+   constant list-links-disp
 
     \ Check for first item
     over 0= if
-        nip
-        list-pop
+        nip                     \ lst0
+        list-pop drop           \ data
         exit
     then
                                 \ u1 lst0
@@ -562,22 +561,22 @@ list-header-disp    cell+   constant list-links-disp
     swap link-deallocate        \ lst0 data last cur-next
     swap _link-set-next         \ lst0 data
     rot _list-dec-length        \ data
-    true
 ;
 
 \ Pop the last item in a list.
 \
 \ If list data are struct instances, use list-pop-end-struct, to dec the use count.
 \ or dec the instance use count of the result.
-: list-pop-end ( lst0 -- data true | false )
+: list-pop-end ( lst0 -- data t | f )
     \ Check arg.
     assert-tos-is-list
 
-    dup list-is-empty
+    dup list-is-empty?
     if drop false exit then
 
     dup list-get-length 1-
     swap list-remove-item
+    true
 ;
 
 \ Deallocate a list.
@@ -592,8 +591,40 @@ list-header-disp    cell+   constant list-links-disp
 
     dup struct-get-use-count        \ lst0 uc
 
-    dup 0 <
-    abort" invalid use count"
+    dup 0 < abort" invalid use count"
+
+    #2 <                            \ lst0 bool
+    if
+        \ Deallocate links.
+        dup list-get-links          \ lst0 lst-link
+        begin
+            ?dup
+        while
+            dup link-get-next       \ lst0 lst-link lst-link-next
+            swap                    \ lst0 lst-link-next lst-link
+
+            \ Process link.
+            link-deallocate         \ lst0 lst-link-next
+        repeat
+                                    \ lst0
+        \ Clear fields.
+        0 over _list-set-length
+        0 over _list-set-links
+
+        \ Deallocate list instance.
+        list-mma mma-deallocate
+    else
+        struct-dec-use-count
+    then
+;
+
+: list-deallocate-recursive ( lst0 -- )
+    \ Check arg.
+    assert-tos-is-list
+
+    dup struct-get-use-count        \ lst0 uc
+
+    dup 0 < abort" invalid use count"
 
     #2 <                            \ lst0 bool
     if
@@ -795,6 +826,26 @@ list-header-disp    cell+   constant list-links-disp
         ?dup
     while
         dup link-get-data       \ xt link0 data0
+        #2 pick                 \ xt link0 data0 xt
+        execute                 \ xt link0
+
+        link-get-next           \ xt link-next
+    repeat
+                                \ xt
+    drop
+;
+
+\ Apply a function to each item in a list, and sub-lists.
+\ xt signature is ( link-data -- )
+: list-apply-recursive ( xt list0 -- )
+    \ Check arg.
+    assert-tos-is-list
+
+    list-get-links              \ xt links0
+    begin
+        ?dup
+    while
+        dup link-get-data       \ xt link0 data0
 
         \ Check for sub-list.
         dup is-allocated-list   \ xt link0 data0 bool
@@ -888,6 +939,48 @@ list-header-disp    cell+   constant list-links-disp
 
     \ Get data to return.
     2drop link-get-data
+;
+
+\ Return a reference to the first item in a list.
+: list-get-first-item ( list -- data )
+    \ Check args.
+    assert-tos-is-list
+
+    0 swap list-get-item
+;
+
+\ Return a reference to the second item in a list.
+: list-get-second-item ( list -- data )
+    \ Check args.
+    assert-tos-is-list
+
+    1 swap list-get-item
+;
+
+\ Return a reference to the third item in a list.
+: list-get-third-item ( list -- data )
+    \ Check args.
+    assert-tos-is-list
+
+    #2 swap list-get-item
+;
+
+\ Return a reference to the fourth item in a list.
+: list-get-fourth-item ( list -- data )
+    \ Check args.
+    assert-tos-is-list
+
+    #3 swap list-get-item
+;
+
+\ Return a reference to the last item in a list.
+: list-get-last-item ( list -- data )
+    \ Check args.
+    assert-tos-is-list
+
+    dup list-get-length     \ list len
+    1 -                     \ list inx
+    swap list-get-item
 ;
 
 \ Sort a list, given an xt that returns true if two successive items
@@ -1012,3 +1105,27 @@ list-header-disp    cell+   constant list-links-disp
     rot                         \ xt 0 lst0
     list-find-all               \ lst
 ;
+
+\ Return a list with elements reversed.
+: list-reverse ( lst0 -- lst )
+    \ Check arg.
+    assert-tos-is-list
+
+    \ Init return list.
+    list-new swap               \ ret-lst lst0
+
+    \ Prep for loop.
+    list-get-links              \ ret-lst lst-link
+
+    begin
+        ?dup
+    while
+        dup link-get-data       \ ret-lst lst-link elemx
+        #2 pick                 \ ret-lst lst-link elemx ret-lst
+        list-push               \ ret-lst lst-link
+
+        link-get-next
+    repeat
+                                \ ret-lst
+;
+

@@ -139,7 +139,7 @@ stack-header-disp   cell+   constant stack-items-disp   \ Item on the stack.
 
     \ Get stack items start.
     dup stack-items-disp + swap \ stack-items stack-addr
-    
+
     stack-get-num-on-stack      \ stack-items num-on-stack
 
     cells +                     \ stack-cell[last]

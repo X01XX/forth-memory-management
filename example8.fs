@@ -4,8 +4,6 @@
 #15 constant all-bits
  #8 constant ms-bit
 
-0 value structinfo-list-store
-
 include tools.fs
 include tools2.fs
 include struct.fs

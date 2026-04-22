@@ -3,28 +3,28 @@ Initializing Link store.
 Initializing List store.
 Initializing StructInfo store.
 
-Dropped link: $635C5BCB42F0 
+Dropped link: $5B1030B172F0 
 
 
 Memory use:
-    Link:       Capacity:   101  Min Free:    97   96%  In use:      4  Item Size:  24  Array size:   2424  Overhead:    848  Total:     3272  Cells:    409
-    List:       Capacity:   102  Min Free:   101   99%  In use:      1  Item Size:  16  Array size:   1632  Overhead:    856  Total:     2488  Cells:    311
-    StructInfo: Capacity:    10  Min Free:     7   70%  In use:      3  Item Size:  72  Array size:    720  Overhead:    120  Total:      840  Cells:    105
-                                                                                                                              Total:     6600            825
+    Link:       Capacity:   101  Min Free:    97   96%  In use:      4  Item Size:  24  Array size:    2424  Overhead:    848  Total:     3272  Cells:    409  Allocs:         4
+    List:       Capacity:   102  Min Free:   101   99%  In use:      1  Item Size:  16  Array size:    1632  Overhead:    856  Total:     2488  Cells:    311  Allocs:         1
+    StructInfo: Capacity:    10  Min Free:     7   70%  In use:      3  Item Size:  72  Array size:     720  Overhead:    120  Total:      840  Cells:    105  Allocs:         3
+                                                                                            Totals:    4776              1824             6600            825                  8
 Forth stack: <0> 
 
 
 Deallocating ...
 
 Memory use:
-    Link:       Capacity:   101  Min Free:    97   96%  In use:      4  Item Size:  24  Array size:   2424  Overhead:    848  Total:     3272  Cells:    409
-    List:       Capacity:   102  Min Free:   101   99%  In use:      1  Item Size:  16  Array size:   1632  Overhead:    856  Total:     2488  Cells:    311
-    StructInfo: Capacity:    10  Min Free:     7   70%  In use:      3  Item Size:  72  Array size:    720  Overhead:    120  Total:      840  Cells:    105
-                                                                                                                              Total:     6600            825
+    Link:       Capacity:   101  Min Free:    97   96%  In use:      4  Item Size:  24  Array size:    2424  Overhead:    848  Total:     3272  Cells:    409  Allocs:         4
+    List:       Capacity:   102  Min Free:   101   99%  In use:      1  Item Size:  16  Array size:    1632  Overhead:    856  Total:     2488  Cells:    311  Allocs:         1
+    StructInfo: Capacity:    10  Min Free:     7   70%  In use:      3  Item Size:  72  Array size:     720  Overhead:    120  Total:      840  Cells:    105  Allocs:         3
+                                                                                            Totals:    4776              1824             6600            825                  8
 Forth stack: <0> 
 
 
 Link instances not fully deallocated
 
-In use: $635C5BCB42F0 
+In use: $5B1030B172F0 
 

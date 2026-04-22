@@ -24,7 +24,7 @@ expect t, found: -1
 
 expect f, found: 0 
 
-Numbers in order: 1 7 2 5 3 4 1 6 2 
+Numbers in order: 1 105352819034488 105352819034520 4 1 105352819034504 
 
 flattened list: (6  2  1  4  5  3  7  2  1 )
 
@@ -37,17 +37,17 @@ flattened list: (010X 0x0X 0X11 00x1 0000)
 
 
 Memory use:
-    List mma:         Capacity:   102  Min Free:    88   86%  In use:     13  Item Size:  16  Array size:   1632  Overhead:    856  Total:     2488  Cells:    311
-    Link mma:         Capacity:   101  Min Free:    56   55%  In use:     45  Item Size:  24  Array size:   2424  Overhead:    848  Total:     3272  Cells:    409
-    Region mma:       Capacity:   102  Min Free:    97   95%  In use:      5  Item Size:  24  Array size:   2448  Overhead:    856  Total:     3304  Cells:    413
-    dstack: <6> 108850956000024 108850955999976 108850955999912 108850955999896 108850955999864 108850955999832 
+    List mma:         Capacity:   102  Min Free:    88   86%  In use:     13  Item Size:  16  Array size:    1632  Overhead:    856  Total:     2488  Cells:    311  Allocs:        25
+    Link mma:         Capacity:   101  Min Free:    56   55%  In use:     45  Item Size:  24  Array size:    2424  Overhead:    848  Total:     3272  Cells:    409  Allocs:        58
+    Region mma:       Capacity:   102  Min Free:    97   95%  In use:      5  Item Size:  24  Array size:    2448  Overhead:    856  Total:     3304  Cells:    413  Allocs:         5
+    dstack: <6> 105352819034584 105352819034536 105352819034472 105352819034456 105352819034424 105352819034392 
 
 Deallocating ...
 
 Memory use:
-    List mma:         Capacity:   102  Min Free:    88   86%  In use:      0  Item Size:  16  Array size:   1632  Overhead:    856  Total:     2488  Cells:    311
-    Link mma:         Capacity:   101  Min Free:    56   55%  In use:      0  Item Size:  24  Array size:   2424  Overhead:    848  Total:     3272  Cells:    409
-    Region mma:       Capacity:   102  Min Free:    97   95%  In use:      0  Item Size:  24  Array size:   2448  Overhead:    856  Total:     3304  Cells:    413
+    List mma:         Capacity:   102  Min Free:    88   86%  In use:      0  Item Size:  16  Array size:    1632  Overhead:    856  Total:     2488  Cells:    311  Allocs:        25
+    Link mma:         Capacity:   101  Min Free:    56   55%  In use:      0  Item Size:  24  Array size:    2424  Overhead:    848  Total:     3272  Cells:    409  Allocs:        58
+    Region mma:       Capacity:   102  Min Free:    97   95%  In use:      0  Item Size:  24  Array size:    2448  Overhead:    856  Total:     3304  Cells:    413  Allocs:         5
     dstack: <0> 
 
 Freeing heap memory

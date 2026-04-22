@@ -35,13 +35,13 @@ region-state-0-disp cell+   constant region-state-1-disp
     then
 ;
 
-\ Check TOS for region, unconventional, leaves stack unchanged. 
+\ Check TOS for region, unconventional, leaves stack unchanged.
 : assert-tos-is-region ( arg0 -- arg0 )
     dup is-allocated-region 0=
     abort" TOS is not an allocated region"
 ;
 
-\ Check NOS for region, unconventional, leaves stack unchanged. 
+\ Check NOS for region, unconventional, leaves stack unchanged.
 : assert-nos-is-region ( arg1 arg0 -- arg1 arg0 )
     over is-allocated-region 0=
     abort" NOS is not an allocated region"
@@ -57,7 +57,7 @@ region-state-0-disp cell+   constant region-state-1-disp
     region-state-0-disp +   \ Add offset.
     @                       \ Fetch the field.
 ;
- 
+
 \ Return the second field from a region instance.
 : region-get-state-1 ( addr -- u)
     \ Check arg.
@@ -67,7 +67,7 @@ region-state-0-disp cell+   constant region-state-1-disp
     region-state-1-disp +   \ Add offset.
     @                       \ Fetch the field.
 ;
- 
+
 \ Set the first field from a region instance, use only in this file.
 : _region-set-state-0 ( u1 addr -- )
     \ Check args.
@@ -76,7 +76,7 @@ region-state-0-disp cell+   constant region-state-1-disp
     region-state-0-disp +   \ Add offset.
     !                       \ Set first field.
 ;
- 
+
 \ Set the second field from a region instance, use only in this file.
 : _region-set-state-1 ( u1 addr -- )
     \ Check args.
@@ -101,7 +101,7 @@ region-state-0-disp cell+   constant region-state-1-disp
     \ Store id.
     region-id over              \ u1 u2 addr id addr
     struct-set-id               \ u1 u2 addr
-    
+
     \ Init use count.
     0 over struct-set-use-count
 
@@ -124,7 +124,7 @@ region-state-0-disp cell+   constant region-state-1-disp
     dup  region-get-state-1
     swap region-get-state-0
     ms-bit          \ st2 st1 ms-bit
-    
+
     \ Process each bit.
     begin
       dup
@@ -180,6 +180,7 @@ region-state-0-disp cell+   constant region-state-1-disp
 
 \ Deallocate a region.
 : region-deallocate ( reg0 -- )
+
     \ Check arg.
     assert-tos-is-region
 
@@ -187,7 +188,7 @@ region-state-0-disp cell+   constant region-state-1-disp
     dup 0< abort" invalid use count"
 
     #2 <
-    if 
+    if
         \ Clear fields.
         0 over _region-set-state-0
         0 over _region-set-state-1
@@ -260,7 +261,7 @@ region-state-0-disp cell+   constant region-state-1-disp
 ;
 
 \ Return the intersection of two regions, or false if they do not intersect.
-\ Since this must check for intersection first, there may be no need to check 
+\ Since this must check for intersection first, there may be no need to check
 \ for intersection before calling this.
 : region-intersection ( reg1 reg0 -- reg true | false )
     \ Check args.
@@ -276,10 +277,10 @@ region-state-0-disp cell+   constant region-state-1-disp
 
         \ Get high and low state of reg1
         rot region-high-low \ reg0high reg0low reg1high reg1low
-  
+
         \ Group high/low states.
         rot                 \ reg0high reg1ghigh reg1low reg0low
-  
+
         \ Calc result
         or -rot and
         region-new
@@ -365,7 +366,7 @@ region-state-0-disp cell+   constant region-state-1-disp
     assert-tos-is-region
 
     region-get-states       \ to-1 s1 s0
-    rot                     \ s1 s0 to-1 
+    rot                     \ s1 s0 to-1
     tuck                    \ s1 to-1 s0 to-1
     or                      \ s1 to-1 s0'
     -rot                    \ s0' s1 to-1
@@ -452,7 +453,7 @@ region-state-0-disp cell+   constant region-state-1-disp
     0=                          \ flag
 ;
 
-\ Push a region to a region-list.                                                                              
+\ Push a region to a region-list.
 : region-list-push ( reg1 list0 -- )
     \ Check args.
     assert-tos-is-list
