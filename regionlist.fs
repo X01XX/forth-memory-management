@@ -99,7 +99,7 @@
     2dup                                    \ reg1 list0 reg1 list0
     [ ' region-superset-of ] literal        \ reg1 list0 reg1 list0 xt
     -rot                                    \ reg1 list0 xt reg1 list0
-    list-member                             \ reg1 list0 flag
+    list-member                         \ reg1 list0 flag
     if
         2drop
         false

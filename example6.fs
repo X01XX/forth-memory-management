@@ -63,35 +63,35 @@ over list-push
 cr cr ." List of lists root: " ' . #2 pick .list cr
 cr cr ." List of lists copy push extra list: " ' . over .list cr
 
-' = #3 #2 pick list-find    \ root-lst copy-lst, item t | f
+' = #3 #2 pick list-find-recursive    \ root-lst copy-lst, item t | f
 cr ." expect 3 -1, found: " swap . . cr
 
-' = #9 #2 pick list-find    \ root-lst copy-lst, item t | f
+' = #9 #2 pick list-find-recursive    \ root-lst copy-lst, item t | f
 cr ." expect 0, found: " . cr
 
-' = #4 #2 pick list-find    \ root-lst copy-lst, item t | f
+' = #4 #2 pick list-find-recursive    \ root-lst copy-lst, item t | f
 cr ." expect 4 -1, found: " swap . . cr
 
-' = #2 #2 pick list-find-all \ root-lst copy-lst lst
+' = #2 #2 pick list-find-all-recursive \ root-lst copy-lst lst
 cr ." expect (2 2), found: " ' . over .list cr
 list-deallocate
 
-' = #4 #2 pick list-find-all \ root-lst copy-lst lst
+' = #4 #2 pick list-find-all-recursive \ root-lst copy-lst lst
 cr ." expect (4), found: " ' . over .list cr
 list-deallocate
 
-' = #7 #2 pick list-member  \ root-list copy-list bool
+' = #7 #2 pick list-member-recursive  \ root-list copy-list bool
+cr ." at 1 expect t, found: " . cr
+
+' = #4 #2 pick list-member-recursive  \ root-list copy-list bool
 cr ." expect t, found: " . cr
 
-' = #4 #2 pick list-member  \ root-list copy-list bool
-cr ." expect t, found: " . cr
-
-' = #9 #2 pick list-member  \ root-list copy-list bool
+' = #9 #2 pick list-member-recursive  \ root-list copy-list bool
 cr ." expect f, found: " . cr
 
-cr ." Numbers in order: " ' . over list-apply cr
+cr ." Numbers in order: " ' . over list-apply-recursive cr
 
-' 2drop-true 0 #2 pick list-find-all
+' 2drop-true 0 #2 pick list-find-all-recursive
 cr ." flattened list: " ' . over .list cr
 
 \ Make structure list.
@@ -108,7 +108,7 @@ dup list-copy-struct
 cr cr ." Region list: " over .region-list
 cr cr ." Region list copy + 0000: " dup .region-list cr
 
-' 2drop-true 0 #2 pick list-find-all-struct
+' 2drop-true 0 #2 pick list-find-all-struct-recursive
 cr ." flattened list: " dup .region-list cr
 
 \ Finish.

@@ -295,6 +295,34 @@ list-header-disp    cell+   constant list-links-disp
     while                       \ xt item link
         dup link-get-data       \ xt item link link-data
 
+        #2 pick swap            \ xt item link item link-data
+        #4 pick                 \ xt item link item link-data xt
+        execute                 \ xt item link flag
+        if
+            \ Return true.
+            2drop drop
+            true
+            exit
+        then
+
+        link-get-next       \ xt item link-next
+    repeat
+
+    \ Cleanup, return.      \ xt item
+    2drop
+    false
+;
+
+: list-member-recursive ( xt item list -- flag )
+    \ Check arg.
+    assert-tos-is-list
+
+    list-get-links              \ xt item link
+    begin
+        ?dup
+    while                       \ xt item link
+        dup link-get-data       \ xt item link link-data
+
         \ Check for sub-list.
         dup is-allocated-list   \ xt item link link-data bool
         if
@@ -332,6 +360,45 @@ list-header-disp    cell+   constant list-links-disp
 \ e.g. TOS is a list of numbers.
 \ [ ' = ] literal over #5 swap list-find
 : list-find ( xt item list -- cell t | f )
+    \ Check arg.
+    assert-tos-is-list
+
+    \ Check for an empty list.
+    dup list-get-length
+    0=
+    if
+        \ Return false.
+        2drop drop
+        false
+        exit
+    then
+
+    list-get-links              \ xt item link
+    begin
+        ?dup
+    while                       \ xt item link
+        2dup                    \ xt item link item link
+        link-get-data           \ xt item link item link-data
+
+        #4 pick             \ xt item link item link-data xt
+        execute             \ xt item link flag
+        if
+            \ Return cell true.
+            link-get-data   \ xt item data
+            nip nip
+            true
+            exit
+        then
+
+        link-get-next           \ xt item link
+    repeat
+
+    \ Cleanup, return false.    \ xt item
+    2drop
+    false
+;
+
+: list-find-recursive ( xt item list -- cell t | f )
     \ Check arg.
     assert-tos-is-list
 
@@ -691,6 +758,48 @@ list-header-disp    cell+   constant list-links-disp
         2dup                \ ret xt item link item link
         link-get-data       \ ret xt item link item link-data
 
+        #4 pick             \ ret xt item link item link-data xt
+        execute             \ ret xt item link flag
+        if
+            \ Get data.
+            dup link-get-data   \ ret xt item link data
+            #4 pick             \ ret xt item link data ret
+            list-push           \ ret xt item link
+        then
+
+        link-get-next       \ ret xt item link-next
+    repeat
+
+    \ Cleanup.
+    drop 2drop              \ ret-list
+;
+
+: list-find-all-recursive ( xt item list -- list )
+    \ Check arg.
+    assert-tos-is-list
+
+                        \ xt item list
+    rot                 \ item list xt
+    list-new            \ item list xt ret
+    swap                \ item list ret xt
+    2swap               \ ret xt item list
+
+    \ Check for an empty list.
+    dup list-get-length
+    0=
+    if
+        \ Return false.
+        2drop drop
+        exit
+    then
+
+    list-get-links          \ ret xt item first-link
+    begin
+        dup                 \ ret xt item link link
+    while                   \ ret xt item link
+        2dup                \ ret xt item link item link
+        link-get-data       \ ret xt item link item link-data
+
 
         \ Check for sub-list.
         dup is-allocated-list   \ ret xt item link item link-data bool
@@ -744,7 +853,7 @@ list-header-disp    cell+   constant list-links-disp
         #3 pick                 \ xt list0 list-ret link1 xt
         over link-get-data      \ xt list0 list-ret link1 xt data1
         #4 pick                 \ xt list0 list-ret link1 xt data1 list0
-        list-member 0=          \ xt list0 list-ret link1 flag
+        list-member 0=      \ xt list0 list-ret link1 flag
         if
                                 \ xt list0 list-ret link1
             dup link-get-data   \ xt list0 list-ret link1 data1
@@ -781,7 +890,7 @@ list-header-disp    cell+   constant list-links-disp
         #3 pick                 \ xt list1 list-ret link0 xt
         over link-get-data      \ xt list1 list-ret link0 xt data0
         #3 pick                 \ xt list1 list-ret link0 xt data0 list-ret
-        list-member 0=          \ xt list1 list-ret link0 flag
+        list-member 0=      \ xt list1 list-ret link0 flag
         if
                                 \ xt list1 list-ret link0
             dup link-get-data   \ xt list1 list-ret link0 data0 list-ret
@@ -802,7 +911,7 @@ list-header-disp    cell+   constant list-links-disp
         #2 pick                 \ xt list-ret link1 xt
         over link-get-data      \ xt list-ret link0 xt data1
         #3 pick                 \ xt list-ret link0 xt data1 list-ret
-        list-member 0=          \ xt list-ret link1 flag
+        list-member 0=      \ xt list-ret link1 flag
         if
                                 \ xt list-ret link1
             dup link-get-data   \ xt list-ret link1 data1 list-ret
@@ -826,6 +935,7 @@ list-header-disp    cell+   constant list-links-disp
         ?dup
     while
         dup link-get-data       \ xt link0 data0
+
         #2 pick                 \ xt link0 data0 xt
         execute                 \ xt link0
 
@@ -886,7 +996,7 @@ list-header-disp    cell+   constant list-links-disp
         #3 pick                 \ xt list0 list-ret link1 xt
         over link-get-data      \ xt list0 list-ret link1 xt data1
         #4 pick                 \ xt list0 list-ret link1 xt data1 list0
-        list-member             \ xt list0 list-ret link1 flag
+        list-member         \ xt list0 list-ret link1 flag
         if
                                 \ xt list0 list-ret link1
             dup link-get-data   \ xt list0 list-ret link1 data1
@@ -896,7 +1006,7 @@ list-header-disp    cell+   constant list-links-disp
             #5 pick             \ xt list0 list-ret link1 data1 list-ret xt
             #2 pick             \ xt list0 list-ret link1 data1 list-ret xt data1
             #2 pick             \ xt list0 list-ret link1 data1 list-ret xt data1 list-ret
-            list-member         \ xt list0 list-ret link1 data1 list-ret flag
+            list-member     \ xt list0 list-ret link1 data1 list-ret flag
             if
                 2drop           \ xt list0 list-ret link1
             else

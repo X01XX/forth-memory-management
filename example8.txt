@@ -3,7 +3,7 @@ Initializing Link store.
 Initializing List store.
 Initializing StructInfo store.
 
-Dropped list: $5E9F4F7429B8 
+Dropped list: $5B2D1127E9B8 
 
 
 Memory use:
@@ -26,5 +26,5 @@ Forth stack: <0>
 
 List instances not fully deallocated
 
-In use: $5E9F4F7429B8 
+In use: $5B2D1127E9B8 
 

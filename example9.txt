@@ -4,7 +4,7 @@ Initializing List store.
 Initializing StructInfo store.
 Initializing Region store.
 
-Dropped region: $5CB9889342E0 
+Dropped region: $61A4F84A72E0 
 
 
 Memory use:
@@ -29,5 +29,5 @@ Forth stack: <0>
 
 Region instances not fully deallocated
 
-In use: $5CB9889342E0 
+In use: $61A4F84A72E0 
 
