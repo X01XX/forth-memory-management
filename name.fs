@@ -66,12 +66,10 @@ name-header-disp cell+  constant name-string-disp
 
 \ Return a new name struct instance address, with given data value.
 : name-new ( string-addr length -- name-addr )
-    name-mma mma-allocate       \ str-addr len name-addr
-    name-id over                \ str-addr len name-addr id name-addr
-    struct-set-id               \ str-addr len name-addr
-    0 over                      \ str-addr len name-addr 0 addr
-    struct-set-use-count        \ str-addr len name-addr
+    name-id name-mma
+    struct-allocate             \ str-addr len name-addr
 
+    \ Store string.
     -rot                        \ name-addr str-addr len
     #2 pick                     \ name-addr str-addr len name-addr
     name-set-string             \ name-addr

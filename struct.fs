@@ -49,3 +49,16 @@
     over struct-inc-use-count
     !
 ;
+
+\ Allocate a struct.
+\ Set id and use count.
+: struct-allocate ( id mma -- inst )
+    mma-allocate            \ id inst
+
+    tuck                    \ inst id inst
+    struct-set-id           \ inst
+
+    0 over                  \ inst 0 inst
+    struct-set-use-count    \ inst
+;
+

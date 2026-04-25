@@ -6,8 +6,8 @@
 
 include tools.fs
 include tools2.fs
-include struct.fs
 include mm_array.fs
+include struct.fs
 include link.fs
 include list.fs
 include structlist.fs

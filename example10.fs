@@ -1,13 +1,13 @@
 
 \ Constants.
- #4 constant num-bits
+#4 constant num-bits
 #15 constant all-bits
- #8 constant ms-bit
+#8 constant ms-bit
 
 include tools.fs
 include tools2.fs
-include struct.fs
 include mm_array.fs
+include struct.fs
 include link.fs
 include list.fs
 include structlist.fs

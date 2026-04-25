@@ -130,15 +130,8 @@ structinfo-deallocate-xt-disp   cell+   constant structinfo-name-disp           
 \ Return a new structinfo struct instance address, with given data value.
 : structinfo-new ( deallcate-xt print-xt c-addr u mma1 id0 -- snf )
 
-    structinfo-mma mma-allocate     \ d-xt p-xt c-addr u snf
-
-    \ Set struct id.
-    structinfo-id over              \ d-xt p-xt c-addr u mma1 id0 snf id0 snf
-    struct-set-id                   \ d-xt p-xt c-addr u mma1 id0 snf
-
-    \ Init use count.
-    0 over                          \ d-xt p-xt c-addr u mma1 id0 snf 0 snf
-    struct-set-use-count            \ d-xt p-xt c-addr u mma1 id0 snf
+    structinfo-id structinfo-mma
+    struct-allocate                 \ d-xt p-xt c-addr u snf
 
     \ Set struct instance id.
     tuck _structinfo-set-inst-id    \ d-xt p-xt c-addr u mma1 snf

@@ -96,14 +96,8 @@ region-state-0-disp cell+   constant region-state-1-disp
 : region-new ( u1 u0 -- addr)
 
     \ Allocate space.
-    region-mma mma-allocate     \ u1 u2 addr
-
-    \ Store id.
-    region-id over              \ u1 u2 addr id addr
-    struct-set-id               \ u1 u2 addr
-
-    \ Init use count.
-    0 over struct-set-use-count
+    region-id region-mma
+    struct-allocate         \ u1 u2 addr
 
     \ Prepare to store states.
     -rot            \ addr u1 u2

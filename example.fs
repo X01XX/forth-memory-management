@@ -1,7 +1,7 @@
 
 include tools.fs
-include struct.fs
 include mm_array.fs
+include struct.fs
 include link.fs
 include list.fs
 include structlist.fs

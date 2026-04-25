@@ -90,12 +90,9 @@ floatnum-header-disp cell+   constant floatnum-number-disp
 
 \ Return a new float struct instance address, with given data value.
 : floatnum-new ( F: r -- fnum )
-    floatnum-mma mma-allocate   \ F: r fnum
-    floatnum-id over            \ F: r fnum id fnum
-    struct-set-id               \ F: r len fnum
-    0 over                      \ F: r len fnum 0 fnum
-    struct-set-use-count        \ F: r len fnum
-    dup                         \ fnum fnum
+    floatnum-id floatnum-mma
+    struct-allocate             \ F: r fnum
+    dup                         \ F: r fum fnum
     floatnum-set-number         \ fnum
 ;
 
