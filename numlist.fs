@@ -52,7 +52,14 @@
     \ Check arg.
     assert-tos-is-list
 
-    list-deallocate
+    \ Check if the list will be deallocated for the last time.
+    dup struct-get-use-count                        \ lst0 uc
+    #2 < if 
+        \ Deallocate the list.
+        list-deallocate                                 \    
+    else 
+        struct-dec-use-count
+    then 
 ;
 
 \ Given an xt and number, apply the xt of the number and each list number, returning a new list.

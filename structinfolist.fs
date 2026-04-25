@@ -24,8 +24,11 @@
     #2 < if
         [ ' structinfo-deallocate ] literal over    \ structinfo-lst xt structinfo-lst
         list-apply                                  \ Deallocate structinfo instances in the list.
+
+        list-deallocate                             \ Deallocate list and links.
+    else
+        struct-dec-use-count
     then
-    list-deallocate                                 \ Deallocate list and links.
 ;
 
 \ Find a structinfo instance in a list, by instance id, if any.

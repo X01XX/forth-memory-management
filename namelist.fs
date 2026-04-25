@@ -6,8 +6,11 @@
     #2 < if
         [ ' name-deallocate ] literal over      \ name-lst xt name-lst
         list-apply                              \ Deallocate name instances in the list.
+
+        list-deallocate                             \ Deallocate list and links.
+    else
+        struct-dec-use-count
     then
-    list-deallocate                             \ Deallocate list and links.
 ;
 
 \ Return the intersection of two name lists.
