@@ -51,11 +51,7 @@ The examples can be run with the commands:
 
   gforth example6.fs  \ Test list functions that can work with lists with sub-lists.
 
-  gforth example7.fs  \ Shows a link being dropped, and detected later.
-
-  gforth example8.fs  \ Shows a list being dropped, and detected later.
-
-  gforth example9.fs  \ Shows a region being dropped, and detected later.
+  gforth example7.fs  \ Shows a link, list and region, being dropped, and detected later.
 
   gforth example10.fs \ Shows a list of floating point numbers, and an operation on the list, producing a second list.
 </pre>
