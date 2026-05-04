@@ -49,9 +49,14 @@ link-next-disp      cell+   constant link-data-disp
     link-data-disp + @
 ;
 
-\ Set link data cell, use only in this file.
+\ Set link data cell, use mostly in this file.
 : _link-set-data ( data-value link-addr -- )
     link-data-disp + !
+;
+
+\ Set link data cell, use mostly in this file.
+: _link-set-data-struct ( data-value link-addr -- )
+    link-data-disp + !struct
 ;
 
 \ Get link next cell.

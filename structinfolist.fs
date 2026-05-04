@@ -181,15 +181,6 @@
     cr .stack-structs-xt execute cr
 ;
 
-: assert-forth-stack-empty ( -- )
-    depth 0<>
-    if
-        cr ." Forth stack is not empty"
-        cr .stack-structs-xt execute cr
-        abort
-    then
-;
-
 \ Return true if the structinfo-list-store is using a given address
 \ for a list, link, or structinfo instance.
 : structinfo-list-store-using-addr?  ( addr -- bool )

@@ -1046,8 +1046,72 @@ list-header-disp    cell+   constant list-links-disp
         link-get-next
     repeat
 
-    \ Get data to return.
+    \ Get data to return.       \ link u count
     2drop link-get-data
+;
+
+\ Set a link data item, based on an index into a list.
+\ The index must be valid.
+: list-set-item ( element u list -- data )
+    \ Check args.
+    assert-tos-is-list
+
+    over                        \ elm u list u
+    over list-get-length        \ elm u list u len
+    over                        \ elm u list u len u
+    0<
+    abort" index LT 0"
+                                \ elm u list u len
+    >=
+    abort" index too large"
+                                \ elm u list
+    \ Step through links the given number of times.
+    0 swap                      \ elm u count list
+    list-get-links              \ elm u count link
+
+    begin
+        -rot 2dup <>            \ elm link u count
+    while
+        1+
+        rot                     \ elm u count+ link
+        link-get-next
+    repeat
+
+    \ Set element.              \ elm link u count
+    2drop                       \ elm link
+    _link-set-data              \
+;
+
+\ Set a link data item, based on an index into a list.
+\ The index must be valid.
+: list-set-item-struct ( element u list -- data )
+    \ Check args.
+    assert-tos-is-list
+
+    over                        \ elm u list u
+    over list-get-length        \ elm u list u len
+    over                        \ elm u list u len u
+    0<
+    abort" index LT 0"
+                                \ elm u list u len
+    >=
+    abort" index too large"
+                                \ elm u list
+    \ Step through links the given number of times.
+    0 swap                      \ elm u count list
+    list-get-links              \ elm u count link
+
+    begin
+        -rot 2dup <>            \ elm link u count
+    while
+        1+
+        rot                     \ elm u count+ link
+        link-get-next
+    repeat
+
+    \ Set element.              \ elm link u count
+    2drop                       \ elm link
+    _link-set-data-struct       \
 ;
 
 \ Return a reference to the first item in a list.

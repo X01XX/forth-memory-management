@@ -16,6 +16,8 @@ include structinfolist.fs
 include stackprint2.fs
 include floatnum.fs
 include floatnumlist.fs
+include token.fs
+include tokenlist.fs
 cs
 
 \ Init array-stacks.
@@ -23,6 +25,7 @@ cs
 #102 list-mma-init
 #010 structinfo-mma-init
 #100 floatnum-mma-init
+#020 token-mma-init
 
 \ Init structinfo list.
 list-new to structinfo-list-store
@@ -32,7 +35,8 @@ list-new to structinfo-list-store
 
 \ The list, link, and StructInfo structs allow for the creation of the structinfo-list-store,
 
-' floatnum-deallocate ' f. s" FloatNum" floatnum-mma floatnum-id structinfo-new structinfo-list-store structinfo-list-push-end
+' floatnum-deallocate ' .floatnum s" FloatNum" floatnum-mma floatnum-id structinfo-new structinfo-list-store structinfo-list-push-end
+' token-deallocate ' .token s" Token" token-mma token-id structinfo-new structinfo-list-store structinfo-list-push-end
 
 \ Init a list.
 list-new                                    \ fnum-lst
@@ -60,15 +64,15 @@ floatnum-list-do-op                         \ fnum-lst fnum-add fnum-lst2
 
 cr cr ." List after adding 3.2e: " dup .floatnum-list cr
 
-floatnum-list-deallocate
-floatnum-deallocate
-floatnum-list-deallocate
-
 \ Finish.
 cr structinfo-list-store structinfo-list-print-memory-use cr
 
 \ Deallocate remaining struct instances.
 cr ." Deallocating ..."
+
+floatnum-list-deallocate
+floatnum-deallocate
+floatnum-list-deallocate
 
 cr structinfo-list-store structinfo-list-print-memory-use cr
 

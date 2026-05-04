@@ -292,9 +292,9 @@ array-end-disp      cell+   constant array-items-disp   \ The start of the array
 : mma-free ( addr -- )
     dup   _mma-get-stack        \ mma-addr stack-addr
     free                        \ mma-addr
-    0<> if ." mma-array stack free failed" then
+    0<> abort" mma-array stack free failed"
     free
-    0<> if ." mma-array free failed" then
+    0<> abort" mma-array free failed"
 ;
 
 \ Return the number of struct instances in use.
