@@ -54,6 +54,8 @@ The examples can be run with the commands:
   gforth example7.fs  \ Shows a link, list and region, being dropped, and detected later.
 
   gforth example10.fs \ Shows a list of floating point numbers, and an operation on the list, producing a second list.
+
+  gforth example11.fs \ Shows string parsing into an integer list-of-lists, and error conditions.
 </pre>
 
 Memory use before, and after, deallocating is shown.  The Min Free column shows the lowest level of struct instances available during the program run,
