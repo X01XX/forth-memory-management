@@ -54,10 +54,6 @@
     swap 1+ swap    \ addr+1 length
 ;
 
-: assert-forth-stack-empty ( -- )
-    depth 0<> abort" Forth stack is not empty"
-;
-
 \ Get the first word, 16 bits, of a, possibly invalid, address.
 : get-first-word ( addr -- w t | f )
     ['] 0w@ catch           \ addr exception-number | word 0
@@ -85,5 +81,14 @@
 : 2drop-true ( agr1 arg0 -- t )
     2drop
     true
+;
+
+: from-string-false ( c-addr u -- f )
+    2drop
+    false
+;
+
+: assert-forth-stack-empty ( -- ) 
+    depth 0<> abort" Forth stack is not empty"
 ;
 

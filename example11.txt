@@ -3,29 +3,34 @@ Initializing Link store.
 Initializing List store.
 Initializing StructInfo store.
 Initializing Token store.
+Initializing Region store.
+Initializing FloatNum store.
 
-(1 2 3 ( 4 5 6)) integer-list: (1  2  3  (4  5  6 ))
 
-(1 2 3 ( 4 5 6)x token list error, unbalanced parens?
-
-(1 2 3 ( 4 5 6))) token list error, unbalanced parens?
-
-)1 2 3 ( 4 5 6)) token list error, unbalanced parens?
-
-(1 2 3 ( a 5 6)) integer-list-from-token-list failed
-
-1 2 3 integer-list: (1  2  3 )
-
-1 (3 4) 2 3 integer-list: (1  (3  4 ) 2  3 )
-
+string: (1 3.2e ( r1010 to ))  list: (1 3.2  (r1010 "to"))
 
 Check memory ...
 
 Memory use:
-    Link:       Capacity:   101  Min Free:    79   78%  In use:      4  Item Size:  24  Array size:    2424  Overhead:    848  Total:     3272  Cells:    409  Allocs:        87
-    List:       Capacity:   102  Min Free:    97   95%  In use:      1  Item Size:  16  Array size:    1632  Overhead:    856  Total:     2488  Cells:    311  Allocs:        17
-    StructInfo: Capacity:    10  Min Free:     6   60%  In use:      4  Item Size:  72  Array size:     720  Overhead:    120  Total:      840  Cells:    105  Allocs:         4
-    Token:      Capacity:    20  Min Free:     9   45%  In use:      0  Item Size:  88  Array size:    1760  Overhead:    200  Total:     1960  Cells:    245  Allocs:        61
-                                                                                            Totals:    6536              2024             8560           1070                169
+    Link:       Capacity:   101  Min Free:    81   80%  In use:     11  Item Size:  24  Array size:    2424  Overhead:    848  Total:     3272  Cells:    409  Allocs:        20
+    List:       Capacity:   102  Min Free:    97   95%  In use:      3  Item Size:  16  Array size:    1632  Overhead:    856  Total:     2488  Cells:    311  Allocs:         5
+    StructInfo: Capacity:    10  Min Free:     4   40%  In use:      6  Item Size:  80  Array size:     800  Overhead:    120  Total:      920  Cells:    115  Allocs:         6
+    Token:      Capacity:    20  Min Free:    11   55%  In use:      1  Item Size:  88  Array size:    1760  Overhead:    200  Total:     1960  Cells:    245  Allocs:         9
+    Region:     Capacity:    20  Min Free:    19   95%  In use:      1  Item Size:  24  Array size:     480  Overhead:    200  Total:      680  Cells:     85  Allocs:         1
+    Region:     Capacity:    20  Min Free:    19   95%  In use:      1  Item Size:  16  Array size:     320  Overhead:    200  Total:      520  Cells:     65  Allocs:         1
+                                                                                            Totals:    7416              2424             9840           1230                 42
+Forth stack: <1> List-3-1 
+
+Deallocating ...
+
+Memory use:
+    Link:       Capacity:   101  Min Free:    81   80%  In use:      6  Item Size:  24  Array size:    2424  Overhead:    848  Total:     3272  Cells:    409  Allocs:        20
+    List:       Capacity:   102  Min Free:    97   95%  In use:      1  Item Size:  16  Array size:    1632  Overhead:    856  Total:     2488  Cells:    311  Allocs:         5
+    StructInfo: Capacity:    10  Min Free:     4   40%  In use:      6  Item Size:  80  Array size:     800  Overhead:    120  Total:      920  Cells:    115  Allocs:         6
+    Token:      Capacity:    20  Min Free:    11   55%  In use:      0  Item Size:  88  Array size:    1760  Overhead:    200  Total:     1960  Cells:    245  Allocs:         9
+    Region:     Capacity:    20  Min Free:    19   95%  In use:      0  Item Size:  24  Array size:     480  Overhead:    200  Total:      680  Cells:     85  Allocs:         1
+    Region:     Capacity:    20  Min Free:    19   95%  In use:      0  Item Size:  16  Array size:     320  Overhead:    200  Total:      520  Cells:     65  Allocs:         1
+                                                                                            Totals:    7416              2424             9840           1230                 42
 Forth stack: <0> 
+
 Freeing heap memory

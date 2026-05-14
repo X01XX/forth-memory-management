@@ -4,8 +4,6 @@
                                 \ Used for memory use print, memory leak checking,
                                 \ freeing heap, struct-aware printing of the Forth stack.
 
-0 value .stack-structs-xt
-
 \ Check if tos is an empty list, or has a structinfo instance as its first item.
 : assert-tos-is-structinfo-list ( tos -- tos )
     assert-tos-is-list
@@ -25,7 +23,20 @@
         [ ' structinfo-deallocate ] literal over    \ structinfo-lst xt structinfo-lst
         list-apply                                  \ Deallocate structinfo instances in the list.
 
-        list-deallocate                             \ Deallocate list and links.
+        list-deallocate                                 \ Deallocate list and links.
+    else
+        struct-dec-use-count
+    then
+;
+
+\ Deallocate a structinfo list recursively.
+: structinfo-list-deallocate-recursive ( structinfo-lst -- )
+    dup struct-get-use-count                        \ structinfo-lst uc
+    #2 < if
+        [ ' structinfo-deallocate ] literal over    \ structinfo-lst xt structinfo-lst
+        list-apply-recursive                        \ Deallocate structinfo instances in the list.
+
+        list-deallocate-recursive                   \ Deallocate list and links.
     else
         struct-dec-use-count
     then
@@ -38,6 +49,8 @@
 
     [ ' structinfo-inst-id-eq ] literal -rot list-find
 ;
+
+' structinfo-list-find to structinfo-list-find-xt
 
 \ Return the length of the longest struct name.
 : structinfo-list-max-name-length ( si-lst0 -- u )
@@ -178,8 +191,10 @@
     #7 spaces #12 dec.r
 
     drop
-    cr .stack-structs-xt execute cr
+    cr .stack-structs-xt execute cr	\ si-lst0
 ;
+
+' structinfo-list-print-memory-use to structinfo-list-print-memory-use-xt
 
 \ Return true if the structinfo-list-store is using a given address
 \ for a list, link, or structinfo instance.
@@ -337,6 +352,8 @@
     assert-forth-stack-empty
 ;
 
+' structinfo-list-project-deallocated to structinfo-list-project-deallocated-xt
+
 \ Free heap of all mm_arrays.
 : structinfo-list-free-heap ( snf-lst0 -- )
     \ Check args.
@@ -373,7 +390,7 @@
     \ Check for duplicate struct id.
     [ ' structinfo-id-eq ] literal      \ snf1 snf-lst0 xt
     #2 pick #2 pick                     \ snf1 snf-lst0 xt snf1 snf-lst1
-    list-member                     \ snf1 snf-lst0 bool
+    list-member                         \ snf1 snf-lst0 bool
     abort" structinfo-list-push-end: Duplicat struct id?"
 
     list-push-end-struct
@@ -388,7 +405,7 @@
     \ Check for duplicate struct id.
     [ ' structinfo-id-eq ] literal      \ snf1 snf-lst0 xt
     #2 pick #2 pick                     \ snf1 snf-lst0 xt snf1 snf-lst1
-    list-member                     \ snf1 snf-lst0 bool
+    list-member                         \ snf1 snf-lst0 bool
     abort" structinfo-list-push: Duplicate struct id?"
 
     list-push-struct
@@ -453,13 +470,15 @@
     ." )"                               \
 ;
 
+' structinfo-list-print-struct-list to structinfo-list-print-struct-list-xt
+
 \ Deallocate a list of structures.
 : structinfo-list-deallocate-struct-list ( lst0 -- )
     \ Check args.
     assert-tos-is-list
 
     dup struct-get-use-count                \ lst0 uc
-    dup 0 < abort" Invalid use count"
+    dup 0 < abort" structinfo-list-deallocate-struct-list: Invalid use count"
 
     #2 <                                    \ lst0 bool
     if
@@ -472,6 +491,7 @@
             dup get-structinfo              \ lst0 lst-link link-data, snf t | f
             if
                 \ Deallocate struct instance.
+                \ space 2dup structinfo-get-print-xt execute
                 structinfo-get-deallocate-xt    \ lst0 lst-link link-struct xt
                 execute                     \ lst0 lst-link
             else
@@ -488,3 +508,39 @@
     then
 ;
 
+' structinfo-list-deallocate-struct-list to structinfo-list-deallocate-struct-list-xt
+
+\ Return a struct instance from a string.
+: stackinfolist-interpret-string ( c-addr u lst0 -- inst t | f )
+    \ Check args.
+    assert-tos-is-structinfo-list
+
+    list-get-links                      \ c-addr u link
+
+    begin
+        ?dup
+    while
+        dup link-get-data               \ c-addr u link snfx
+        structinfo-get-from-string-xt   \ c-addr u link xt
+        [ ' noop ] literal              \ c-addr u link xt xt-nop
+        over =                          \ c-addr u link xt bool
+        if
+            drop                        \ c-addr u link
+        else                            \ c-addr u link xt
+            #3 pick swap                \ c-addr u link c-addr xt
+            #3 pick swap                \ c-addr u link c-addr u xt
+            execute                     \ c-addr u link, inst t | f
+            if                          \ c-addr u link inst
+                2nip                    \ link inst
+                nip                     \ inst
+                true
+                exit
+            then
+        then
+        link-get-next
+    repeat
+
+                                        \ c-addr u
+    2drop
+    false
+;

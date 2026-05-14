@@ -18,29 +18,29 @@ expect (2 2), found: (2  2 )
 
 expect (4), found: (4 )
 
-expect t, found: -1 
+at 1 expect t, found: -1 
 
 expect t, found: -1 
 
 expect f, found: 0 
 
-Numbers in order: 1 105352819034488 105352819034520 4 1 105352819034504 
+Numbers in order: 1 7 2 5 3 4 1 6 2 
 
 flattened list: (6  2  1  4  5  3  7  2  1 )
 
 
-Region list: ((0X11 00x1) 0x0X 010X)
+Region list: ((r0X11 r00x1) r0x0X r010X)
 
-Region list copy + 0000: (0000 (0X11 00x1) 0x0X 010X)
+Region list copy + 0000: (r0000 (r0X11 r00x1) r0x0X r010X)
 
-flattened list: (010X 0x0X 0X11 00x1 0000)
+flattened list: (r010X r0x0X r0X11 r00x1 r0000)
 
 
 Memory use:
     List mma:         Capacity:   102  Min Free:    88   86%  In use:     13  Item Size:  16  Array size:    1632  Overhead:    856  Total:     2488  Cells:    311  Allocs:        25
     Link mma:         Capacity:   101  Min Free:    56   55%  In use:     45  Item Size:  24  Array size:    2424  Overhead:    848  Total:     3272  Cells:    409  Allocs:        58
     Region mma:       Capacity:   102  Min Free:    97   95%  In use:      5  Item Size:  24  Array size:    2448  Overhead:    856  Total:     3304  Cells:    413  Allocs:         5
-    dstack: <6> 105352819034584 105352819034536 105352819034472 105352819034456 105352819034424 105352819034392 
+    dstack: <6> 108827697000648 108827697000600 108827697000536 108827697000520 108827697000488 108827697000456 
 
 Deallocating ...
 

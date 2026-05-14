@@ -119,6 +119,9 @@ region-state-0-disp cell+   constant region-state-1-disp
     swap region-get-state-0
     ms-bit          \ st2 st1 ms-bit
 
+    \ Print prefix.
+    [char] r emit
+
     \ Process each bit.
     begin
       dup
@@ -600,8 +603,22 @@ region-state-0-disp cell+   constant region-state-1-disp
 
 \ Get a region from a string.
 \ Valid chars are 0, 1, X, x, and underscore as separator.
-: region-from-string ( addr n --  reg )
-    cr
+: region-from-string ( addr n --  reg t | f )
+
+    \ Check for prefix.
+    over c@ [char] r <>
+    if  
+        2drop
+        false
+        exit
+    then
+
+    \ Inc address.
+    swap 1+ swap
+
+    \ Dec length.
+    1-
+
     0 swap 0 swap 0     \ addr 0 0 n 0
     do                  \ addr 0 0
         #2 pick i +
@@ -629,4 +646,5 @@ region-state-0-disp cell+   constant region-state-1-disp
     loop
     region-new
     nip
+    true
 ;

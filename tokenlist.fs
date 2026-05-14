@@ -45,33 +45,50 @@
     [ ' .token ] literal swap .list
 ;
 
-\ Return the depth of a token list,
+\ Return the maximum depth of a token list,
 \ that is how deep the lists go.
 : token-list-depth ( tkn-lst - u )
     \ Check arg.
     assert-tos-is-token-list
 
-    \ Init counter.
-    0 swap                          \ cnt tkn-lst
+    \ Init counter, max count.
+    0 swap                          \ max tkn-lst
+    0 swap                          \ max cnt tkn-lst
 
     \ Prep for loop.
-    list-get-links                  \ cnt link
+    list-get-links                  \ max cnt maxlink
 
     begin
         ?dup
     while
         \ Check for left paren.
-        s" ("                       \ cnt link c-addr u
-        #2 pick link-get-data       \ cnt link c-addr u tkt
-        token-eq-string             \ cnt link flag
+        s" ("                       \ max cnt link c-addr u
+        #2 pick link-get-data       \ max cnt link c-addr u tkt
+        token-eq-string             \ max cnt link flag
         if
             \ Inc paren counter.
-            swap 1+ swap
+            swap 1+ swap            \ max cnt link
+
+            \ Update max value.
+            rot                     \ cnt link max
+            #2 pick                 \ cnt link max cnt
+            max                     \ cnt link max'
+            -rot                    \ max cnt link
+        then
+
+        \ Check for right paren.
+        s" )"                       \ max cnt link c-addr u
+        #2 pick link-get-data       \ max cnt link c-addr u tkt
+        token-eq-string             \ max cnt link flag
+        if
+            \ Inc paren counter.
+            swap 1- swap
         then
 
         link-get-next
     repeat
-                                    \ cnt
+                                    \ max cnt
+    drop
 ;
 
 \ Given a string on the stack, return a token list.

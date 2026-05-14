@@ -138,3 +138,13 @@ floatnum-header-disp cell+   constant floatnum-number-disp
     floatnum-new
 ;
 
+\ Return a floatnum from a string.
+: floatnum-from-string ( c-addr u -- fltn t | f )
+    >float              \ t | f
+    if
+        floatnum-new
+        true
+    else
+        false
+    then
+;

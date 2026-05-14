@@ -4,6 +4,7 @@
 #15 constant all-bits
 #8 constant ms-bit
 
+include xtindirect.fs
 include tools.fs
 include tools2.fs
 include mm_array.fs
@@ -29,14 +30,14 @@ cs
 
 \ Init structinfo list.
 list-new to structinfo-list-store
-' link-deallocate ' .link s" Link" link-mma link-id structinfo-new structinfo-list-store structinfo-list-push
-' structinfo-list-deallocate-struct-list ' structinfo-list-print-struct-list s" List" list-mma list-id structinfo-new structinfo-list-store structinfo-list-push-end
-' structinfo-deallocate ' .structinfo s" StructInfo" structinfo-mma structinfo-id structinfo-new structinfo-list-store structinfo-list-push-end
+' from-string-false ' link-deallocate ' .link s" Link" link-mma link-id structinfo-new structinfo-list-store structinfo-list-push
+' from-string-false ' structinfo-list-deallocate-struct-list ' structinfo-list-print-struct-list s" List" list-mma list-id structinfo-new structinfo-list-store structinfo-list-push-end
+' from-string-false ' structinfo-deallocate ' .structinfo s" StructInfo" structinfo-mma structinfo-id structinfo-new structinfo-list-store structinfo-list-push-end
 
 \ The list, link, and StructInfo structs allow for the creation of the structinfo-list-store,
 
-' floatnum-deallocate ' .floatnum s" FloatNum" floatnum-mma floatnum-id structinfo-new structinfo-list-store structinfo-list-push-end
-' token-deallocate ' .token s" Token" token-mma token-id structinfo-new structinfo-list-store structinfo-list-push-end
+' from-string-false ' floatnum-deallocate ' .floatnum s" FloatNum" floatnum-mma floatnum-id structinfo-new structinfo-list-store structinfo-list-push-end
+' from-string-false ' token-deallocate ' .token s" Token" token-mma token-id structinfo-new structinfo-list-store structinfo-list-push-end
 
 \ Init a list.
 list-new                                    \ fnum-lst

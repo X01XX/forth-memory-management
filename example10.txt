@@ -3,6 +3,7 @@ Initializing Link store.
 Initializing List store.
 Initializing StructInfo store.
 Initializing FloatNum store.
+Initializing Token store.
 
 List: (3.2  2.2  1.2 )
 
@@ -11,22 +12,24 @@ List after adding 3.2e: (6.4  5.4  4.4 )
 
 
 Memory use:
-    Link:       Capacity:   101  Min Free:    91   90%  In use:      4  Item Size:  24  Array size:    2424  Overhead:    848  Total:     3272  Cells:    409  Allocs:        10
-    List:       Capacity:   102  Min Free:    99   97%  In use:      1  Item Size:  16  Array size:    1632  Overhead:    856  Total:     2488  Cells:    311  Allocs:         3
-    StructInfo: Capacity:    10  Min Free:     6   60%  In use:      4  Item Size:  72  Array size:     720  Overhead:    120  Total:      840  Cells:    105  Allocs:         4
-    FloatNum:   Capacity:   100  Min Free:    93   93%  In use:      0  Item Size:  16  Array size:    1600  Overhead:    840  Total:     2440  Cells:    305  Allocs:         7
-                                                                                            Totals:    6376              2664             9040           1130                 24
-Forth stack: <0> 
+    Link:       Capacity:   101  Min Free:    90   89%  In use:     11  Item Size:  24  Array size:    2424  Overhead:    848  Total:     3272  Cells:    409  Allocs:        11
+    List:       Capacity:   102  Min Free:    99   97%  In use:      3  Item Size:  16  Array size:    1632  Overhead:    856  Total:     2488  Cells:    311  Allocs:         3
+    StructInfo: Capacity:    10  Min Free:     5   50%  In use:      5  Item Size:  80  Array size:     800  Overhead:    120  Total:      920  Cells:    115  Allocs:         5
+    FloatNum:   Capacity:   100  Min Free:    93   93%  In use:      7  Item Size:  16  Array size:    1600  Overhead:    840  Total:     2440  Cells:    305  Allocs:         7
+    Token:      Capacity:    20  Min Free:    20  100%  In use:      0  Item Size:  88  Array size:    1760  Overhead:    200  Total:     1960  Cells:    245  Allocs:         0
+                                                                                            Totals:    8216              2864            11080           1385                 26
+Forth stack: <3> List-3-FloatNum FloatNum List-3-FloatNum 
 
 
 Deallocating ...
 
 Memory use:
-    Link:       Capacity:   101  Min Free:    91   90%  In use:      4  Item Size:  24  Array size:    2424  Overhead:    848  Total:     3272  Cells:    409  Allocs:        10
+    Link:       Capacity:   101  Min Free:    90   89%  In use:      5  Item Size:  24  Array size:    2424  Overhead:    848  Total:     3272  Cells:    409  Allocs:        11
     List:       Capacity:   102  Min Free:    99   97%  In use:      1  Item Size:  16  Array size:    1632  Overhead:    856  Total:     2488  Cells:    311  Allocs:         3
-    StructInfo: Capacity:    10  Min Free:     6   60%  In use:      4  Item Size:  72  Array size:     720  Overhead:    120  Total:      840  Cells:    105  Allocs:         4
+    StructInfo: Capacity:    10  Min Free:     5   50%  In use:      5  Item Size:  80  Array size:     800  Overhead:    120  Total:      920  Cells:    115  Allocs:         5
     FloatNum:   Capacity:   100  Min Free:    93   93%  In use:      0  Item Size:  16  Array size:    1600  Overhead:    840  Total:     2440  Cells:    305  Allocs:         7
-                                                                                            Totals:    6376              2664             9040           1130                 24
+    Token:      Capacity:    20  Min Free:    20  100%  In use:      0  Item Size:  88  Array size:    1760  Overhead:    200  Total:     1960  Cells:    245  Allocs:         0
+                                                                                            Totals:    8216              2864            11080           1385                 26
 Forth stack: <0> 
 
 Freeing heap memory
