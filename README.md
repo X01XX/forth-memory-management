@@ -43,11 +43,7 @@ The examples can be run with the commands:
                       \ At end it deallocates around two thousand struct instances, checks for memory leaks, and anything left on the Forth stack.
                       \ Having made around 14 Million struct allocation/deallocation operations.
 
-  gforth example3.fs  \ Shows lists of lists of regions.
-
   gforth example4.fs  \ Shows a struct-aware print of items on the Forth stack, for debugging.
-
-  gforth example5.fs  \ Shows print, and deallocate, of a list of mixed lists, structs and numbers.
 
   gforth example6.fs  \ Test list functions that can work with lists with sub-lists.
 
@@ -55,7 +51,8 @@ The examples can be run with the commands:
 
   gforth example10.fs \ Shows a list of floating point numbers, and an operation on the list, producing a second list.
 
-  gforth example11.fs \ Shows string parsing into an integer list-of-lists, and error conditions.
+  gforth example11.fs \ Shows string parsing, print, and deallocate, of a list of mixed integer, sub-list, float,
+                      \ region, and unidentified token.
 </pre>
 
 Memory use before, and after, deallocating is shown.  The Min Free column shows the lowest level of struct instances available during the program run,
