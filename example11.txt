@@ -17,7 +17,7 @@ Memory use:
     StructInfo: Capacity:    10  Min Free:     4   40%  In use:      6  Item Size:  80  Array size:     800  Overhead:    120  Total:      920  Cells:    115  Allocs:         6
     Token:      Capacity:    20  Min Free:    11   55%  In use:      1  Item Size:  88  Array size:    1760  Overhead:    200  Total:     1960  Cells:    245  Allocs:         9
     Region:     Capacity:    20  Min Free:    19   95%  In use:      1  Item Size:  24  Array size:     480  Overhead:    200  Total:      680  Cells:     85  Allocs:         1
-    Region:     Capacity:    20  Min Free:    19   95%  In use:      1  Item Size:  16  Array size:     320  Overhead:    200  Total:      520  Cells:     65  Allocs:         1
+    Floatnum:   Capacity:    20  Min Free:    19   95%  In use:      1  Item Size:  16  Array size:     320  Overhead:    200  Total:      520  Cells:     65  Allocs:         1
                                                                                             Totals:    7416              2424             9840           1230                 42
 Forth stack: <1> List-3-1 
 
@@ -29,7 +29,7 @@ Memory use:
     StructInfo: Capacity:    10  Min Free:     4   40%  In use:      6  Item Size:  80  Array size:     800  Overhead:    120  Total:      920  Cells:    115  Allocs:         6
     Token:      Capacity:    20  Min Free:    11   55%  In use:      0  Item Size:  88  Array size:    1760  Overhead:    200  Total:     1960  Cells:    245  Allocs:         9
     Region:     Capacity:    20  Min Free:    19   95%  In use:      0  Item Size:  24  Array size:     480  Overhead:    200  Total:      680  Cells:     85  Allocs:         1
-    Region:     Capacity:    20  Min Free:    19   95%  In use:      0  Item Size:  16  Array size:     320  Overhead:    200  Total:      520  Cells:     65  Allocs:         1
+    Floatnum:   Capacity:    20  Min Free:    19   95%  In use:      0  Item Size:  16  Array size:     320  Overhead:    200  Total:      520  Cells:     65  Allocs:         1
                                                                                             Totals:    7416              2424             9840           1230                 42
 Forth stack: <0> 
 

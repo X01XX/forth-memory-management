@@ -56,7 +56,7 @@ list-new to structinfo-list-store
 
 ' from-string-false ' token-deallocate ' .token s" Token" token-mma token-id structinfo-new structinfo-list-store structinfo-list-push-end
 ' region-from-string ' region-deallocate ' .region s" Region" region-mma region-id structinfo-new structinfo-list-store structinfo-list-push-end
-' floatnum-from-string ' floatnum-deallocate ' .floatnum s" Region" floatnum-mma floatnum-id structinfo-new structinfo-list-store structinfo-list-push-end
+' floatnum-from-string ' floatnum-deallocate ' .floatnum s" Floatnum" floatnum-mma floatnum-id structinfo-new structinfo-list-store structinfo-list-push-end
 
 cr cr
 s" (1 3.2e ( r1010 to ))" string-test
