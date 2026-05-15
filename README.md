@@ -51,8 +51,9 @@ The examples can be run with the commands:
 
   gforth example10.fs \ Shows a list of floating point numbers, and an operation on the list, producing a second list.
 
-  gforth example11.fs \ Shows string parsing, print, and deallocate, of a list of mixed integer, float, sub-list,
-                      \ region, and unidentified token. Only fails with unbalanced parentheses. 
+  gforth example11.fs \ Shows string parsing, print, and deallocate, of a list of mixed float, integer, sub-list,
+                      \ region, and unidentified token. Only fails with unbalanced parentheses.
+                      \ Outer parentheses are optional.
 </pre>
 
 Memory use before, and after, deallocating is shown.  The Min Free column shows the lowest level of struct instances available during the program run,
