@@ -7,30 +7,32 @@ Initializing Region store.
 Initializing FloatNum store.
 
 
-string: (1 3.2e ( r1010 to ))  list: (1 3.2  (r1010 "to"))
+string: "(3.2e 1 ( r1010 to ))"  -> list: (3.2  1 (r1010 "to"))
+
+string: "r1001 x ( 1 3) 1"  -> list: (r1001 "x" (1 3 ) 1 )
 
 Check memory ...
 
 Memory use:
-    Link:       Capacity:   101  Min Free:    81   80%  In use:     11  Item Size:  24  Array size:    2424  Overhead:    848  Total:     3272  Cells:    409  Allocs:        20
-    List:       Capacity:   102  Min Free:    97   95%  In use:      3  Item Size:  16  Array size:    1632  Overhead:    856  Total:     2488  Cells:    311  Allocs:         5
+    Link:       Capacity:   101  Min Free:    77   76%  In use:     17  Item Size:  24  Array size:    2424  Overhead:    848  Total:     3272  Cells:    409  Allocs:        33
+    List:       Capacity:   102  Min Free:    96   94%  In use:      5  Item Size:  16  Array size:    1632  Overhead:    856  Total:     2488  Cells:    311  Allocs:         8
     StructInfo: Capacity:    10  Min Free:     4   40%  In use:      6  Item Size:  80  Array size:     800  Overhead:    120  Total:      920  Cells:    115  Allocs:         6
-    Token:      Capacity:    20  Min Free:    11   55%  In use:      1  Item Size:  88  Array size:    1760  Overhead:    200  Total:     1960  Cells:    245  Allocs:         9
-    Region:     Capacity:    20  Min Free:    19   95%  In use:      1  Item Size:  24  Array size:     480  Overhead:    200  Total:      680  Cells:     85  Allocs:         1
-    Floatnum:   Capacity:    20  Min Free:    19   95%  In use:      1  Item Size:  16  Array size:     320  Overhead:    200  Total:      520  Cells:     65  Allocs:         1
-                                                                                            Totals:    7416              2424             9840           1230                 42
-Forth stack: <1> List-3-1 
+    Token:      Capacity:    20  Min Free:    11   55%  In use:      2  Item Size:  88  Array size:    1760  Overhead:    200  Total:     1960  Cells:    245  Allocs:        17
+    Region:     Capacity:    20  Min Free:    18   90%  In use:      2  Item Size:  24  Array size:     480  Overhead:    200  Total:      680  Cells:     85  Allocs:         2
+    FloatNum:   Capacity:    20  Min Free:    19   95%  In use:      1  Item Size:  16  Array size:     320  Overhead:    200  Total:      520  Cells:     65  Allocs:         1
+                                                                                            Totals:    7416              2424             9840           1230                 67
+Forth stack: <2> List-3-FloatNum List-4-Region 
 
 Deallocating ...
 
 Memory use:
-    Link:       Capacity:   101  Min Free:    81   80%  In use:      6  Item Size:  24  Array size:    2424  Overhead:    848  Total:     3272  Cells:    409  Allocs:        20
-    List:       Capacity:   102  Min Free:    97   95%  In use:      1  Item Size:  16  Array size:    1632  Overhead:    856  Total:     2488  Cells:    311  Allocs:         5
+    Link:       Capacity:   101  Min Free:    77   76%  In use:      6  Item Size:  24  Array size:    2424  Overhead:    848  Total:     3272  Cells:    409  Allocs:        33
+    List:       Capacity:   102  Min Free:    96   94%  In use:      1  Item Size:  16  Array size:    1632  Overhead:    856  Total:     2488  Cells:    311  Allocs:         8
     StructInfo: Capacity:    10  Min Free:     4   40%  In use:      6  Item Size:  80  Array size:     800  Overhead:    120  Total:      920  Cells:    115  Allocs:         6
-    Token:      Capacity:    20  Min Free:    11   55%  In use:      0  Item Size:  88  Array size:    1760  Overhead:    200  Total:     1960  Cells:    245  Allocs:         9
-    Region:     Capacity:    20  Min Free:    19   95%  In use:      0  Item Size:  24  Array size:     480  Overhead:    200  Total:      680  Cells:     85  Allocs:         1
-    Floatnum:   Capacity:    20  Min Free:    19   95%  In use:      0  Item Size:  16  Array size:     320  Overhead:    200  Total:      520  Cells:     65  Allocs:         1
-                                                                                            Totals:    7416              2424             9840           1230                 42
+    Token:      Capacity:    20  Min Free:    11   55%  In use:      0  Item Size:  88  Array size:    1760  Overhead:    200  Total:     1960  Cells:    245  Allocs:        17
+    Region:     Capacity:    20  Min Free:    18   90%  In use:      0  Item Size:  24  Array size:     480  Overhead:    200  Total:      680  Cells:     85  Allocs:         2
+    FloatNum:   Capacity:    20  Min Free:    19   95%  In use:      0  Item Size:  16  Array size:     320  Overhead:    200  Total:      520  Cells:     65  Allocs:         1
+                                                                                            Totals:    7416              2424             9840           1230                 67
 Forth stack: <0> 
 
 Freeing heap memory

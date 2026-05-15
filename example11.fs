@@ -34,12 +34,12 @@ cs
 : string-test ( c-addr u -- list )
 
     \ Print the list.
-    cr ." string: " 2dup type
+    cr ." string: " [char] " emit 2dup type [char] " emit
 
     \ Convert the list.
     list-from-string 		\ result t | f
     if
-        2 spaces ." list: " dup structinfo-list-print-struct-list
+        2 spaces ." -> list: " dup structinfo-list-print-struct-list
     else
         cr ." list-from-string failed?" cr
         abort
@@ -56,10 +56,12 @@ list-new to structinfo-list-store
 
 ' from-string-false ' token-deallocate ' .token s" Token" token-mma token-id structinfo-new structinfo-list-store structinfo-list-push-end
 ' region-from-string ' region-deallocate ' .region s" Region" region-mma region-id structinfo-new structinfo-list-store structinfo-list-push-end
-' floatnum-from-string ' floatnum-deallocate ' .floatnum s" Floatnum" floatnum-mma floatnum-id structinfo-new structinfo-list-store structinfo-list-push-end
+' floatnum-from-string ' floatnum-deallocate ' .floatnum s" FloatNum" floatnum-mma floatnum-id structinfo-new structinfo-list-store structinfo-list-push-end
 
 cr cr
-s" (1 3.2e ( r1010 to ))" string-test
+s" (3.2e 1 ( r1010 to ))" string-test
+cr
+s" r1001 x ( 1 3) 1" string-test
 
 cr cr ." Check memory ..." cr
 
@@ -67,6 +69,7 @@ structinfo-list-store structinfo-list-print-memory-use
 
 \ Deallocate lists.
 cr ." Deallocating ..."
+structinfo-list-deallocate-struct-list
 structinfo-list-deallocate-struct-list
 
 cr structinfo-list-store structinfo-list-print-memory-use cr
