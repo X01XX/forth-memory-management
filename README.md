@@ -52,7 +52,8 @@ The examples can be run with the commands:
   gforth example10.fs \ Shows a list of floating point numbers, and an operation on the list, producing a second list.
 
   gforth example11.fs \ Shows string parsing, print, and deallocate, of a list of mixed float, integer, sub-list,
-                      \ region, and unidentified token. Only fails with unbalanced parentheses.
+                      \ region, and unidentified token.
+                      \ Only fails with unbalanced parentheses, or unidentified token GT token struct string limit, currently 80.
                       \ Outer parentheses are optional.
 </pre>
 
