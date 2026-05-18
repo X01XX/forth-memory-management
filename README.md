@@ -42,6 +42,7 @@ The examples can be run with the commands:
                       \ UES-Forth is a large application that uses this code to make 25 different structs and 20 struct lists.
                       \ At end it deallocates around two thousand struct instances, checks for memory leaks, and anything left on the Forth stack.
                       \ Having made around 14 Million struct allocation/deallocation operations.
+                      \ A lot of activity, in less than 1 MB.
 
   gforth example4.fs  \ Shows a struct-aware print of items on the Forth stack, for debugging.
 
