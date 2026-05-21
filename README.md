@@ -14,7 +14,7 @@ an infinite number of allocations, and deallocations, are possible.
 
 On deallocation, the first cell of an item is zeroed out, to make use problems apparent.
 
-Allocations, and deallocations, causes increasing disorder of the addresses on the stack,
+Allocations, and deallocations, cause increasing disorder of the addresses on the stack,
 which has no effect on the utility, or speed, of the array-stack.
 
 That a stack is used to provide memory management to a stack-based language is sublime.
@@ -23,6 +23,7 @@ Forth runs on an OS that uses stacks. Its stacks, all the way down.
 Functions that manipulate a struct instance can act as wrappers to array-stack, and list, functions.
 
 A memory leak can be automatically detected, the type of struct, and the specific instance addresses.
+There is a process for finding where any lost struct instance is produced, then follow your code to where it should be deallocated.
 
 The first word of every struct instance, allocated from the same array-stack, can be set to a unique number, to indicate the type of struct.
 
@@ -60,5 +61,7 @@ The examples can be run with the commands:
 
 Memory use before, and after, deallocating is shown.  The Min Free column shows the lowest level of struct instances available during the program run,
 for tuning purposes.
+
+Total allocations, per struct kind, are shown in the memory print.  At end, the deallocations equal the allocations.
 
 Stacks can be created, and used, without an array.  Stack "pointer" info is stored in the allocated space.
