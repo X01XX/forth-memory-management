@@ -24,6 +24,7 @@ Functions that manipulate a struct instance can act as wrappers to array-stack, 
 
 A memory leak can be automatically detected, the type of struct, and the specific instance addresses.
 There is a process for finding where any lost struct instance is allocated, then follow your code to where it should be deallocated.
+See memory-leak-fixing.odt.
 
 The first word of every struct instance, allocated from the same array-stack, can be set to a unique number, to indicate the type of struct.
 
