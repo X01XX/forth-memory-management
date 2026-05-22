@@ -1,0 +1,21 @@
+
+Initializing Link store.
+Initializing List store.
+Initializing StructInfo store.
+Initializing Region store.
+
+Dropped region: $60CC39034620 
+
+
+Dropped region: $60CC39034608 
+
+stack-pop stack is empty, one leaked address: $60CC39034608 
+
+in file included from *OS command line*:-1
+example8.fs:36: Invalid numeric argument
+#3 #5 >>>region-new<<< 
+Backtrace:
+$7BFFF1E57C68 throw 
+$7BFFF1E58DF8 stack-pop 
+$7BFFF1E5A0E8 mma-allocate 
+$7BFFF1E5FC28 struct-allocate 

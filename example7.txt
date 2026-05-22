@@ -45,3 +45,10 @@ List instances not fully deallocated
 
 In use: $5BA50424A038 
 
+in file included from *OS command line*:-1
+example7.fs:48: Memory leaks found!
+structinfo-list-store >>>structinfo-list-project-deallocated<<<
+Backtrace:
+$735128003988 throw 
+$735128063F28 c(abort") 
+
