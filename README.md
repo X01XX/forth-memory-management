@@ -50,8 +50,10 @@ The examples can be run with the commands:
 
   gforth example6.fs  \ Test list functions that can work with lists with sub-lists.
 
-  gforth example7.fs  \ Shows a link, list and region, being dropped, and detected later.
+  gforth example7.fs  \ Shows a link, list and region, being lost, and detected later.
 
+  gforth example8.fs  \ Shows a stack empty event, with one lost struct instance address being printed.
+  
   gforth example10.fs \ Shows a list of floating point numbers, and an operation on the list, producing a second list.
 
   gforth example11.fs \ Shows string parsing, print, and deallocate, of a list of mixed float, integer, sub-list,
