@@ -116,7 +116,7 @@
         1 =
         if
             \ Get rid of upper-level list.
-            dup list-pop                    \ int-lst next-lst bool
+            dup list-pop-struct             \ int-lst next-lst bool
             invert abort" pop failed?"
             swap list-deallocate            \ next-lst
         then

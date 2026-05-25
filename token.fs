@@ -20,15 +20,51 @@ token-header-disp cell+ constant token-string-disp
     token-struct-number-cells swap mma-new to token-mma
 ;
 
+\ Check instance type.
+: is-allocated-token? ( tos -- bool )
+    dup token-mma mma-is-item  \ addr bool
+    if
+        struct-get-id           \ id
+        token-id =              \ bool
+    else
+        drop
+        false                   \ f
+    then
+;
+
+\ Check TOS for token, unconventional, leaves stack unchanged.
+: assert-tos-is-token ( tos -- tos )
+    dup is-allocated-token?
+    if exit then
+
+    s" TOS is not an allocated token"
+    abort
+;
+
+\ Check NOS for token, unconventional, leaves stack unchanged.
+: assert-nos-is-token ( nos tos -- nos tos )
+    over is-allocated-token?
+    if exit then
+
+    s" NOS is not an allocated token"
+    abort
+;
+
 \ Start accessors.
 
 \ Get token data cell.
 : token-get-string ( tkn -- c-addr u )
+    \ Check arg.
+    assert-tos-is-token
+
     token-string-disp + string@
 ;
 
 \ Set token data cell.
 : token-set-string ( c-addr u tkn -- )
+    \ Check args.
+    assert-tos-is-token
+
     over #80 >
     if
         ." token-set-string: string length is too large"
@@ -40,28 +76,6 @@ token-header-disp cell+ constant token-string-disp
         abort
     then
     token-string-disp + string!
-;
-
-\ Check instance type.
-: is-allocated-token ( tkn -- flag )
-    get-first-word          \ w t | f
-    if
-        token-id =
-    else
-        false
-    then
-;
-
-\ Check TOS for token. Unconventional, no change in stack.
-: assert-tos-is-token ( arg0 -- arg0 )
-    dup is-allocated-token 0=
-    abort" tos is not an allocated token."
-;
-
-\ Check list mma usage.
-: assert-token-mma-none-in-use ( -- )
-    token-mma mma-in-use 0<>
-    abort" token-mma use GT 0"
 ;
 
 \ Return a new token struct instance address, with given data value.
@@ -77,36 +91,47 @@ token-header-disp cell+ constant token-string-disp
 
 \ Print a token struct instance.
 : .token ( tkn -- )
+    \ Check arg.
+    assert-tos-is-token
+
     [char] " emit
     token-get-string type
     [char] " emit
 ;
 
 \ Return true if two tokens are equal.
-: token-eq ( tkn1 tkn0 -- flag )
-    token-get-string        \ tkn1 c-addr0 u0
-    rot                     \ c-addr0 u0 tkn1
-    token-get-string        \ c-addr0 u0 c-addr1 u1
-    str=                    \ flag
+: token-eq ( tkn1 tkn2 -- flag )
+    \ Check args.
+    assert-tos-is-token
+    assert-nos-is-token
+
+    token-get-string        \ tkn1 c-addr2 u2
+    rot                     \ c-addr2 u2 tkn1
+    token-get-string        \ c-addr2 u2 c-addr1 u1
+    compare                 \ result
+    0=                      \ return true if the result is 0.
 ;
 
 \ Return true if a token is equal to a string.
 : token-eq-string ( c-addr u tkn0 -- flag )
+    \ Check args.
+    assert-tos-is-token
+
     token-get-string        \ c-addr u c-addr u
     str=                    \ flag
 ;
 
 \ Deallocate a token.
-: token-deallocate ( tkn -- )
-    \ Check argument.
+: token-deallocate ( tkn0 -- )
+    \ Check arg.
     assert-tos-is-token
 
     dup struct-get-use-count    \ tkn count
-    dup 0< abort" invalid use count"
+    dup 0< abort" token-deallocate: Invalid use count"
 
     dup 0<
     if
-        ." invalid use count" abort
+        ." token-deallocate: Invalid use count" abort
     else
         #2 <
         if

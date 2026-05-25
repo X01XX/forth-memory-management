@@ -7,7 +7,7 @@
         [ ' token-deallocate ] literal over     \ token-lst xt token-lst
         list-apply                              \ Deallocate token instances in the list.
 
-        list-deallocate                             \ Deallocate list and links.
+        list-deallocate                         \ Deallocate list and links.
     else
         struct-dec-use-count
     then
@@ -56,7 +56,7 @@
     0 swap                          \ max cnt tkn-lst
 
     \ Prep for loop.
-    list-get-links                  \ max cnt maxlink
+    list-get-links                  \ max cnt link
 
     begin
         ?dup
@@ -72,7 +72,7 @@
             \ Update max value.
             rot                     \ cnt link max
             #2 pick                 \ cnt link max cnt
-            max                     \ cnt link max'
+            max                     \ cnt link max
             -rot                    \ max cnt link
         then
 
@@ -81,7 +81,7 @@
         #2 pick link-get-data       \ max cnt link c-addr u tkt
         token-eq-string             \ max cnt link flag
         if
-            \ Inc paren counter.
+            \ Dec paren counter.
             swap 1- swap
         then
 
@@ -102,10 +102,13 @@
 \
 \ Returns false if parens are imbalanced.
 : token-list-from-string ( c-addr u -- tkn-lst t | f )
+    \ cr ." token-list-from-string: " 2dup type cr
+
     \ Check for null input.
     dup 0= if                       \ c-addr 0
         2drop
         list-new
+        true
         exit
     then
 
@@ -292,7 +295,7 @@
             swap 1-                 \ ret-lst link cnt-
 
             \ Check counter not LT zero.
-            dup 0 <                 \ ret-lst link cnt- flag
+            dup 0<                  \ ret-lst link cnt- flag
             if
                 2drop
                 token-list-deallocate
@@ -313,4 +316,40 @@
         token-list-deallocate
         false
     then
+;
+
+\ Return the number of non-paren tokens,
+: token-list-get-num-non-paren-tokens ( tkn-lst - u )
+    \ Check arg.
+    assert-tos-is-token-list
+
+    \ Init counter.
+    0 swap                          \ cnt tkn-lst
+
+    \ Prep for loop.
+    list-get-links                  \ cnt maxlink
+
+    begin
+        ?dup
+    while
+        \ Check for left paren.
+        s" ("                       \ cnt link c-addr u
+        #2 pick link-get-data       \ cnt link c-addr u tkt
+        token-eq-string             \ cnt link flag
+        if
+        else
+            \ Check for right paren.
+            s" )"                       \ cnt link c-addr u
+            #2 pick link-get-data       \ cnt link c-addr u tkt
+            token-eq-string             \ cnt link flag
+            if
+            else
+                \ Inc counter.
+                swap 1+ swap
+            then
+        then
+
+        link-get-next
+    repeat
+                                    \ cnt
 ;
