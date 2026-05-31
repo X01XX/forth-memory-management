@@ -52,7 +52,8 @@ The examples can be run with the commands:
 
   gforth example7.fs  \ Shows a link, list and region, being lost, and detected later.
 
-  gforth example8.fs  \ Shows a stack empty event, with one lost struct instance address being printed.
+  gforth example8.fs  \ Shows a stack empty event, with one lost struct instance address,
+                      \ and its first word (to help identify the struct kind) being printed.
   
   gforth example10.fs \ Shows a list of floating point numbers, and an operation on the list, producing a second list.
 
