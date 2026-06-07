@@ -28,7 +28,7 @@ See memory-leak-fixing.odt.
 
 The first word of every struct instance, allocated from the same array-stack, can be set to a unique number, to indicate the type of struct.
 
-These ideas should work in Assembler Language and C (if you want faster allocation/deallocation, more control).
+These ideas should work in Assembler Language and C (if you want faster allocation/deallocation, more control and understanding).
 
 Lists are built of List structs, and Link structs, that have an ID and use-count in their header.
 
