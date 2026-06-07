@@ -69,3 +69,6 @@ for tuning purposes.
 Total allocations, per struct kind, are shown in the memory print.  At end, the deallocations equal the allocations.
 
 Stacks can be created, and used, without an array.  Stack "pointer" info is stored in the allocated space.
+
+For a struct that uses one cell, the overhead of the stack is about 50%.  For a 10-cell struct, its about 9%.
+
