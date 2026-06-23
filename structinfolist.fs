@@ -114,7 +114,25 @@
     \ Print Summary line.
     cr
     spaces
-    #82 spaces ." Totals: "
+    #46 spaces ." Totals: "
+
+    \ Sum struct instances in use.
+    0 over list-get-links           \ si-lst0 cnt si-link
+
+    begin
+        ?dup
+    while
+        dup link-get-data           \ si-lst0 cnt si-link six
+        structinfo-get-mma          \ si-lst0 cnt si-link mmax
+        mma-in-use                  \ si-lst0 cnt si-link totx
+        rot                         \ si-lst0 si-link totx cnt
+        + swap                      \ si-lst0 cnt+ si-link
+
+        link-get-next
+    repeat
+
+    \ Print array instances in use.
+    #6 dec.r
 
     \ Sum array memory use.
     0 over list-get-links           \ si-lst0 cnt si-link
@@ -132,6 +150,7 @@
     repeat
 
     \ Print array memory use.
+    30 spaces
     #7 dec.r
 
     \ Sum overhead memory use.
@@ -478,7 +497,7 @@
     assert-tos-is-list
 
     dup struct-get-use-count                \ lst0 uc
-    dup 0 < abort" structinfo-list-deallocate-struct-list: Invalid use count"
+    dup 0< abort" structinfo-list-deallocate-struct-list: Invalid use count"
 
     #2 <                                    \ lst0 bool
     if
@@ -511,7 +530,7 @@
 ' structinfo-list-deallocate-struct-list to structinfo-list-deallocate-struct-list-xt
 
 \ Return a struct instance from a string.
-: stackinfolist-interpret-string ( c-addr u lst0 -- inst t | f )
+: structinfolist-interpret-string ( c-addr u lst0 -- inst t | f )
     \ Check args.
     assert-tos-is-structinfo-list
 

@@ -96,7 +96,7 @@ name-header-disp cell+  constant name-string-disp
 
     dup struct-get-use-count    \ name-addr count
 
-    dup 0 <
+    dup 0<
     abort" invalid use count"
 
     #2 <

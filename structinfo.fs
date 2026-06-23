@@ -168,7 +168,7 @@ structinfo-from-string-xt-disp  cell+   constant structinfo-name-disp           
     \ Set deallocate xt.
     tuck _structinfo-set-deallocate-xt  \ fs-xt snf
 
-    \ Set frem-string xt.
+    \ Set from-string xt.
     tuck _structinfo-set-from-string-xt \ snf
 ;
 

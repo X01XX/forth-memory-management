@@ -61,7 +61,7 @@ list-new to structinfo-list-store
 cr cr
 s" (3.2e 1 ( r1010 to ))" string-test
 cr
-s" r1001 x ( 1 3) 1" string-test
+s" r1001 x ( 1 3) 1 ()" string-test
 
 cr cr ." Check memory ..." cr
 

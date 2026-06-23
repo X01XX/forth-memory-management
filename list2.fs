@@ -131,7 +131,7 @@
 
     \ Check for struct instance.
     2dup structinfo-list-store          \ c-addr u c-addr u stkinf-lst
-    stackinfolist-interpret-string      \ c-addr u, instance t | f
+    structinfolist-interpret-string     \ c-addr u, instance t | f
     if
         nip nip
         true

@@ -282,7 +282,7 @@ array-end-disp      cell+   constant array-items-disp   \ The start of the array
 
     \ Set allocation counter.
     \ At end, with no memory leaks, deallocations will match allocations.
-    \ With the exception of lists (1), links (number structures), stackinfo (number structures)
+    \ With the exception of lists (1), links (number structures), structinfo (number structures)
     \ due to the structinfo-list-store.
     0 over _mma-set-num-allocations
 ;

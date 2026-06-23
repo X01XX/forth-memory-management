@@ -18,7 +18,7 @@ Memory use:
     StructInfo: Capacity:    10  Min Free:     5   50%  In use:      5  Item Size:  80  Array size:     800  Overhead:    120  Total:      920  Cells:    115  Allocs:         5
     Region:     Capacity:   103  Min Free:   101   98%  In use:      2  Item Size:  24  Array size:    2472  Overhead:    864  Total:     3336  Cells:    417  Allocs:         2
     Name:       Capacity:    50  Min Free:    47   94%  In use:      3  Item Size:  24  Array size:    1200  Overhead:    440  Total:     1640  Cells:    205  Allocs:         3
-                                                                                            Totals:    8528              3128            11656           1457                 27
+                                                        Totals:     27                                 8528              3128            11656           1457                 27
 Forth stack: <1> List-4-5 
 
 
@@ -30,7 +30,7 @@ Memory use:
     StructInfo: Capacity:    10  Min Free:     5   50%  In use:      5  Item Size:  80  Array size:     800  Overhead:    120  Total:      920  Cells:    115  Allocs:         5
     Region:     Capacity:   103  Min Free:   101   98%  In use:      0  Item Size:  24  Array size:    2472  Overhead:    864  Total:     3336  Cells:    417  Allocs:         2
     Name:       Capacity:    50  Min Free:    47   94%  In use:      0  Item Size:  24  Array size:    1200  Overhead:    440  Total:     1640  Cells:    205  Allocs:         3
-                                                                                            Totals:    8528              3128            11656           1457                 27
+                                                        Totals:     11                                 8528              3128            11656           1457                 27
 Forth stack: <0> 
 
 Freeing heap memory
