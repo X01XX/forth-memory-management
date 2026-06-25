@@ -17,6 +17,8 @@ On deallocation, the first cell of an item is zeroed out, to make use problems a
 Allocations, and deallocations, cause increasing disorder of the addresses on the stack,
 which has no effect on the utility, or speed, of the array-stack.
 
+From low to high memory usage, no effect on performance.
+
 That a stack is used to provide memory management to a stack-based language is sublime.
 Forth runs on an OS that uses stacks. Its stacks, all the way down.
 
