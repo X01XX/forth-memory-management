@@ -5,13 +5,13 @@ Initializing List store.
 Initializing StructInfo store.
 Initializing Region store.
 
-Dropped link: $62685E53A6F8 
+Dropped link: $5F40540BA6F8 
 
 
-Dropped list: $62685E53ADD8 
+Dropped list: $5F40540BADD8 
 
 
-Dropped region: $62685E53B570 
+Dropped region: $5F40540BB570 
 
 
 Memory use:
@@ -37,25 +37,27 @@ Forth stack: <0>
 Region instances not fully deallocated
 
 In use: 
-62685E53B570: 75 4B 00 00  00 00 00 00 - 05 00 00 00  00 00 00 00  uK..............
+5F40540BB570: 75 4B 00 00  00 00 00 00 - 05 00 00 00  00 00 00 00  uK..............
+5F40540BB580: 05 00 00 00  00 00 00 00 -                           ........
 
 
 Link instances not fully deallocated
 
 In use: 
-62685E53A6F8: F1 42 00 00  00 00 00 00 - 00 00 00 00  00 00 00 00  .B..............
+5F40540BA6F8: F1 42 00 00  00 00 00 00 - 00 00 00 00  00 00 00 00  .B..............
+5F40540BA708: 05 00 00 00  00 00 00 00 -                           ........
 
 
 List instances not fully deallocated
 
 In use: 
-62685E53ADD8: 33 46 00 00  00 00 00 00 - 00 00 00 00  00 00 00 00  3F..............
+5F40540BADD8: 33 46 00 00  00 00 00 00 - 00 00 00 00  00 00 00 00  3F..............
 
 
 in file included from *OS command line*:-1
 example7.fs:49: Memory leaks found!
 structinfo-list-store >>>structinfo-list-project-deallocated<<<
 Backtrace:
-$7693EFA03988 throw 
-$7693EFA653E0 c(abort")
+$7EA75CC03988 throw 
+$7EA75CC653E0 c(abort")
 

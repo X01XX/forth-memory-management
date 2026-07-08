@@ -397,7 +397,9 @@ array-end-disp      cell+   constant array-items-disp   \ The start of the array
         stack-in                    \ size stack end item flag
         if
         else
-            cr dup ." In use: " #2 cells dump
+            dup cr ." In use: " #4 pick dump
+            \ 2drop drop
+            \ exit
         then
 
         #3 pick                     \ size stack end item size
