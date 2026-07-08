@@ -54,8 +54,7 @@ The examples can be run with the commands:
 
   gforth example7.fs  \ Shows a link, list and region, being lost, and detected later.
 
-  gforth example8.fs  \ Shows a stack empty event, with one lost struct instance address,
-                      \ and its first word (to help identify the struct kind) being printed.
+  gforth example8.fs  \ Shows a stack empty event, with one lost struct instance reported.
   
   gforth example10.fs \ Shows a list of floating point numbers, and an operation on the list, producing a second list.
 
@@ -71,6 +70,7 @@ for tuning purposes.
 Total allocations, per struct kind, are shown in the memory print.  At end, the deallocations equal the allocations.
 
 Stacks can be created, and used, without an array.  Stack "pointer" info is stored in the allocated space.
+This is used in list2.fs list-from-token-list.
 
 For a struct that uses one cell, the overhead of the stack is about 50%.  For a 10-cell struct, its about 9%.
 
