@@ -2,7 +2,7 @@
 \ xt signature is: c-addr u -- result t | f
 : list-from-token-list ( xt tkn-lst -- int-lst t | f )
     \ Check arg.
-    assert-tos-is-token-list
+    assert( tos is-token-list? )
 
     \ Init stack.
     dup token-list-depth                    \ xt tkn-lst depth
@@ -110,7 +110,7 @@
 
     \ Avoid unneeded top-level list.
     dup list-get-first-item                 \ int-lst itm0
-    is-allocated-list                       \ int-lst bool
+    is-allocated-list?                      \ int-lst bool
     if
         dup list-get-length                 \ int-lst len
         1 =

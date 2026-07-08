@@ -1,20 +1,24 @@
 \ Functions for a list of floatnums.
 
-\ Check if tos is an empty list, or has a floatnum instance as its first item.
-: assert-tos-is-floatnum-list ( tos -- tos )
+\ Check TOS for floatnum-list.
+: is-floatnum-list? ( tos -- t )
+    assert( tos is-list? )
+    
     dup list-is-empty?
     if
-    else
-        dup list-get-links link-get-data
-        assert-tos-is-floatnum
         drop
+        true
+    else
+        list-get-links link-get-data
+        assert( is-floatnum? )
+        true
     then
 ;
 
 \ Deallocate a float list.
 : floatnum-list-deallocate ( fnum-lst0 -- )
     \ Check arg.
-    assert-tos-is-floatnum-list
+    assert( tos is-floatnum-list? )
 
     dup struct-get-use-count                    \ floatnum-lst uc
     #2 < if
@@ -27,7 +31,7 @@
 \ Print a floatnum-list
 : .floatnum-list ( fnum-lst0 -- )
     \ Check arg.
-    assert-tos-is-floatnum-list
+    assert( tos is-floatnum-list? )
 
     [ ' .floatnum ] literal swap .list
 ;
@@ -35,8 +39,8 @@
 \ Push a floatnum to a floatnum-list.
 : floatnum-list-push ( fnum fnum-lst0 -- )
     \ Check args.
-    assert-tos-is-floatnum-list
-    assert-nos-is-floatnum
+    assert( tos is-floatnum-list? )
+    assert( nos is-floatnum? )
 
     list-push-struct
 ;
@@ -44,8 +48,8 @@
 \ Push a floatnum to the end floatnum-list.
 : floatnum-list-push-end ( fnum fnum-lst0 -- )
     \ Check args.
-    assert-tos-is-floatnum-list
-    assert-nos-is-floatnum
+    assert( tos is-floatnum-list? )
+    assert( nos is-floatnum? )
 
     list-push-end-struct
 ;
@@ -54,8 +58,8 @@
 \ The xt signature is expected to be ( fnum fnum -- fnum )
 : floatnum-list-do-op ( xt fnum-1 fnum-lst0 -- fnum-lst )
     \ Check args.
-    assert-tos-is-floatnum-list
-    assert-nos-is-floatnum
+    assert( tos is-floatnum-list? )
+    assert( nos is-floatnum? )
 
     \ Init return list.
     list-new swap               \ xt fnum-1 ret-lst fnum-lst

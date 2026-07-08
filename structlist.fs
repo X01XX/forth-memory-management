@@ -1,7 +1,7 @@
 \ Pop the first struct from a list.
 : list-pop-struct ( lst0 -- struct t | f )
     \ Check args.
-    assert-tos-is-list
+    assert( tos is-list? )
 
     list-pop        \ struct t | f
     if
@@ -15,7 +15,7 @@
 \ Pop the last struct from a list.
 : list-pop-end-struct ( lst0 -- struct t | f )
     \ Check args.
-    assert-tos-is-list
+    assert( tos is-list? )
 
     list-pop-end    \ struct t | f
     if
@@ -29,7 +29,7 @@
 \ Push a struct to a list.
 : list-push-struct ( struct1 list0 -- )
     \ Check args.
-    assert-tos-is-list
+    assert( tos is-list? )
 
     over struct-inc-use-count
     list-push
@@ -38,7 +38,7 @@
 \ Push a struct to the end of a list.
 : list-push-end-struct ( struct1 list0 -- )
     \ Check args.
-    assert-tos-is-list
+    assert( tos is-list? )
 
     over struct-inc-use-count
     list-push-end
@@ -68,7 +68,7 @@
 \ Return a list of items that return true for a given xt and data.
 : list-find-all-struct ( xt data list0 -- list )
     \ Check args.
-    assert-tos-is-list
+    assert( tos is-list? )
 
     list-find-all                                   \ ret-list
     [ ' struct-inc-use-count ] literal over         \ ret-list xt ret-list
@@ -78,7 +78,7 @@
 \ Return a list of items that return true for a given xt and data.
 : list-find-all-struct-recursive ( xt data list0 -- list )
     \ Check args.
-    assert-tos-is-list
+    assert( tos is-list? )
 
     list-find-all-recursive                         \ ret-list
     [ ' struct-inc-use-count ] literal over         \ ret-list xt ret-list
@@ -88,7 +88,7 @@
 \ Return a list that is a copy of a given list, but with a specific item replaced by a given struct item.
 : list-copy-except-struct ( new-item2 index1 lst0 -- lst )
      \ Check args.
-    assert-tos-is-list
+    assert( tos is-list? )
     over 0< abort" list-copy-except-struct: index negative?"
     over over list-get-length < 0= abort" list-copy-except-struct: index out of range?"
 
@@ -118,7 +118,7 @@
 \ Return a copy of a list of structs.
 : list-copy-struct ( lst0 -- lst )
     \ Check arg.
-    assert-tos-is-list
+    assert( tos is-list? )
 
     list-copy                           \ ret-lst
 
@@ -129,7 +129,7 @@
 \ Return a flattened struct list.
 : list-flatten-struct ( lst0 -- lst )
     \ Check arg.
-    assert-tos-is-list
+    assert( tos is-list? )
 
     list-flatten                        \ ret-list
 
@@ -140,7 +140,7 @@
 \ Remove a struct item based on index.
 : list-remove-item-struct ( u1 lst0 -- item )
     \ Check arg.
-    assert-tos-is-list
+    assert( tos is-list? )
 
     list-remove-item        \ item
     dup struct-dec-use-count
@@ -149,7 +149,7 @@
 \ Return a list with elements reversed.
 : list-reverse-struct ( lst0 -- lst )
     \ Check arg.
-    assert-tos-is-list
+    assert( tos is-list? )
 
     list-reverse                        \ ret-list
 

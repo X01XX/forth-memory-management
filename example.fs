@@ -1,4 +1,4 @@
-
+include globals.fs
 include tools.fs
 include mm_array.fs
 include struct.fs

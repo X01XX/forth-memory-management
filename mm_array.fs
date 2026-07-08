@@ -397,7 +397,7 @@ array-end-disp      cell+   constant array-items-disp   \ The start of the array
         stack-in                    \ size stack end item flag
         if
         else
-            cr dup ." In use: " hex.
+            cr dup ." In use: " #2 cells dump
         then
 
         #3 pick                     \ size stack end item size
@@ -410,7 +410,7 @@ array-end-disp      cell+   constant array-items-disp   \ The start of the array
 
 \ Check if an address is an item of the array,
 \ on an exact item boundary.
-: mma-is-item ( addr mma0 -- bool )
+: mma-is-item? ( addr mma0 -- bool )
     2dup mma-within-array       \ addr mma0 bool
     if
         swap                    \ mma0 addr

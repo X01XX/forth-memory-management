@@ -4,15 +4,18 @@
                                 \ Used for memory use print, memory leak checking,
                                 \ freeing heap, struct-aware printing of the Forth stack.
 
-\ Check if tos is an empty list, or has a structinfo instance as its first item.
-: assert-tos-is-structinfo-list ( tos -- tos )
-    assert-tos-is-list
+\ Check TOS for strectinfo-list.
+: is-structinfo-list? ( tos -- t )
+    assert( tos is-list? )
+    
     dup list-is-empty?
     if
-    else
-        dup list-get-links link-get-data
-        assert-tos-is-structinfo
         drop
+        true
+    else
+        list-get-links link-get-data
+        assert( is-structinfo? )
+        true
     then
 ;
 
@@ -45,7 +48,7 @@
 \ Find a structinfo instance in a list, by instance id, if any.
 : structinfo-list-find ( id1 si-lst0 -- si t | f )
     \ Check args.
-    assert-tos-is-structinfo-list
+    assert( tos is-structinfo-list? )
 
     [ ' structinfo-inst-id-eq ] literal -rot list-find
 ;
@@ -55,7 +58,7 @@
 \ Return the length of the longest struct name.
 : structinfo-list-max-name-length ( si-lst0 -- u )
     \ Check args.
-    assert-tos-is-structinfo-list
+    assert( tos is-structinfo-list? )
 
     \ Init length counter.
     0 swap                       \ cnt si-lst0
@@ -80,7 +83,7 @@
 \ Print memory use of structs.
 : structinfo-list-print-memory-use ( si-lst0 -- )
     \ Check args.
-    assert-tos-is-structinfo-list
+    assert( tos is-structinfo-list? )
 
     cr ." Memory use:"
     \ Get/store longest name length.
@@ -282,7 +285,7 @@
             dup structinfo-list-store-using-addr?
             if
             else                    \ size stack end item
-                cr dup ." In use: " hex.
+                cr dup ." In use: " #2 cells dump
             then
         then
 
@@ -298,7 +301,7 @@
 \ A lost higher-level struct instance will also complain about struct instances it contains.
 : structinfo-list-project-deallocated ( snf-lst0 -- )
     \ Check args.
-    assert-tos-is-structinfo-list
+    assert( tos is-structinfo-list? )
     \ cr ." structinfo-list-project-deallocated" cr
 
     \ Init error flag.
@@ -376,7 +379,7 @@
 \ Free heap of all mm_arrays.
 : structinfo-list-free-heap ( snf-lst0 -- )
     \ Check args.
-    assert-tos-is-structinfo-list
+    assert( tos is-structinfo-list? )
 
     \ Init count.
     dup list-get-length swap                \ cnt snf-lst0
@@ -403,13 +406,13 @@
 \ Push a structinfo instance, insure no duplicat id.
 : structinfo-list-push-end ( snf1 snf-lst0 -- )
     \ Check args.
-    assert-tos-is-structinfo-list
-    assert-nos-is-structinfo
+    assert( tos is-structinfo-list? )
+    assert( nos is-structinfo? )
 
     \ Check for duplicate struct id.
     [ ' structinfo-id-eq ] literal      \ snf1 snf-lst0 xt
     #2 pick #2 pick                     \ snf1 snf-lst0 xt snf1 snf-lst1
-    list-member                         \ snf1 snf-lst0 bool
+    list-member?                        \ snf1 snf-lst0 bool
     abort" structinfo-list-push-end: Duplicat struct id?"
 
     list-push-end-struct
@@ -418,13 +421,13 @@
 \ Push a structinfo instance, insure no duplicat id.
 : structinfo-list-push ( snf1 snf-lst0 -- )
     \ Check args.
-    assert-tos-is-structinfo-list
-    assert-nos-is-structinfo
+    assert( tos is-structinfo-list? )
+    assert( nos is-structinfo? )
 
     \ Check for duplicate struct id.
     [ ' structinfo-id-eq ] literal      \ snf1 snf-lst0 xt
     #2 pick #2 pick                     \ snf1 snf-lst0 xt snf1 snf-lst1
-    list-member                         \ snf1 snf-lst0 bool
+    list-member?                        \ snf1 snf-lst0 bool
     abort" structinfo-list-push: Duplicate struct id?"
 
     list-push-struct
@@ -461,7 +464,7 @@
 \ Print a list of structures.
 : structinfo-list-print-struct-list ( lst0 -- )
     \ Check args.
-    assert-tos-is-list
+    assert( tos is-list? )
 
     ." ("
 
@@ -494,7 +497,7 @@
 \ Deallocate a list of structures.
 : structinfo-list-deallocate-struct-list ( lst0 -- )
     \ Check args.
-    assert-tos-is-list
+    assert( tos is-list? )
 
     dup struct-get-use-count                \ lst0 uc
     dup 0< abort" structinfo-list-deallocate-struct-list: Invalid use count"
@@ -532,7 +535,7 @@
 \ Return a struct instance from a string.
 : structinfolist-interpret-string ( c-addr u lst0 -- inst t | f )
     \ Check args.
-    assert-tos-is-structinfo-list
+    assert( tos is-structinfo-list? )
 
     list-get-links                      \ c-addr u link
 

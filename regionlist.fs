@@ -3,7 +3,7 @@
 \ Deallocate a region list.
 : region-list-deallocate ( list0 -- )
     \ Check arg.
-    assert-tos-is-list
+    assert( tos is-list? )
 
     dup struct-get-use-count                    \ list0 uc
     #2 < if
@@ -17,8 +17,8 @@
 \ Or use ' region-eq list1 list0 list-intersection-struct
 : region-list-set-intersection ( list1 list0 -- list-result )
     \ Check args.
-    assert-tos-is-list
-    assert-nos-is-list
+    assert( tos is-list? )
+    assert( nos is-list? )
 
     [ ' region-eq ] literal -rot        \ xt list1 list0
     list-intersection                   \ list-result
@@ -30,8 +30,8 @@
 \ Or use ' region-eq list1 list0 list-union-struct
 : region-list-set-union ( list1 list0 -- list-result )
     \ Check args.
-    assert-tos-is-list
-    assert-nos-is-list
+    assert( tos is-list? )
+    assert( nos is-list? )
 
     [ ' region-eq ] literal -rot        \ xt list1 list0
     list-union                          \ list-result
@@ -43,8 +43,8 @@
 \ Or use ' region-eq list1 list0 list-difference-struct
 : region-list-set-difference ( list1 list0 -- list-result )
     \ Check args.
-    assert-tos-is-list
-    assert-nos-is-list
+    assert( tos is-list? )
+    assert( nos is-list? )
 
     [ ' region-eq ] literal -rot        \ xt list1 list0
     list-difference                     \ list-result
@@ -55,7 +55,7 @@
 \ Print a region-list
 : .region-list ( list0 -- )
     \ Check arg.
-    assert-tos-is-list
+    assert( tos is-list? )
 
     [ ' .region ] literal swap .list
 ;
@@ -64,8 +64,8 @@
 \ Or use list-push-struct
 : _region-list-push ( reg1 list0 -- )
     \ Check args.
-    assert-tos-is-list
-    assert-nos-is-region
+    assert( tos is-list? )
+    assert( nos is-region? )
 
     over struct-inc-use-count
     list-push
@@ -76,8 +76,8 @@
 \ Return true if a region was removed.
 : region-list-remove ( xt reg list -- bool )
     \ Check args.
-    assert-tos-is-list
-    assert-nos-is-region
+    assert( tos is-list? )
+    assert( nos is-region? )
 
     list-remove
     if
@@ -92,14 +92,14 @@
 \ If there are no supersets in the list, delete any subsets.
 : region-list-push-nosubs ( reg1 list0 -- )
     \ Check args.
-    assert-tos-is-list
-    assert-nos-is-region
+    assert( tos is-list? )
+    assert( nos is-region? )
 
     \ Return if any region in the list is a superset of reg1.
     2dup                                    \ reg1 list0 reg1 list0
     [ ' region-superset-of ] literal        \ reg1 list0 reg1 list0 xt
     -rot                                    \ reg1 list0 xt reg1 list0
-    list-member                         \ reg1 list0 flag
+    list-member?                            \ reg1 list0 flag
     if
         2drop
         false
@@ -122,8 +122,8 @@
 \ Return a list of region intersections with a region-list, no subsets.
 : region-list-region-intersections ( list1 list0 -- list-result )
     \ Check args.
-    assert-tos-is-list
-    assert-nos-is-list
+    assert( tos is-list? )
+    assert( nos is-list? )
 
     \ list1 list0
     list-get-links                  \ list1 link0

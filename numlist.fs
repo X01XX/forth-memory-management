@@ -6,20 +6,20 @@
 ;
 
 \ Return true if a number if in a num-list
-: num-list-member ( n num-list -- flag )
+: num-list-member? ( n num-list -- flag )
     \ Check arg.
-    assert-tos-is-list
+    assert( tos is-list? )
 
-    ' =         \ n list xt
-    -rot        \ xt n list
-    list-member \ flag
+    ' =             \ n list xt
+    -rot            \ xt n list
+    list-member?    \ flag
 ;
 
 \ Return the intersection of two num lists
 : num-list-intersection ( list1 list0 -- list-intersection )
     \ Check args.
-    assert-tos-is-list
-    assert-nos-is-list
+    assert( tos is-list? )
+    assert( nos is-list? )
 
     ' =                 \ list1 list2 xt
     -rot                \ xt list1 list2
@@ -29,8 +29,8 @@
 \ Return the difference of two num lists, same order as in subrtracting numbers in forth, list1 - list0
 : num-list-difference ( list1 list0 -- list )
     \ Check args.
-    assert-tos-is-list
-    assert-nos-is-list
+    assert( tos is-list? )
+    assert( nos is-list? )
 
     ' =                 \ list1 list2 xt
     -rot                \ xt list1 list2
@@ -40,8 +40,8 @@
 \ Return the union of two num lists
 : num-list-union ( list1 list0 -- list-union )
     \ Check args.
-    assert-tos-is-list
-    assert-nos-is-list
+    assert( tos is-list? )
+    assert( nos is-list? )
 
     ' =         \ list1 list2 xt
     -rot        \ xt list1 list2
@@ -50,7 +50,7 @@
 
 : num-list-deallocate ( list-addr -- )
     \ Check arg.
-    assert-tos-is-list
+    assert( tos is-list? )
 
     \ Check if the list will be deallocated for the last time.
     dup struct-get-use-count                        \ lst0 uc
@@ -72,7 +72,7 @@
 \ to put the xt onto the stack.
 : num-list-apply ( xt u list0 -- list1 )
     \ Check arg.
-    assert-tos-is-list
+    assert( tos is-list? )
 
     list-new swap           \ xt u list-ret list0
     list-get-links          \ xt u list-ret link

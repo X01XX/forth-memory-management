@@ -1,4 +1,5 @@
 
+debug on
 Initializing Link store.
 Initializing List store.
 Initializing Name store.

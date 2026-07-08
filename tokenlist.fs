@@ -13,34 +13,25 @@
     then
 ;
 
-\ Check if tos is an empty list, or has a token instance as its first item.
-: assert-tos-is-token-list ( tos -- tos )
-    assert-tos-is-list
+\ Check TOS for token-list.
+: is-token-list? ( tos -- t )
+    assert( tos is-list? )
+    
     dup list-is-empty?
     if
-    else
-        dup list-get-links link-get-data
-        assert-tos-is-token
         drop
-    then
-;
-
-\ Check if nos is an empty list, or has a token instance as its first item.
-: assert-nos-is-token-list ( nos tos -- nos tos )
-    assert-nos-is-list
-    over list-is-empty?
-    if
+        true
     else
-        over list-get-links link-get-data
-        assert-tos-is-token
-        drop
+        list-get-links link-get-data
+        assert( is-token? )
+        true
     then
 ;
 
 \ Print a token-list
 : .token-list ( list0 -- )
     \ Check arg.
-    assert-tos-is-token-list
+    assert( tos is-token-list? )
 
     [ ' .token ] literal swap .list
 ;
@@ -49,7 +40,7 @@
 \ that is how deep the lists go.
 : token-list-depth ( tkn-lst - u )
     \ Check arg.
-    assert-tos-is-token-list
+    assert( tos is-token-list? )
 
     \ Init counter, max count.
     0 swap                          \ max tkn-lst
@@ -321,7 +312,7 @@
 \ Return the number of non-paren tokens,
 : token-list-get-num-non-paren-tokens ( tkn-lst - u )
     \ Check arg.
-    assert-tos-is-token-list
+    assert( tos is-token-list? )
 
     \ Init counter.
     0 swap                          \ cnt tkn-lst

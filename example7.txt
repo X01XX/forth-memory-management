@@ -1,16 +1,17 @@
 
+debug on
 Initializing Link store.
 Initializing List store.
 Initializing StructInfo store.
 Initializing Region store.
 
-Dropped link: $59A9E85DA958 
+Dropped link: $62685E53A6F8 
 
 
-Dropped list: $59A9E85DB038 
+Dropped list: $62685E53ADD8 
 
 
-Dropped region: $59A9E85DB7D0 
+Dropped region: $62685E53B570 
 
 
 Memory use:
@@ -35,19 +36,26 @@ Forth stack: <0>
 
 Region instances not fully deallocated
 
-In use: $59A9E85DB7D0 
+In use: 
+62685E53B570: 75 4B 00 00  00 00 00 00 - 05 00 00 00  00 00 00 00  uK..............
+
 
 Link instances not fully deallocated
 
-In use: $59A9E85DA958 
+In use: 
+62685E53A6F8: F1 42 00 00  00 00 00 00 - 00 00 00 00  00 00 00 00  .B..............
+
 
 List instances not fully deallocated
 
-In use: $59A9E85DB038 
+In use: 
+62685E53ADD8: 33 46 00 00  00 00 00 00 - 00 00 00 00  00 00 00 00  3F..............
 
-example7.fs:48: Memory leaks found!
+
+in file included from *OS command line*:-1
+example7.fs:49: Memory leaks found!
 structinfo-list-store >>>structinfo-list-project-deallocated<<<
 Backtrace:
-$7CFAC9403988 throw 
-$7CFAC9464098 c(abort")
+$7693EFA03988 throw 
+$7693EFA653E0 c(abort")
 

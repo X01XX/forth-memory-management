@@ -1,5 +1,5 @@
 \ The name struct, storing a name of up to 15 characters.
-#61979 constant name-id
+#61979 constant name-struct-id
     #3 constant name-struct-number-cells
 
 \ Name struct fields.
@@ -18,6 +18,33 @@ name-header-disp cell+  constant name-string-disp
 
     cr ." Initializing Name store."
     name-struct-number-cells swap mma-new to name-mma
+;
+
+\ Check name mma usage.
+: assert-name-mma-none-in-use ( -- )
+    name-mma mma-in-use 0<>
+    abort" link-mma use GT 0"
+;
+
+\ Check instance type.
+: is-allocated-name? ( name-addr -- flag )
+    get-first-word          \ w t | f
+    if
+        name-struct-id =
+    else
+        false
+    then
+;
+
+\ Check TOS for name.
+: is-name? ( tos -- t )
+    dup is-allocated-name?
+    if
+        drop true
+    else
+        s" Selected arg is not an allocated name."
+       abort
+    then
 ;
 
 \ Start accessors.
@@ -42,31 +69,11 @@ name-header-disp cell+  constant name-string-disp
     name-string-disp + string!
 ;
 
-\ Check instance type.
-: is-allocated-name ( name-addr -- flag )
-    get-first-word          \ w t | f
-    if
-        name-id =
-    else
-        false
-    then
-;
-
-\ Check TOS for name. Unconventional, no change in stack.
-: assert-tos-is-name ( arg0 --  arg0 )
-    dup is-allocated-name 0=
-    abort" tos is not an allocated name."
-;
-
-\ Check list mma usage.
-: assert-name-mma-none-in-use ( -- )
-    name-mma mma-in-use 0<>
-    abort" name-mma use GT 0"
-;
+\ End accessors.
 
 \ Return a new name struct instance address, with given data value.
 : name-new ( string-addr length -- name-addr )
-    name-id name-mma
+    name-struct-id name-mma
     struct-allocate             \ str-addr len name-addr
 
     \ Store string.
@@ -92,7 +99,7 @@ name-header-disp cell+  constant name-string-disp
 \ Deallocate a name.
 : name-deallocate ( name-addr -- )
     \ Check argument.
-    assert-tos-is-name
+    assert( tos is-name? )
 
     dup struct-get-use-count    \ name-addr count
 

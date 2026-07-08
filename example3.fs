@@ -5,6 +5,7 @@
 #15 constant all-bits
  #8  constant ms-bit
 
+include globals.fs
 include tools.fs
 include tools2.fs
 include mm_array.fs
