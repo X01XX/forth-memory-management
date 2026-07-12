@@ -59,8 +59,8 @@
 \ Cycle through each stack item, displaying its struct type.
 : .stack-structs
     ." Forth stack: <" depth dup abs 0 <# #S rot sign #> type ." > "
-    depth 0=
-    if
+    depth
+    ifnot
         exit
     then
     depth 0 do
@@ -69,19 +69,19 @@
         dup list-mma mma-within-array
         if
             dup struct-get-id
-            0= if
-                ." List-u "
-            else
+            if
                 ." List-"
                 dup list-get-length dup abs 0 <# #S rot sign #> type
                 dup list-get-length
-                0<> if
-                        ." -"
-                        dup list-get-links link-get-data
-                        .stack-struct
-                    else
-                        space
-                    then
+                if
+                    ." -"
+                    dup list-get-links link-get-data
+                    .stack-struct
+                else
+                    space
+                then
+            else
+                ." List-u "
             then
             drop
         else

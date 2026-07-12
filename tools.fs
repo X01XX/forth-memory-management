@@ -92,3 +92,6 @@
     depth 0<> abort" Forth stack is not empty"
 ;
 
+\ A replacement for "if else" or "0= if".
+: ifnot POSTPONE 0= POSTPONE if ; immediate
+

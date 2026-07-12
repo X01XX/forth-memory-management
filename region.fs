@@ -464,8 +464,8 @@ region-state-0-disp cell+   constant region-state-1-disp
     assert( nos is-region? )
 
     \ Check if any subtraction is needed.
-    2dup region-intersects 0=       \ reg1 reg0 flag
-    if
+    2dup region-intersects          \ reg1 reg0 flag
+    ifnot
         list-new tuck               \ reg1 list reg0 list
         region-list-push            \ reg1 list
         nip                         \ list
@@ -524,8 +524,8 @@ region-state-0-disp cell+   constant region-state-1-disp
     assert( tos is-region? )
 
     \ Check if any subtraction is needed.
-    2dup region-superset-of-state 0=    \ sta1 reg0 flag
-    if
+    2dup region-superset-of-state       \ sta1 reg0 flag
+    ifnot
         list-new tuck              \ sta1 list reg0 list
         region-list-push           \ sta1 list
         nip                         \ list
@@ -540,8 +540,8 @@ region-state-0-disp cell+   constant region-state-1-disp
     over region-x-mask              \ sta1 reg0 list | xmask
 
     \ Check if the result is nothing.
-    dup 0=                          \ sta1 reg0 list | xmask
-    if
+    dup                             \ sta1 reg0 list | xmask
+    ifnot
         drop
         swap drop
         swap drop

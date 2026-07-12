@@ -97,13 +97,13 @@
     begin
         ?dup
     while
-        over 0=
+        over
         if
-            #3 pick #3 pick         \ new-item2 lst-new index1 link new-item2 lst-new
-            list-push-end-struct    \ new-item2 lst-new index1 link
-        else
             dup link-get-data       \ new-item2 lst-new index1 link data
             #3 pick                 \ new-item2 lst-new index1 link data lst-new
+            list-push-end-struct    \ new-item2 lst-new index1 link
+        else
+            #3 pick #3 pick         \ new-item2 lst-new index1 link new-item2 lst-new
             list-push-end-struct    \ new-item2 lst-new index1 link
         then
 

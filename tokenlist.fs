@@ -96,7 +96,8 @@
     \ cr ." token-list-from-string: " 2dup type cr
 
     \ Check for null input.
-    dup 0= if                       \ c-addr 0
+    dup
+    ifnot                           \ c-addr 0
         2drop
         list-new
         true
@@ -301,11 +302,11 @@
     repeat
 
     \ Check paren counter eq zero.  \ ret-lst cnt
-    0= if
-        true
-    else
+    if
         token-list-deallocate
         false
+    else
+        true
     then
 ;
 
@@ -327,14 +328,12 @@
         s" ("                       \ cnt link c-addr u
         #2 pick link-get-data       \ cnt link c-addr u tkt
         token-eq-string             \ cnt link flag
-        if
-        else
+        ifnot
             \ Check for right paren.
             s" )"                       \ cnt link c-addr u
             #2 pick link-get-data       \ cnt link c-addr u tkt
             token-eq-string             \ cnt link flag
-            if
-            else
+            ifnot
                 \ Inc counter.
                 swap 1+ swap
             then
