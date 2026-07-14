@@ -25,6 +25,7 @@ Forth runs on an OS that uses stacks. Its stacks, all the way down.
 Functions that manipulate a struct instance can act as wrappers to array-stack, and list, functions.
 
 A memory leak can be automatically detected, the type of struct, and the specific instance addresses.
+A hex dump of each leaked struct instance will be printed.
 There is a process for finding where any lost struct instance is allocated, then follow your code to where it should be deallocated.
 See memory-leak-fixing.odt.
 
