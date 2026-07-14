@@ -34,5 +34,5 @@ list-new to structinfo-list-store
 
 cr #5 #5 region-new  cr ." Dropped region: " hex. cr
 cr #4 #5 region-new  cr ." Dropped region: " hex. cr
-#3 #5 region-new 
+#3 #5 region-new
 

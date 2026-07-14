@@ -34,4 +34,6 @@ Memory use:
                                                         Totals:     11                                 8528              3128            11656           1457                 27
 Forth stack: <0> 
 
+
+No memory leaks.
 Freeing heap memory

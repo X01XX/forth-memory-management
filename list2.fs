@@ -110,7 +110,7 @@
 
     \ Avoid unneeded top-level list.
     dup list-get-first-item                 \ int-lst itm0
-    is-allocated-list?                      \ int-lst bool
+    is-list?                                \ int-lst bool
     if
         dup list-get-length                 \ int-lst len
         1 =
@@ -151,7 +151,7 @@
     if
         tuck                                            \ tkn-lst xt tkn-lst
         list-from-token-list                            \ tkn-lst, lst t | f
-        if  
+        if
             swap token-list-deallocate                  \ lst
             true
         else

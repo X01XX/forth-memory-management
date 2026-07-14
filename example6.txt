@@ -41,7 +41,7 @@ Memory use:
     List mma:         Capacity:   102  Min Free:    88   86%  In use:     13  Item Size:  16  Array size:    1632  Overhead:    856  Total:     2488  Cells:    311  Allocs:        25
     Link mma:         Capacity:   101  Min Free:    56   55%  In use:     45  Item Size:  24  Array size:    2424  Overhead:    848  Total:     3272  Cells:    409  Allocs:        58
     Region mma:       Capacity:   102  Min Free:    97   95%  In use:      5  Item Size:  24  Array size:    2448  Overhead:    856  Total:     3304  Cells:    413  Allocs:         5
-    dstack: <6> 97322885397928 97322885397880 97322885397816 97322885397800 97322885397768 97322885397736 
+    dstack: <6> 108467135647144 108467135647096 108467135647032 108467135647016 108467135646984 108467135646952 
 
 Deallocating ...
 

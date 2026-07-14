@@ -99,6 +99,7 @@ cr ." flattened list: " ' . over .list cr
 list-new                    \ root-lst copy-lst reg-lst
 #5 #4 region-new over list-push-struct
 #1 #4 region-new over list-push-struct
+
 list-new
 #1 #3 region-new over list-push-struct
 #7 #3 region-new over list-push-struct

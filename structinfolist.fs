@@ -6,21 +6,30 @@
 
 \ Check TOS for strectinfo-list.
 : is-structinfo-list? ( tos -- t )
-    assert( tos is-list? )
-    
-    dup list-is-empty?
+    dup is-list?                \ tos bool
+    ifnot
+        drop
+        false
+        exit
+    then
+
+    dup list-is-empty?          \ tos bool
     if
         drop
         true
-    else
-        list-get-links link-get-data
-        assert( is-structinfo? )
-        true
+        exit
     then
+
+    list-get-links              \ link
+    link-get-data               \ data
+    is-structinfo?              \ bool
 ;
 
 \ Deallocate a structinfo list.
 : structinfo-list-deallocate ( structinfo-lst -- )
+    \ Check arg.
+    assert( tos is-structinfo-list? )
+
     dup struct-get-use-count                        \ structinfo-lst uc
     #2 < if
         [ ' structinfo-deallocate ] literal over    \ structinfo-lst xt structinfo-lst
@@ -34,6 +43,9 @@
 
 \ Deallocate a structinfo list recursively.
 : structinfo-list-deallocate-recursive ( structinfo-lst -- )
+    \ Check arg.
+    assert( tos is-structinfo-list? )
+
     dup struct-get-use-count                        \ structinfo-lst uc
     #2 < if
         [ ' structinfo-deallocate ] literal over    \ structinfo-lst xt structinfo-lst
@@ -47,6 +59,9 @@
 
 \ Find a structinfo instance in a list, by instance id, if any.
 : structinfo-list-find ( id1 si-lst0 -- si t | f )
+    \ Check arg.
+    assert( tos is-structinfo-list? )
+
     \ Check args.
     assert( tos is-structinfo-list? )
 
@@ -153,7 +168,7 @@
     repeat
 
     \ Print array memory use.
-    30 spaces
+    #30 spaces
     #7 dec.r
 
     \ Sum overhead memory use.
@@ -221,8 +236,9 @@
 \ Return true if the structinfo-list-store is using a given address
 \ for a list, link, or structinfo instance.
 : structinfo-list-store-using-addr?  ( addr -- bool )
+
     \ Check list itself.
-    structinfo-list-store            \ addr store
+    structinfo-list-store           \ addr store
     over =                          \ addr bool
     if
         drop
@@ -231,7 +247,7 @@
     then
 
     \ Check links and stores.
-    structinfo-list-store          \ addr store
+    structinfo-list-store           \ addr store
     list-get-links                  \ addr lnk
 
     begin
@@ -280,11 +296,9 @@
         dup                         \ size stack end item item
         #3 pick                     \ size stack end item item stack
         stack-in                    \ size stack end item flag
-        if
-        else
+        ifnot
             dup structinfo-list-store-using-addr?
-            if
-            else                    \ size stack end item
+            ifnot                   \ size stack end item
                 cr dup ." In use: " #4 pick dump
             then
         then
@@ -368,7 +382,11 @@
         link-get-next
     repeat
                                     \ snf-lst flg
-    abort" Memory leaks found!"
+    if
+        cr ." Memory leaks found!" abort
+    else
+        cr ." No memory leaks."
+    then
 
     drop
     assert-forth-stack-empty

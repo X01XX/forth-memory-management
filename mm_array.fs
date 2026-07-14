@@ -30,7 +30,7 @@
 \
 \ Run <struct name>-mma .mma-in-use
 \
-\ Check in-use addresses with:  addr  is-allocated-<struct name> ( see is-allocated-region in region.fs )
+\ Check in-use addresses with:  addr  is-<struct name>? ( see is-region? in region.fs )
 \ If that returns true, try:    addr  .<struct name>             ( see .region in region.fs )
 \ and                           addr  struct-get-use-count
 \

@@ -26,8 +26,8 @@ name-header-disp cell+  constant name-string-disp
     abort" link-mma use GT 0"
 ;
 
-\ Check instance type.
-: is-allocated-name? ( name-addr -- flag )
+\ Check if tos is an allocated name.
+: is-name? ( name-addr -- flag )
     get-first-word          \ w t | f
     if
         name-struct-id =
@@ -36,26 +36,21 @@ name-header-disp cell+  constant name-string-disp
     then
 ;
 
-\ Check TOS for name.
-: is-name? ( tos -- t )
-    dup is-allocated-name?
-    if
-        drop true
-    else
-        s" Selected arg is not an allocated name."
-       abort
-    then
-;
-
 \ Start accessors.
 
 \ Get name data cell.
 : name-get-string ( name-addr -- string-addr length )
+    \ Check argument.
+    assert( tos is-name? )
+
     name-string-disp + string@
 ;
 
 \ Set name data cell.
 : name-set-string ( string-addr length name-addr -- )
+    \ Check argument.
+    assert( tos is-name? )
+
     over #15 >
     if
         ." name-set-string: string length is too large"
@@ -84,11 +79,18 @@ name-header-disp cell+  constant name-string-disp
 
 \ Print a name struct instance.
 : .name ( name-addr -- )        \ redefines an obsolete function, so a warning displays.
+    \ Check argument.
+    assert( tos is-name? )
+
     name-get-string type
 ;
 
 \ Return true if two names are equal.
 : name-eq ( name-addr1 name-addr2 -- flag )
+    \ Check argument.
+    assert( tos is-name? )
+    assert( nos is-name? )
+
     name-get-string         \ name-addr1 string-addr2 string-length2
     rot                     \ string-addr2 string-length2 name-addr1
     name-get-string         \ string-addr2 string-length2 string-addr1 string-length1

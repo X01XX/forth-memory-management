@@ -88,7 +88,7 @@
     false
 ;
 
-: assert-forth-stack-empty ( -- ) 
+: assert-forth-stack-empty ( -- )
     depth 0<> abort" Forth stack is not empty"
 ;
 

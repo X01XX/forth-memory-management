@@ -24,7 +24,7 @@
     dup 0 <
     abort" use count cannot be negative."
 
-    1-                                                                                                                                     
+    1-
     swap struct-set-use-count
 ;
 

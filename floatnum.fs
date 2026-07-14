@@ -20,8 +20,8 @@ floatnum-header-disp cell+   constant floatnum-number-disp
     floatnum-struct-number-cells swap mma-new to floatnum-mma
 ;
 
-\ Check instance type.
-: is-allocated-floatnum? ( addr -- flag )
+\ Check if tos is an allocated floatnum.
+: is-floatnum? ( tos -- bool )
     dup floatnum-mma mma-is-item? \ addr bool
     if
         get-first-word              \ w t | f
@@ -34,15 +34,6 @@ floatnum-header-disp cell+   constant floatnum-number-disp
         drop
         false                       \ f
     then
-;
-
-\ Check TOS for floatnum.
-: is-floatnum? ( tos -- t )
-    dup is-allocated-floatnum?
-    if drop true exit then
-
-    s" Selected arg is not an allocated floatnum"
-    abort
 ;
 
 \ Start accessors.

@@ -40,7 +40,7 @@ cs
     \ Convert the list.
     list-from-string 		\ result t | f
     if
-        2 spaces ." -> list: " dup structinfo-list-print-struct-list
+        #2 spaces ." -> list: " dup structinfo-list-print-struct-list
     else
         cr ." list-from-string failed?" cr
         abort
@@ -78,5 +78,5 @@ cr structinfo-list-store structinfo-list-print-memory-use cr
 structinfo-list-store structinfo-list-project-deallocated
 
 \ Free heap memory before exiting.
-." Freeing heap memory"
+cr ." Freeing heap memory"
 structinfo-list-store structinfo-list-free-heap

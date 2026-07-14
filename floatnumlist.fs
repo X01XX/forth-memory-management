@@ -1,18 +1,24 @@
 \ Functions for a list of floatnums.
 
 \ Check TOS for floatnum-list.
-: is-floatnum-list? ( tos -- t )
-    assert( tos is-list? )
-    
-    dup list-is-empty?
+: is-floatnum-list? ( tos -- bool )
+    dup is-list?            \ tos bool
+    ifnot
+        drop
+        false
+        exit
+    then
+
+    dup list-is-empty?      \ tos bool
     if
         drop
         true
-    else
-        list-get-links link-get-data
-        assert( is-floatnum? )
-        true
+        exit
     then
+
+    list-get-links          \ link
+    link-get-data           \ data
+    is-floatnum?            \ bool
 ;
 
 \ Deallocate a float list.

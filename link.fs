@@ -23,24 +23,13 @@ link-next-disp      cell+   constant link-data-disp
     abort" link-mma use GT 0"
 ;
 
-\ Return true if TOS is an allocated link.
-: is-allocated-link? ( link -- flag )
+\ Check if tos is an allocated link.
+: is-link? ( link -- bool )
     get-first-word          \ w t | f
     if
         link-struct-id =
     else
         false
-    then
-;
-
-\ Check TOS for link.
-: is-link? ( tos -- t )
-    dup is-allocated-link?
-    if
-        drop true
-    else
-        s" Selected arg is not an allocated link."
-       abort
     then
 ;
 

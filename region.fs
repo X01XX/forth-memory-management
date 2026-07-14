@@ -25,23 +25,14 @@ region-state-0-disp cell+   constant region-state-1-disp
     abort" region-mma use GT 0"
 ;
 
-\ Check instance type.
-: is-allocated-region? ( addr -- flag )
+\ Check if tos is an allocated region.
+: is-region? ( addr -- flag )
     get-first-word          \ w t | f
     if
         region-struct-id =
     else
         false
     then
-;
-
-\ Check TOS for region.
-: is-region? ( tos -- t )
-    dup is-allocated-region?
-    if drop true exit then
-
-    s" Selected arg is not an allocated region"
-    abort
 ;
 
 \ Start accessors.
@@ -604,7 +595,7 @@ region-state-0-disp cell+   constant region-state-1-disp
 
     \ Check for prefix.
     over c@ [char] r <>
-    if  
+    if
         2drop
         false
         exit

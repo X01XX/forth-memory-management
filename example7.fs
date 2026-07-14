@@ -49,6 +49,6 @@ cr structinfo-list-store structinfo-list-print-memory-use cr
 structinfo-list-store structinfo-list-project-deallocated
 
 \ Free heap memory before exiting.
-." Freeing heap memory"
+cr ." Freeing heap memory"
 structinfo-list-store structinfo-list-free-heap
 cr
