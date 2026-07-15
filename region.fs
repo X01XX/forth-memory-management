@@ -26,12 +26,14 @@ region-state-0-disp cell+   constant region-state-1-disp
 ;
 
 \ Check if tos is an allocated region.
-: is-region? ( addr -- flag )
-    get-first-word          \ w t | f
-    if
-        region-struct-id =
+: is-region? ( tos -- bool )
+    dup region-mma mma-is-item? \ tos bool
+    if  
+        struct-get-id           \ id
+        region-struct-id =      \ bool
     else
-        false
+        drop
+        false                   \ f
     then
 ;
 

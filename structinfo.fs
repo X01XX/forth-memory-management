@@ -28,12 +28,14 @@ structinfo-from-string-xt-disp  cell+   constant structinfo-name-disp           
 ;
 
 \ Check if tos is an allocated structinfo.
-: is-structinfo? ( tos -- flag )
-    get-first-word          \ w t | f
+: is-structinfo? ( tos -- bool )
+    dup structinfo-mma mma-is-item? \ tos bool
     if
-        structinfo-struct-id =
+        struct-get-id
+        structinfo-struct-id =      \ bool
     else
-        false
+        drop
+        false                       \ f
     then
 ;
 
@@ -135,6 +137,12 @@ structinfo-from-string-xt-disp  cell+   constant structinfo-name-disp           
 
 \ Return a new structinfo struct instance address, with given data value.
 : structinfo-new ( from-string-xt deallocate-xt print-xt c-addr u mma1 id0 -- snf )
+
+    \ Check struct id is not zero, or negative.
+    \ With a <struct>-deallocate wrapper, using argument checking,
+    \ deallocating an invalid address, or deallocating a valid address twice,
+    \ will be detected.
+    dup 1 < abort" Invalid struct id."
 
     structinfo-struct-id structinfo-mma
     struct-allocate                     \ fs-xt d-xt p-xt c-addr u mma1 id0 snf

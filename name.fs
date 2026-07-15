@@ -27,12 +27,14 @@ name-header-disp cell+  constant name-string-disp
 ;
 
 \ Check if tos is an allocated name.
-: is-name? ( name-addr -- flag )
-    get-first-word          \ w t | f
-    if
-        name-struct-id =
+: is-name? ( tos -- bool )
+    dup name-mma mma-is-item?   \ tos bool
+    if  
+        struct-get-id           \ id
+        name-struct-id =        \ bool
     else
-        false
+        drop
+        false                   \ f
     then
 ;
 

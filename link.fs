@@ -24,12 +24,14 @@ link-next-disp      cell+   constant link-data-disp
 ;
 
 \ Check if tos is an allocated link.
-: is-link? ( link -- bool )
-    get-first-word          \ w t | f
+: is-link? ( tos -- bool )
+    dup link-mma mma-is-item?   \ tos bool
     if
-        link-struct-id =
+        struct-get-id
+        link-struct-id =        \ bool
     else
-        false
+        drop
+        false                   \ f
     then
 ;
 

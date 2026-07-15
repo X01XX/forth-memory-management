@@ -56,11 +56,13 @@ list-header-disp    cell+   constant list-links-disp
 
 \ Check if tos is an allocated list.
 : is-list? ( list -- flag )
-    get-first-word          \ w t | f
+    dup list-mma mma-is-item?   \ tos bool
     if
-        list-struct-id =
+        struct-get-id
+        list-struct-id =        \ bool
     else
-        false
+        drop
+        false                   \ f
     then
 ;
 
