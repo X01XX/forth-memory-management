@@ -24,14 +24,17 @@ Forth runs on an OS that uses stacks. Its stacks, all the way down.
 
 Functions that manipulate a struct instance can act as wrappers to array-stack, and list, functions.
 
-A memory leak can be automatically detected, the type of struct, and the specific instance addresses.
-A hex dump of each leaked struct instance will be printed.
-There is a process for finding where any lost struct instance is allocated, then follow your code to where it should be deallocated.
-See memory-leak-fixing.odt.
+At program end, each address in the array should have been returned to the stack, although not in the same order.
+At that point, a function can be run to detect memory leaks. The type of struct (the specific array-stack), the
+specific instance addresses, and a hex dump of each leaked struct instance will be printed.
+There is a process for finding where any lost struct instance is allocated, then follow your code to where it
+should be deallocated. See memory-leak-fixing.odt.
 
-The first word of every struct instance, allocated from the same array-stack, can be set to a unique number, to indicate the type of struct.
+The first word of every struct instance, allocated from the same array-stack, can be set to a unique number,
+to indicate the type of struct.
 
-These ideas should work in Assembler Language and C (if you want faster allocation/deallocation, more control and understanding).
+These ideas should work in Assembler Language and C, for faster allocation/deallocation, more control and
+understanding.
 
 Lists are built of List structs, and Link structs, that have an ID and use-count in their header.
 
@@ -40,12 +43,14 @@ The examples can be run with the commands:
   gforth example.fs   \ Shows two lists of numbers, with set functions union, intersection and subtraction.
                       \ Shows applying multiplication, and addition, of all list elements, given a number.
                       \ The numbers are not structs, just numbers in the Link data field.
-                      \ Shows two lists of names, with set functions union, intersection and subtraction. The Name is a struct.
+                      \ Shows two lists of names, with set functions union, intersection and subtraction. 
+                      \ The Name is a struct.
 
   gforth example2.fs  \ Shows my favorite equation, Understanding = ~A + ~B.
                       \ See more detailed notes under the UES-Forth project.
                       \ UES-Forth is a large application that uses this code to make 25 different structs and 20 struct lists.
-                      \ At end it deallocates around two thousand struct instances, checks for memory leaks, and anything left on the Forth stack.
+                      \ At end it deallocates around two thousand struct instances, checks for memory leaks, and anything
+                      \ left on the Forth stack.
                       \ Having made around 14 Million struct allocation/deallocation operations.
                       \ A lot of activity, in less than 1 MB.
 
@@ -61,7 +66,8 @@ The examples can be run with the commands:
 
   gforth example11.fs \ Shows string parsing, print, and deallocate, of a list of mixed float, integer, sub-list,
                       \ region, and unidentified token.
-                      \ Only fails with unbalanced parentheses, or unidentified token GT token struct string limit, currently 80.
+                      \ Only fails with unbalanced parentheses, or unidentified token GT token struct string limit,
+                      \ currently 80.
                       \ Outer parentheses are optional.
 </pre>
 
