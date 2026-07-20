@@ -13,6 +13,7 @@ Within the limit of the maximum number of array items allocated at the same time
 an infinite number of allocations, and deallocations, are possible.
 
 On deallocation, the first cell of an item is zeroed out, to make use problems apparent.
+Like using a deallocated instance, or double-deallocation.
 
 Allocations, and deallocations, cause increasing disorder of the addresses on the stack,
 which has no effect on the utility, or speed, of the array-stack.
@@ -29,6 +30,8 @@ At that point, a function can be run to detect memory leaks. The type of struct 
 specific instance addresses, and a hex dump of each leaked struct instance will be printed.
 There is a process for finding where any lost struct instance is allocated, then follow your code to where it
 should be deallocated. See memory-leak-fixing.odt.
+
+Knowing the addresses in the array allows detection of the deallocation of an invalid address.
 
 The first word of every struct instance, allocated from the same array-stack, can be set to a unique number,
 to indicate the type of struct.
