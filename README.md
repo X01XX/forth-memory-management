@@ -61,7 +61,7 @@ The examples can be run with the commands:
 
   gforth example6.fs  \ Test list functions that can work with lists with sub-lists.
 
-  gforth example7.fs  \ Shows a link, list and region, being lost, and detected later.
+  gforth example7.fs  \ Shows a lin<p>Lists with sub-lists and multiple structs, parsing a list from a string.</p>k, list and region, being lost, and detected later.
 
   gforth example8.fs  \ Shows a stack empty event, with one lost struct instance reported.
   
@@ -77,7 +77,7 @@ The examples can be run with the commands:
 Memory use before, and after, deallocating is shown.  The Min Free column shows the lowest level of struct instances available during the program run,
 for tuning purposes.
 
-Total allocations, per struct kind, are shown in the memory print.  At end, the deallocations equal the allocations.
+Total number of allocations, per struct kind, are shown in the memory print.  At end, the deallocations equal the allocations.
 
 Stacks can be created, and used, without an array.  Stack "pointer" info is stored in the allocated space.
 This is used in list2.fs list-from-token-list.
