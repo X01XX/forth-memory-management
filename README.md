@@ -61,7 +61,7 @@ The examples can be run with the commands:
 
   gforth example6.fs  \ Test list functions that can work with lists with sub-lists.
 
-  gforth example7.fs  \ Shows a lin<p>Lists with sub-lists and multiple structs, parsing a list from a string.</p>k, list and region, being lost, and detected later.
+  gforth example7.fs  \ Shows a link, list and region, being lost, and detected later.
 
   gforth example8.fs  \ Shows a stack empty event, with one lost struct instance reported.
   
