@@ -36,8 +36,8 @@ Knowing the addresses in the array allows detection of the deallocation of an in
 The first word of every struct instance, allocated from the same array-stack, can be set to a unique number,
 to indicate the type of struct.
 
-These ideas should work in Assembler Language and C, for faster allocation/deallocation, more control and
-understanding.
+These ideas should work in Assembler Language (see the risc-v-memory-management-vf2 project) and C, for faster
+allocation/deallocation, memory leak detection, more control and understanding.
 
 Lists are built of List structs, and Link structs, that have an ID and use-count in their header.
 
