@@ -31,6 +31,8 @@ specific instance addresses, and a hex dump of each leaked struct instance will 
 There is a process for finding where any lost struct instance is allocated, then follow your code to where it
 should be deallocated. See memory-leak-fixing.odt.
 
+Saying "There are no memory leaks currently causing a problem" is different from saying "There are no memory leaks".
+
 Knowing the addresses in the array allows detection of the deallocation of an invalid address.
 
 The first word of every struct instance, allocated from the same array-stack, can be set to a unique number,
