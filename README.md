@@ -1,7 +1,7 @@
 # forth-memory-management
 Pair an array of potential struct instances, with a special-purpose stack, giving an array-stack.
 
-Multiple array-stacks can be created, with the number of items, and the size of each item, varying by as needed.
+Multiple array-stacks can be created, with the number of items, and the size of each item, varying as needed.
 
 The special-purpose stack does not use a dedicated register, it stores position information in the stack struct header.
 This requires additional cycles for a load and a store, but allows any number of stacks.
@@ -57,11 +57,11 @@ The examples can be run with the commands:
 
   gforth example2.fs  \ Shows my favorite equation, Understanding = ~A + ~B.
                       \ See more detailed notes under the UES-Forth project.
-                      \ UES-Forth is a large application that uses this code to make 25 different structs and 20 struct lists.
+                      \ UES-Forth is a 30K+ line application that uses this code to make 25 different structs and 20 struct lists.
                       \ At end it deallocates around two thousand struct instances, checks for memory leaks, and anything
                       \ left on the Forth stack.
                       \ Having made around 14 Million struct allocation/deallocation operations.
-                      \ A lot of activity, in less than 1 MB.
+                      \ A lot of activity, in less than 1 MB of data.
 
   gforth example4.fs  \ Shows a struct-aware print of items on the Forth stack, for debugging.
 
