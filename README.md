@@ -6,7 +6,7 @@ Multiple array-stacks can be created, with the number of items, and the size of 
 The special-purpose stack does not use a dedicated register, it stores position information in the stack struct header.
 This requires additional cycles for a load and a store, but allows any number of stacks.
 
-The stack of a array-stack is initialized with the address of each array item.
+The stack of an array-stack is initialized with the address of each array item.
 
 Allocation and deallocation is fairly fast because it involves simply popping, or pushing, the stack.
 
