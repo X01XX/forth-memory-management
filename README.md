@@ -33,7 +33,7 @@ should be deallocated. See memory-leak-fixing.odt.
 Saying "There are no memory leaks currently causing a problem" is different from saying "There are no memory leaks".
 
 At first, making a change and seeing a memory leak causes frustration. But they are not that hard to find and fix,
-since the change is still in your mind, so it later becomes a welcome warning.
+since the change is still in your mind, so it later becomes a welcome warning, fix this before you make more changes.
 
 Knowing the addresses in the array allows detection of the deallocation of an invalid address.
 The address is between the start and end of the array, the address minus the start of the array, mod the struct instance size equals zero.
