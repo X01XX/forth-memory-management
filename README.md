@@ -30,7 +30,7 @@ specific instance addresses, and a hex dump of each leaked struct instance will 
 There is a process for finding where any lost struct instance is allocated, then follow your code to where it
 should be deallocated. See memory-leak-fixing.odt.
 
-Saying "There are no memory leaks currently causing a problem" is different from saying "There are no memory leaks".
+Change "There are no memory leaks currently causing a problem" to "There are no memory leaks".
 
 At first, making a change and seeing a memory leak causes frustration. But they are not that hard to find and fix,
 since the change is still in your mind. It later becomes a welcome warning, fix this before you make more changes.
