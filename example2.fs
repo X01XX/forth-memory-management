@@ -26,6 +26,40 @@ cs
     base @ >r decimal .s r> base !
 ;
 
+: .region-list2 ( reg-lst -- )
+    list-get-links
+    begin
+        ?dup
+    while
+        dup link-get-data cr .region
+        space ." ("
+
+        3 over link-get-data region-superset-of-state
+        if
+            ." 3 "
+        then
+                
+        4 over link-get-data region-superset-of-state
+        if
+            ." 4 "
+        then
+                
+        5 over link-get-data region-superset-of-state
+        if
+            ." 5 "
+        then
+                
+        6 over link-get-data region-superset-of-state
+        if
+            ." 6 "
+        then
+
+        ." )"
+                
+        link-get-next
+    repeat
+;
+
 \ Init array-stacks.
 #101 link-mma-init
 #102 list-mma-init
@@ -45,7 +79,10 @@ cr ." ~3 + ~6: " dup .region-list cr
 \ Get intersection of lists.
 2dup region-list-region-intersections   \ list45 list36 ints
 
-dup cr ." Possible regions = (~4 + ~5) & (~3 + ~6) = " .region-list
+cr ." Possible regions = (~4 + ~5) & (~3 + ~6) = " dup .region-list
+cr cr ." Separation effects: ( not counting possible cross-pair relations, which could be added ),"
+cr ." no region can contain 4 and 5, or 3 and 6."
+dup .region-list2
 
 \ Finish.
 cr
