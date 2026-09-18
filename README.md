@@ -2,6 +2,7 @@
 Pair an array of potential struct instances, with a special-purpose stack, giving an array-stack.
 
 Multiple array-stacks can be created, with the number of items, and the size of each item, varying as needed.
+Different array-stacks could be accessed in parallel.
 
 The special-purpose stack does not use a dedicated register, it stores position information in the stack struct header.
 This requires additional cycles for a load and a store, but allows any number of stacks.
