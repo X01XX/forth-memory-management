@@ -7,11 +7,11 @@ Different array-stacks could be accessed in parallel, no mutex.
 The special-purpose stack does not use a dedicated register, it stores position information in the stack struct header.
 This requires additional cycles for a load and a store, but allows any number of stacks.
 
-The stack of an array-stack is initialized with the address of each array item.  The maximum required size of the stack is known.
+The stack of an array-stack is initialized with the address of each array instance.  The maximum required size of the stack is known.
 
 Allocation and deallocation is fairly fast because it involves simply popping, or pushing, the stack.
 
-Within the limit of the maximum number of array items allocated at the same time,
+Within the limit of the maximum number of array instances allocated at the same time,
 an infinite number of allocations, and deallocations, are possible.
 
 Allocations, and deallocations, cause increasing disorder of the addresses on the stack,
@@ -44,7 +44,7 @@ For greater speed, some checks can be made active for debug mode, inactive for p
 The first word of every struct instance, allocated from the same array-stack, can be set to a unique number,
 to indicate the type of struct.
 
-On deallocation, the first cell of an item is zeroed out, to make use problems apparent.
+On deallocation, the first cell of an instance is zeroed out, to make use problems apparent.
 Like using a deallocated instance, or double-deallocation.
 
 These ideas should work in Assembler Language (see the risc-v-memory-management-vf2 project) and C.
@@ -67,7 +67,7 @@ The examples can be run with the commands:
                       \ Having made around 14 Million struct allocation/deallocation operations.
                       \ A lot of activity, in less than 1 MB of data.
 
-  gforth example4.fs  \ Shows a struct-aware print of items on the Forth stack, for debugging.
+  gforth example4.fs  \ Shows a struct-aware print of instances on the Forth stack, for debugging.
 
   gforth example6.fs  \ Test list functions that can work with lists with sub-lists.
 
