@@ -17,7 +17,7 @@ an infinite number of allocations, and deallocations, are possible.
 Allocations, and deallocations, cause increasing disorder of the addresses on the stack,
 which has no effect on the utility, or speed, of the array-stack.
 
-From low to high memory usage, there is no effect on performance, no memory fragmentation.
+From low to high memory usage, there is no effect on performance, no memory fragmentation. Possibly a plus for RTC programming.
 
 That a stack is used to provide memory management to a stack-based language is sublime.
 Forth runs on an OS that uses stacks. Its stacks, all the way down.
