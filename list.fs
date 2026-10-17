@@ -89,6 +89,9 @@ list-header-disp    cell+   constant list-links-disp
     list-links-disp + @
 ;
 
+\ Make simple loops, with next word, using less typing.
+: foreach ( list -- next-link | end loop ) postpone list-get-links postpone begin postpone ?dup postpone while ; immediate
+
 \ Set list links, use only in this file.
 : _list-set-links ( links-value list-addr -- )
     list-links-disp + !
@@ -608,7 +611,7 @@ list-header-disp    cell+   constant list-links-disp
     dup link-get-next           \ lst0 data last cur-link cur-next
     swap link-deallocate        \ lst0 data last cur-next
     swap _link-set-next         \ lst0 data
-    rot _list-dec-length        \ data
+    swap _list-dec-length       \ data
 ;
 
 \ Pop the last item in a list.
