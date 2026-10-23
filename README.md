@@ -89,6 +89,8 @@ The examples can be run with the commands:
 Memory use before, and after, deallocating is shown.  The Min Free column shows the lowest level of struct instances available during the program run,
 for tuning purposes.
 
+Huge varying demand for particular types of structs, from run to run, can be a problem.  This can be ameliorated by allocating a larger amount of memory to the struct arrays.  Having one such struct is no problem compared to a more dynamic method, but having multiple such structs could pressure the available memory.
+
 Total number of allocations, per struct kind, are shown in the memory print.  At end, the deallocations equal the allocations.
 
 Stacks can be created, and used, without an array.  This is used in list2.fs, list-from-token-list.
