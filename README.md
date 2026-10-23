@@ -4,6 +4,8 @@ Pair an array of potential struct instances, with a special-purpose stack, givin
 Multiple array-stacks can be created, with the number, and size, of instances, varying as needed.
 Different array-stacks could be accessed in parallel, no mutex.
 
+My first structs implemented lists.  With lists of struct instances, you can do a lot.
+
 The special-purpose stack does not use a dedicated register, it stores position information in the stack struct header.
 This requires additional cycles for a load and a store, but allows any number of stacks.
 
