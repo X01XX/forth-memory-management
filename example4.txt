@@ -4,20 +4,20 @@ Initializing Link store.
 Initializing List store.
 Initializing Region store.
 
-structs on stack: Forth stack: <6> 23 link list-0 region region list-1-region 
+structs on stack: Forth stack: <7> 23 link list-0 region region list-1-region region-u 
 
 Memory use:
     List mma:         Capacity:   102  Min Free:   100   98%  In use:      2  Item Size:  16  Array size:    1632  Overhead:    856  Total:     2488  Cells:    311  Allocs:         2
     Link mma:         Capacity:   101  Min Free:    99   98%  In use:      2  Item Size:  24  Array size:    2424  Overhead:    848  Total:     3272  Cells:    409  Allocs:         2
-    Region mma:       Capacity:   103  Min Free:   101   98%  In use:      2  Item Size:  24  Array size:    2472  Overhead:    864  Total:     3336  Cells:    417  Allocs:         3
-    dstack: <6> 23 102901157795592 102901157797272 102901157800600 102901157800576 102901157797256 
+    Region mma:       Capacity:   103  Min Free:   100   97%  In use:      2  Item Size:  24  Array size:    2472  Overhead:    864  Total:     3336  Cells:    417  Allocs:         4
+    dstack: <7> 23 94544039421704 94544039423384 94544039426712 94544039426688 94544039423368 94544039426664 
 
 Deallocating ...
 
 Memory use:
     List mma:         Capacity:   102  Min Free:   100   98%  In use:      0  Item Size:  16  Array size:    1632  Overhead:    856  Total:     2488  Cells:    311  Allocs:         2
     Link mma:         Capacity:   101  Min Free:    99   98%  In use:      0  Item Size:  24  Array size:    2424  Overhead:    848  Total:     3272  Cells:    409  Allocs:         2
-    Region mma:       Capacity:   103  Min Free:   101   98%  In use:      0  Item Size:  24  Array size:    2472  Overhead:    864  Total:     3336  Cells:    417  Allocs:         3
+    Region mma:       Capacity:   103  Min Free:   100   97%  In use:      0  Item Size:  24  Array size:    2472  Overhead:    864  Total:     3336  Cells:    417  Allocs:         4
     dstack: <0> 
 
 Freeing heap memory
