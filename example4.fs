@@ -45,6 +45,9 @@ dup region-deallocate
 list-new
 #4 #5 region-new over list-push-struct
 
+#3 #5 region-new
+dup region-deallocate
+
 cr cr ." structs on stack: " .stack-structs
 
 \ Finish.
@@ -54,6 +57,7 @@ cr
 
 \ Deallocate remaining struct instances.
 cr ." Deallocating ..."
+drop                    \ Drop the already deallocated region.
 region-list-deallocate
 drop
 region-deallocate

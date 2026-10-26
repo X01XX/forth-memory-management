@@ -28,7 +28,7 @@ region-state-0-disp cell+   constant region-state-1-disp
 \ Check if tos is an allocated region.
 : is-region? ( tos -- bool )
     dup region-mma mma-is-item? \ tos bool
-    if  
+    if
         struct-get-id           \ id
         region-struct-id =      \ bool
     else

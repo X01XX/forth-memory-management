@@ -38,24 +38,24 @@ cs
         if
             ." 3 "
         then
-                
+
         4 over link-get-data region-superset-of-state
         if
             ." 4 "
         then
-                
+
         5 over link-get-data region-superset-of-state
         if
             ." 5 "
         then
-                
+
         6 over link-get-data region-superset-of-state
         if
             ." 6 "
         then
 
         ." )"
-                
+
         link-get-next
     repeat
 ;

@@ -29,7 +29,7 @@ name-header-disp cell+  constant name-string-disp
 \ Check if tos is an allocated name.
 : is-name? ( tos -- bool )
     dup name-mma mma-is-item?   \ tos bool
-    if  
+    if
         struct-get-id           \ id
         name-struct-id =        \ bool
     else
