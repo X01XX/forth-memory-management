@@ -64,6 +64,7 @@ list-deallocate-recursive       \
 
 cr memory-use cr
 
+cr ." Checking for memory leaks, anything left on the stack."
 assert-list-mma-none-in-use
 assert-link-mma-none-in-use
 assert-region-mma-none-in-use

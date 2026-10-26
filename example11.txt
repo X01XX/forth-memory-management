@@ -38,4 +38,4 @@ Forth stack: <0>
 
 
 No memory leaks.
-Freeing heap memory
+Freeing heap memory.

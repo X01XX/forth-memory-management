@@ -150,16 +150,16 @@ list11 name-list-deallocate
 list12 name-list-deallocate
 list13 name-list-deallocate
 list14 name-list-deallocate
-cr memory-use
+cr memory-use cr
 
+cr ." Checking for memory leaks, anything left on the stack."
 assert-list-mma-none-in-use
 assert-link-mma-none-in-use
 assert-name-mma-none-in-use
 assert-forth-stack-empty
 
 \ Free heap memory.
-cr
-cr ." Freeing heap memory"
+cr ." Freeing heap memory."
 list-mma mma-free
 link-mma mma-free
 name-mma mma-free

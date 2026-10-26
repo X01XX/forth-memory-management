@@ -97,13 +97,14 @@ region-list-deallocate
 
 cr memory-use cr
 
+cr ." Checking for memory leaks, anything left on the stack."
 assert-list-mma-none-in-use
 assert-link-mma-none-in-use
 assert-region-mma-none-in-use
 assert-forth-stack-empty
 
 \ Free heap memory before exiting.
-cr ." Freeing heap memory"
+cr ." Freeing heap memory."
 list-mma mma-free
 link-mma mma-free
 region-mma mma-free

@@ -65,4 +65,5 @@ Memory Use:
     name Capacity:    50  Min Free:    42   84%  In use:      0  Item Size:  24  Array size:    1200  Overhead:    440  Total:     1640  Cells:    205  Allocs:         8
     dstack: <0> 
 
-Freeing heap memory
+Checking for memory leaks, anything left on the stack.
+Freeing heap memory.

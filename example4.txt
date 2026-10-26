@@ -10,7 +10,7 @@ Memory use:
     List mma:         Capacity:   102  Min Free:   100   98%  In use:      2  Item Size:  16  Array size:    1632  Overhead:    856  Total:     2488  Cells:    311  Allocs:         2
     Link mma:         Capacity:   101  Min Free:    99   98%  In use:      2  Item Size:  24  Array size:    2424  Overhead:    848  Total:     3272  Cells:    409  Allocs:         2
     Region mma:       Capacity:   103  Min Free:   100   97%  In use:      2  Item Size:  24  Array size:    2472  Overhead:    864  Total:     3336  Cells:    417  Allocs:         4
-    dstack: <7> 23 94544039421704 94544039423384 94544039426712 94544039426688 94544039423368 94544039426664 
+    dstack: <7> 23 98435560494856 98435560496536 98435560499864 98435560499840 98435560496520 98435560499816 
 
 Deallocating ...
 
@@ -20,4 +20,5 @@ Memory use:
     Region mma:       Capacity:   103  Min Free:   100   97%  In use:      0  Item Size:  24  Array size:    2472  Overhead:    864  Total:     3336  Cells:    417  Allocs:         4
     dstack: <0> 
 
-Freeing heap memory
+Checking for memory leaks, anything left on the stack.
+Freeing heap memory.
