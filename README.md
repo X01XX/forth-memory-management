@@ -84,6 +84,13 @@ The examples can be run with the commands:
                       \ Only fails with unbalanced parentheses, or unidentified token GT token struct string limit,
                       \ currently 80.
                       \ Outer parentheses are optional.
+
+  gforth example12.fs \ Shows detection of the deallocation of an invalid address.
+
+  gforth example13.fs \ Shows detection of double deallocation.
+
+  gforth example14.fs \ Shows detection of use after deallocation, using an argument check at the beginning of a function.
+  
 </pre>
 
 Memory use before, and after, deallocating is shown.  The Min Free column shows the lowest level of struct instances available during the program run,
