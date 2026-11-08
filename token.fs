@@ -25,6 +25,10 @@ token-header-disp cell+ constant token-string-disp
     dup token-mma mma-is-item? \ addr bool
     if
         struct-get-id           \ id
+        dup 0=
+        if
+            cr ." Use after deallocation" cr
+        then
         token-struct-id =       \ bool
     else
         drop

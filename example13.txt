@@ -1,0 +1,11 @@
+
+in file included from *OS command line*:-1
+example13.fs:24: Aborted
+token-mma >>>mma-deallocate-struct<<<
+Backtrace:
+$7594C4603A78 throw 
+$7594C46590F0 abort 
+debug on
+Initializing Token store.
+double deallocate of $58720BFC1360 
+

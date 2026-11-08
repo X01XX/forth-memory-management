@@ -1,0 +1,13 @@
+
+in file included from *OS command line*:-1
+example14.fs:24: assertion failed
+cr ." token: " >>>.token<<< cr
+Backtrace:
+$71CED5403988 throw 
+$71CED542ADD8 c(abort") 
+$71CED545ABC0 (end-assert) 
+debug on
+Initializing Token store.
+token: 
+Use after deallocation
+token.fs:81: failed assertion

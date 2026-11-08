@@ -1,0 +1,11 @@
+
+in file included from *OS command line*:-1
+example12.fs:20: Aborted
+0 token-mma >>>mma-deallocate<<<
+Backtrace:
+$7655A5003A78 throw 
+$7655A5058DF0 abort 
+debug on
+Initializing Token store.
+deallocation of invalid address? $0 
+

@@ -177,15 +177,49 @@ array-end-disp      cell+   constant array-items-disp   \ The start of the array
     then
 ;
 
-\ Run like: <item-addr> <struct name>-mma mma-deallocate
-: mma-deallocate ( item-addr mma-addr -- )
-    depth #2 <
-    abort" mma-deallocate: data stack has too few items"
-
+\ Run like: <item-addr> <array-stack-name>-mma mma-deallocate2
+: mma-deallocate2 ( item-addr mma-addr -- )
     _mma-get-stack  \ item-addr stack-addr
     over swap       \ item-addr item-addr stack-addr
     stack-push      \ item-addr
     0 swap !        \ ( zero out first cell of deallocated item )
+;
+
+\ Run like: <item-addr> <array-stack-name>-mma mma-deallocate
+: mma-deallocate ( item-addr mma-addr -- )
+    depth #2 <
+    abort" mma-deallocate: data stack has too few items"
+
+    2dup mma-within-array   \ item-addr mma-addr bool
+    if
+    else
+        cr ." deallocation of invalid address? " over hex. cr abort
+    then
+
+    mma-deallocate2
+;
+
+\ Run like: <struct-inst-addr> <array-stack-name>-mma mma-deallocate-struct
+: mma-deallocate-struct ( struct-addr mma-addr -- )
+    depth #2 <
+    abort" mma-deallocate: data stack has too few items"
+
+    2dup mma-within-array           \ struct-inst-addr mma-addr bool
+    if
+    else
+        cr ." deallocation of invalid address? " over hex. cr abort
+    then
+
+    over get-first-word             \ struct-inst-addr mma-addr, w t | f
+    invert abort" get-first-word failed?"
+
+    0=                              \ struct-inst-addr mma-addr bool
+    if
+        cr ." double deallocate of " over hex. cr
+        abort
+    then
+
+    mma-deallocate2
 ;
 
 \ Run like: <struct name>-mma mma-allocate
