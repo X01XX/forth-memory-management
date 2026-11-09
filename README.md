@@ -1,4 +1,6 @@
 # forth-memory-management
+These ideas should work in Assembler Language (see the risc-v-memory-management-vf2 project) and C.
+
 Pair an array of potential struct instances, with a special-purpose stack, giving an array-stack.
 
 Multiple array-stacks can be created, with the number, and size, of instances, varying as needed.
@@ -48,8 +50,6 @@ to indicate the type of struct.
 
 On deallocation, the first cell of an instance is zeroed out, to make use problems apparent.
 Like using a deallocated instance, or double-deallocation.
-
-These ideas should work in Assembler Language (see the risc-v-memory-management-vf2 project) and C.
 
 Lists are built of List structs, and Link structs, that have an ID and use-count in their headers.
 
