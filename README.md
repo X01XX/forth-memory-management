@@ -61,7 +61,8 @@ The examples can be run with the commands:
                       \ Shows two lists of names, with set functions union, intersection and subtraction. 
                       \ The Name is a struct.
 
-  gforth example2.fs  \ Shows my favorite equation, Understanding = ~A + ~B. Crucially, such calculations can be intersected.
+  gforth example2.fs  \ Shows my favorite equation, Understanding = ~A + ~B.
+                      \ Crucially, the results of such calculations can be intersected.
                       \ See more detailed notes under the UES-Forth project.
                       \ UES-Forth is a 30K+ line application that uses this code to make 25 different structs and 20 struct lists.
                       \ At end it deallocates around two thousand struct instances, checks for memory leaks, and anything
