@@ -1,0 +1,70 @@
+
+Enter command: > q
+
+at end of session: Forth stack: <1> Session 
+
+
+Memory use:
+    Link:           Capacity:  6500  Min Free:  5028   77%  In use:   1000  Item Size:  24  Array size:  156000  Overhead:  52040  Total:   208040  Cells:  26005  Allocs:   2953643
+    List:           Capacity:  1902  Min Free:  1327   69%  In use:    404  Item Size:  16  Array size:   30432  Overhead:  15256  Total:    45688  Cells:   5711  Allocs:   2749366
+    StructInfo:     Capacity:    30  Min Free:     5   16%  In use:     25  Item Size:  88  Array size:    2640  Overhead:    280  Total:     2920  Cells:    365  Allocs:        25
+    Session:        Capacity:     1  Min Free:     0    0%  In use:      1  Item Size:  80  Array size:      80  Overhead:     48  Total:      128  Cells:     16  Allocs:         1
+    Domain:         Capacity:    25  Min Free:    23   92%  In use:      2  Item Size:  64  Array size:    1600  Overhead:    240  Total:     1840  Cells:    230  Allocs:         2
+    Action:         Capacity:    50  Min Free:    36   72%  In use:     14  Item Size:  72  Array size:    3600  Overhead:    440  Total:     4040  Cells:    505  Allocs:        14
+    Group:          Capacity:   100  Min Free:    70   70%  In use:     30  Item Size:  40  Array size:    4000  Overhead:    840  Total:     4840  Cells:    605  Allocs:        48
+    Square:         Capacity:   406  Min Free:   310   76%  In use:     64  Item Size:  56  Array size:   22736  Overhead:   3288  Total:    26024  Cells:   3253  Allocs:       115
+    PathStep:       Capacity:   870  Min Free:   760   87%  In use:     55  Item Size:  40  Array size:   34800  Overhead:   7000  Total:    41800  Cells:   5225  Allocs:       216
+    PlanCorr:       Capacity:    40  Min Free:    37   92%  In use:      0  Item Size:  16  Array size:     640  Overhead:    360  Total:     1000  Cells:    125  Allocs:       358
+    Plan:           Capacity:   150  Min Free:   142   94%  In use:      0  Item Size:  24  Array size:    3600  Overhead:   1240  Total:     4840  Cells:    605  Allocs:     99314
+    PlanStep:       Capacity:   150  Min Free:   127   84%  In use:      0  Item Size:  56  Array size:    8400  Overhead:   1240  Total:     9640  Cells:   1205  Allocs:    326270
+    RegionCorrRate: Capacity:   100  Min Free:    80   80%  In use:     13  Item Size:  24  Array size:    2400  Overhead:    840  Total:     3240  Cells:    405  Allocs:        32
+    RegionCorr:     Capacity:   600  Min Free:   351   58%  In use:    138  Item Size:  16  Array size:    9600  Overhead:   4840  Total:    14440  Cells:   1805  Allocs:     30308
+    ChangesCorr:    Capacity:   450  Min Free:   340   75%  In use:     55  Item Size:  16  Array size:    7200  Overhead:   3640  Total:    10840  Cells:   1355  Allocs:    446010
+    RuleCorr:       Capacity:   404  Min Free:   294   72%  In use:     55  Item Size:  16  Array size:    6464  Overhead:   3272  Total:     9736  Cells:   1217  Allocs:    118094
+    RuleStore:      Capacity:   505  Min Free:   378   74%  In use:     94  Item Size:  24  Array size:   12120  Overhead:   4080  Total:    16200  Cells:   2025  Allocs:       420
+    Corner:         Capacity:   200  Min Free:   165   82%  In use:     24  Item Size:  40  Array size:    8000  Overhead:   1640  Total:     9640  Cells:   1205  Allocs:       297
+    Need:           Capacity:   200  Min Free:   126   63%  In use:      0  Item Size:  32  Array size:    6400  Overhead:   1640  Total:     8040  Cells:   1005  Allocs:     10110
+    Sample:         Capacity:   250  Min Free:   249   99%  In use:      0  Item Size:  24  Array size:    6000  Overhead:   2040  Total:     8040  Cells:   1005  Allocs:      1268
+    Rate:           Capacity:   100  Min Free:    80   80%  In use:     13  Item Size:   8  Array size:     800  Overhead:    840  Total:     1640  Cells:    205  Allocs:      1726
+    Changes:        Capacity:   650  Min Free:   430   66%  In use:    110  Item Size:  24  Array size:   15600  Overhead:   5240  Total:    20840  Cells:   2605  Allocs:   2724916
+    Rule:           Capacity:   904  Min Free:   659   72%  In use:    204  Item Size:  40  Array size:   36160  Overhead:   7272  Total:    43432  Cells:   5429  Allocs:    623371
+    Region:         Capacity:  3003  Min Free:  2501   83%  In use:    408  Item Size:  24  Array size:   72072  Overhead:  24064  Total:    96136  Cells:  12017  Allocs:   3404300
+    Token:          Capacity:   100  Min Free:    96   96%  In use:      0  Item Size:  88  Array size:    8800  Overhead:    840  Total:     9640  Cells:   1205  Allocs:        22
+                                                            Totals:   2709                               460144            142520           602664          75333           13490246
+Forth stack: <1> Session 
+
+Deallocating ...
+
+No memory leaks.
+
+Memory use:
+    Link:           Capacity:  6500  Min Free:  5028   77%  In use:     25  Item Size:  24  Array size:  156000  Overhead:  52040  Total:   208040  Cells:  26005  Allocs:   2953643
+    List:           Capacity:  1902  Min Free:  1327   69%  In use:      1  Item Size:  16  Array size:   30432  Overhead:  15256  Total:    45688  Cells:   5711  Allocs:   2749366
+    StructInfo:     Capacity:    30  Min Free:     5   16%  In use:     25  Item Size:  88  Array size:    2640  Overhead:    280  Total:     2920  Cells:    365  Allocs:        25
+    Session:        Capacity:     1  Min Free:     0    0%  In use:      0  Item Size:  80  Array size:      80  Overhead:     48  Total:      128  Cells:     16  Allocs:         1
+    Domain:         Capacity:    25  Min Free:    23   92%  In use:      0  Item Size:  64  Array size:    1600  Overhead:    240  Total:     1840  Cells:    230  Allocs:         2
+    Action:         Capacity:    50  Min Free:    36   72%  In use:      0  Item Size:  72  Array size:    3600  Overhead:    440  Total:     4040  Cells:    505  Allocs:        14
+    Group:          Capacity:   100  Min Free:    70   70%  In use:      0  Item Size:  40  Array size:    4000  Overhead:    840  Total:     4840  Cells:    605  Allocs:        48
+    Square:         Capacity:   406  Min Free:   310   76%  In use:      0  Item Size:  56  Array size:   22736  Overhead:   3288  Total:    26024  Cells:   3253  Allocs:       115
+    PathStep:       Capacity:   870  Min Free:   760   87%  In use:      0  Item Size:  40  Array size:   34800  Overhead:   7000  Total:    41800  Cells:   5225  Allocs:       216
+    PlanCorr:       Capacity:    40  Min Free:    37   92%  In use:      0  Item Size:  16  Array size:     640  Overhead:    360  Total:     1000  Cells:    125  Allocs:       358
+    Plan:           Capacity:   150  Min Free:   142   94%  In use:      0  Item Size:  24  Array size:    3600  Overhead:   1240  Total:     4840  Cells:    605  Allocs:     99314
+    PlanStep:       Capacity:   150  Min Free:   127   84%  In use:      0  Item Size:  56  Array size:    8400  Overhead:   1240  Total:     9640  Cells:   1205  Allocs:    326270
+    RegionCorrRate: Capacity:   100  Min Free:    80   80%  In use:      0  Item Size:  24  Array size:    2400  Overhead:    840  Total:     3240  Cells:    405  Allocs:        32
+    RegionCorr:     Capacity:   600  Min Free:   351   58%  In use:      0  Item Size:  16  Array size:    9600  Overhead:   4840  Total:    14440  Cells:   1805  Allocs:     30308
+    ChangesCorr:    Capacity:   450  Min Free:   340   75%  In use:      0  Item Size:  16  Array size:    7200  Overhead:   3640  Total:    10840  Cells:   1355  Allocs:    446010
+    RuleCorr:       Capacity:   404  Min Free:   294   72%  In use:      0  Item Size:  16  Array size:    6464  Overhead:   3272  Total:     9736  Cells:   1217  Allocs:    118094
+    RuleStore:      Capacity:   505  Min Free:   378   74%  In use:      0  Item Size:  24  Array size:   12120  Overhead:   4080  Total:    16200  Cells:   2025  Allocs:       420
+    Corner:         Capacity:   200  Min Free:   165   82%  In use:      0  Item Size:  40  Array size:    8000  Overhead:   1640  Total:     9640  Cells:   1205  Allocs:       297
+    Need:           Capacity:   200  Min Free:   126   63%  In use:      0  Item Size:  32  Array size:    6400  Overhead:   1640  Total:     8040  Cells:   1005  Allocs:     10110
+    Sample:         Capacity:   250  Min Free:   249   99%  In use:      0  Item Size:  24  Array size:    6000  Overhead:   2040  Total:     8040  Cells:   1005  Allocs:      1268
+    Rate:           Capacity:   100  Min Free:    80   80%  In use:      0  Item Size:   8  Array size:     800  Overhead:    840  Total:     1640  Cells:    205  Allocs:      1726
+    Changes:        Capacity:   650  Min Free:   430   66%  In use:      0  Item Size:  24  Array size:   15600  Overhead:   5240  Total:    20840  Cells:   2605  Allocs:   2724916
+    Rule:           Capacity:   904  Min Free:   659   72%  In use:      0  Item Size:  40  Array size:   36160  Overhead:   7272  Total:    43432  Cells:   5429  Allocs:    623371
+    Region:         Capacity:  3003  Min Free:  2501   83%  In use:      0  Item Size:  24  Array size:   72072  Overhead:  24064  Total:    96136  Cells:  12017  Allocs:   3404300
+    Token:          Capacity:   100  Min Free:    96   96%  In use:      0  Item Size:  88  Array size:    8800  Overhead:    840  Total:     9640  Cells:   1205  Allocs:        22
+                                                            Totals:     51                               460144            142520           602664          75333           13490246
+Forth stack: <0> 
+
+No memory leaks. ok
+
