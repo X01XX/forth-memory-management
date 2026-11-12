@@ -41,8 +41,8 @@ At first, making a change and seeing a memory leak causes frustration. But they 
 since the change is still in your mind. It later becomes a welcome warning, fix this before you make more changes.
 
 Knowing the addresses in the array allows detection of the deallocation of an invalid address.
-The address is between the start (inclusive) and end (exclusive) of the array, 
-the address minus the start of the array, mod the struct instance size equals zero.
+The address is between the start (inclusive) and end (exclusive) of the array. 
+The address minus the start of the array, mod the struct instance size equals zero.
 
 For greater speed, some checks can be made active for debug mode, inactive for production.
 
