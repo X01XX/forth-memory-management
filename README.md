@@ -69,6 +69,7 @@ The examples can be run with the commands:
                       \ left on the Forth stack.
                       \ Having made around 14 Million struct allocation/deallocation operations.
                       \ A lot of activity, in less than 1 MB of data.
+                      \ See UES-Forth.txt.
 
   gforth example4.fs  \ Shows a struct-aware print of instances on the Forth stack, for debugging.
 
